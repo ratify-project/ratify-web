@@ -93,6 +93,25 @@ const config = {
             label: 'Tutorial',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+            dropdownActiveClassDisabled: true,
+          },
+          {
+            to: 'https://cloud-native.slack.com/?redir=%2Farchives%2FC03T3PEKVA9',
+            label: ' ',
+            position: 'right',
+            target: '_blank',
+            className: 'fab fa-lg fa-slack',
+          },
+          {
+            to: 'https://github.com/deislabs/ratify',
+            label: ' ',
+            position: 'right',
+            target: '_blank',
+            className: 'fab fa-lg fa-github',
+          },
           
         ],
       },
@@ -134,7 +153,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/deislabs/ratify',
               },
             ],
           },
