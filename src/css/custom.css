@@ -5,26 +5,122 @@
  */
 
 /* You can override the default Infima variables here. */
-:root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-VariableFont_wght.ttf');
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+@font-face {
+  font-family: 'OpenSans';
+  src: url('/fonts/OpenSans-VariableFont_wdth,wght.ttf');
+}
+
+:root {
+  --ifm-font-heading-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --ifm-font-content-family: 'OpenSans', ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+:root {
+  --my-green: #39A84A;
+  --my-red: #FA2C54;
+  --my-blue: #3FB1E5;
+  
+  
+  --ifm-color-primary: var(--my-green);
+  --ifm-color-primary-dark: darken(var(--my-green), 10%);
+  --ifm-color-primary-darker: darken(var(--my-green), 20%);
+  --ifm-color-primary-darkest: darken(var(--my-green), 30%);
+  --ifm-color-primary-light: lighten(var(--my-green), 10%);
+  --ifm-color-primary-lighter: lighten(var(--my-green), 20%);
+  --ifm-color-primary-lightest: lighten(var(--my-green), 30%);
+  
+  --ifm-color-secondary: var(--my-red);
+  --ifm-color-secondary-dark: darken(var(--my-red), 10%);
+  --ifm-color-secondary-darker: darken(var(--my-red), 20%);
+  --ifm-color-secondary-darkest: darken(var(--my-red), 30%);
+  --ifm-color-secondary-light: lighten(var(--my-red), 10%);
+  --ifm-color-secondary-lighter: lighten(var(--my-red), 20%);
+  --ifm-color-secondary-lightest: lighten(var(--my-red), 30%);
+  
+  --ifm-color-tertiary: var(--my-blue);
+  --ifm-color-tertiary-dark: darken(var(--my-blue), 10%);
+  --ifm-color-tertiary-darker: darken(var(--my-blue), 20%);
+  --ifm-color-tertiary-darkest: darken(var(--my-blue), 30%);
+  --ifm-color-tertiary-light: lighten(var(--my-blue), 10%);
+  --ifm-color-tertiary-lighter: lighten(var(--my-blue), 20%);
+  --ifm-color-tertiary-lightest: lighten(var(--my-blue), 30%);
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  
+  --ifm-footer-link-color:white;
+  --theme-features-card: #FBFBFB;
+
+  }
+  
+  [data-theme='dark'] {
+  --ifm-color-primary: var(--my-green);
+  --ifm-color-primary-dark: darken(var(--my-green), 10%);
+  --ifm-color-primary-darker: darken(var(--my-green), 20%);
+  --ifm-color-primary-darkest: darken(var(--my-green), 30%);
+  --ifm-color-primary-light: lighten(var(--my-green), 10%);
+  --ifm-color-primary-lighter: lighten(var(--my-green), 20%);
+  --ifm-color-primary-lightest: lighten(var(--my-green), 30%);
+  
+  --ifm-color-secondary: var(--my-red);
+--ifm-color-secondary-dark: darken(var(--my-red), 10%);
+--ifm-color-secondary-darker: darken(var(--my-red), 20%);
+--ifm-color-secondary-darkest: darken(var(--my-red), 30%);
+--ifm-color-secondary-light: lighten(var(--my-red), 10%);
+--ifm-color-secondary-lighter: lighten(var(--my-red), 20%);
+--ifm-color-secondary-lightest: lighten(var(--my-red), 30%);
+
+--ifm-color-tertiary: var(--my-blue);
+--ifm-color-tertiary-dark: darken(var(--my-blue), 10%);
+--ifm-color-tertiary-darker: darken(var(--my-blue), 20%);
+--ifm-color-tertiary-darkest: darken(var(--my-blue), 30%);
+--ifm-color-tertiary-light: lighten(var(--my-blue), 10%);
+--ifm-color-tertiary-lighter: lighten(var(--my-blue), 20%);
+--ifm-color-tertiary-lightest: lighten(var(--my-blue), 30%);
+
+--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+
+  --ifm-navbar-link-color: #B9BFE6;
+  --theme-features-card: #484E56;
+
+  
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--ifm-font-heading-family);
+}
+
+p,
+a {
+  font-family: var(--ifm-font-content-family);
+  
+}
+
+.button {
+  color: black;
+ 
+}
+
+.footer__link-item{
+  color:white;
+}
+
+.footer{
+  background-color: var(--my-blue);
+  color:white;
+}
+
+.footer__title{
+ font-weight: 900;
 }
