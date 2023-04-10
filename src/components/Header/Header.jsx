@@ -9,7 +9,7 @@ export default function Header() {
                 <h1>RATIFY</h1>
                 <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. </h3>
                 <div className={styles.header_content_input}>
-                    <a class="button  button--lg" href="/docs/intro">Get Started</a>
+                    <a class="button  button--lg" href="/docs/">Get Started</a>
                 </div>
             </div>
             <div className={styles.header_image}>
