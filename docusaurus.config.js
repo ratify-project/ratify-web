@@ -104,7 +104,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/',
+                to: 'docs/1.0.0/intro/',
               },
             ],
           },
