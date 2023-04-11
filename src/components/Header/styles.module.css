@@ -4,7 +4,7 @@
  */
  .header {
     display: flex;
-    background: var(--my-blue);
+    background: #2b3137;
     /* clip-path: polygon(0 0, 100% 0, 100% calc(100% - 75px), 0 100%); */
 }
 

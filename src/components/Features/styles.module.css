@@ -1,12 +1,12 @@
 .features {
     display: flex;
     flex-wrap: wrap;
-    gap: 3rem;
+    gap: 4rem;
     justify-content: center;
 }
 
 .section_padding {
-    padding: 4rem 6rem;
+    padding: 4rem 2rem;
 }
 
 .features_r {
@@ -26,7 +26,7 @@
 }
 
 .feature_card {
-    width: 300px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
