@@ -90,7 +90,7 @@ const config = {
             type: 'doc',
             docId: 'intro',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
@@ -112,7 +112,13 @@ const config = {
             target: '_blank',
             className: 'fab fa-lg fa-github',
           },
-          
+          {
+            to: 'https://twitter.com/artifact_ratify',
+            label: ' ',
+            position: 'right',
+            target: '_blank',
+            className: 'fab fa-lg fa-twitter',
+          },
         ],
       },
       footer: {
@@ -122,7 +128,7 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Documentation',
                 to: 'docs/1.0.0/intro/',
               },
             ],
@@ -131,16 +137,16 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Github',
+                href: 'https://github.com/deislabs/ratify',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Slack',
+                href: 'https://cloud-native.slack.com/?redir=%2Farchives%2FC03T3PEKVA9',
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://twitter.com/artifact_ratify',
               },
             ],
           },
@@ -151,10 +157,7 @@ const config = {
                 label: 'Blog',
                 to: '/blog',
               },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/deislabs/ratify',
-              },
+              
             ],
           },
         ],

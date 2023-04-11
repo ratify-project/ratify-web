@@ -26,7 +26,7 @@
   --my-blue: #3FB1E5;
   
   
-  --ifm-color-primary: var(--my-green);
+  --ifm-color-primary: var(--my-blue);
   --ifm-color-primary-dark: darken(var(--my-green), 10%);
   --ifm-color-primary-darker: darken(var(--my-green), 20%);
   --ifm-color-primary-darkest: darken(var(--my-green), 30%);
@@ -59,7 +59,7 @@
   }
   
   [data-theme='dark'] {
-  --ifm-color-primary: var(--my-green);
+  --ifm-color-primary: var(--my-blue);
   --ifm-color-primary-dark: darken(var(--my-green), 10%);
   --ifm-color-primary-darker: darken(var(--my-green), 20%);
   --ifm-color-primary-darkest: darken(var(--my-green), 30%);
@@ -107,9 +107,13 @@ a {
   
 }
 
+
 .button {
   color: black;
  
+}
+.button:hover{
+  color:var(--my-blue);
 }
 
 .footer__link-item{
@@ -120,6 +124,7 @@ a {
   background-color: #2b3137;
   color:white;
 }
+
 
 .footer__title{
  font-weight: 900;
