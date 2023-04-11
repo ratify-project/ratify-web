@@ -34,24 +34,24 @@ const features = [
             </>
         ),
     },
-    {
-        title: 'Open Source Driven',
-        img:img4,
-        content: (
-            <>
-              Ratify is an open source project that is driven by a vibrant community of contributors. This means that you can benefit from the collective knowledge and experience of a diverse group of developers and users who are committed to making Ratify the best it can be.
-            </>
-        ),
-    },
-    {
-        title: 'Open Source Driven',
-        img:img5,
-        content: (
-            <>
-              Ratify is an open source project that is driven by a vibrant community of contributors. This means that you can benefit from the collective knowledge and experience of a diverse group of developers and users who are committed to making Ratify the best it can be.
-            </>
-        ),
-    },
+    // {
+    //     title: 'Open Source Driven',
+    //     img:img4,
+    //     content: (
+    //         <>
+    //           Ratify is an open source project that is driven by a vibrant community of contributors. This means that you can benefit from the collective knowledge and experience of a diverse group of developers and users who are committed to making Ratify the best it can be.
+    //         </>
+    //     ),
+    // },
+    // {
+    //     title: 'Open Source Driven',
+    //     img:img5,
+    //     content: (
+    //         <>
+    //           Ratify is an open source project that is driven by a vibrant community of contributors. This means that you can benefit from the collective knowledge and experience of a diverse group of developers and users who are committed to making Ratify the best it can be.
+    //         </>
+    //     ),
+    // },
 ];
 
 export default function Features() {
