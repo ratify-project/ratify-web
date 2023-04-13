@@ -51,6 +51,34 @@
     gap: 0.3rem;
     text-align: justify;
 }
+@media screen and (max-width: 1392px){
+    .features{
+        gap: 3rem;
+    }
+    .feature_card{
+        width:330px;
+    }
+    .section_padding{
+        padding:4rem 0;
+    }
+    .info{
+        font-size: 13px;
+    }
+}
+@media screen and (max-width: 1086px){
+    .features{
+        gap: 1rem;
+    }
+    .feature_card{
+        width:300px;
+    }
+    .section_padding{
+        padding:4rem 0;
+    }
+    .info{
+        font-size: 13px;
+    }
+}
 @media screen and (max-width: 1024px){
     .features{
         gap: 1rem;
@@ -88,10 +116,10 @@
         padding:2rem 0;
     }
     .info{
-        font-size: 14px;
+        font-size: 12px;
     }
 }
-@media screen and (max-width: 768px){
+@media screen and (max-width: 782px){
     .features{
         gap: 3rem;
     }
