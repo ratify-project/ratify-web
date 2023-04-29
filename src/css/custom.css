@@ -21,76 +21,34 @@
   --ifm-font-content-family: 'OpenSans', ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 }
 :root {
-  --my-green: #39A84A;
-  --my-red: #FA2C54;
   --my-blue: #3FB1E5;
-  
-  
-  --ifm-color-primary: var(--my-blue);
-  --ifm-color-primary-dark: darken(var(--my-green), 10%);
-  --ifm-color-primary-darker: darken(var(--my-green), 20%);
-  --ifm-color-primary-darkest: darken(var(--my-green), 30%);
-  --ifm-color-primary-light: lighten(var(--my-green), 10%);
-  --ifm-color-primary-lighter: lighten(var(--my-green), 20%);
-  --ifm-color-primary-lightest: lighten(var(--my-green), 30%);
-  
-  --ifm-color-secondary: var(--my-red);
-  --ifm-color-secondary-dark: darken(var(--my-red), 10%);
-  --ifm-color-secondary-darker: darken(var(--my-red), 20%);
-  --ifm-color-secondary-darkest: darken(var(--my-red), 30%);
-  --ifm-color-secondary-light: lighten(var(--my-red), 10%);
-  --ifm-color-secondary-lighter: lighten(var(--my-red), 20%);
-  --ifm-color-secondary-lightest: lighten(var(--my-red), 30%);
-  
-  --ifm-color-tertiary: var(--my-blue);
-  --ifm-color-tertiary-dark: darken(var(--my-blue), 10%);
-  --ifm-color-tertiary-darker: darken(var(--my-blue), 20%);
-  --ifm-color-tertiary-darkest: darken(var(--my-blue), 30%);
-  --ifm-color-tertiary-light: lighten(var(--my-blue), 10%);
-  --ifm-color-tertiary-lighter: lighten(var(--my-blue), 20%);
-  --ifm-color-tertiary-lightest: lighten(var(--my-blue), 30%);
-
+  --ifm-color-primary: #3FB1E5;
+  --ifm-color-primary-dark: #38A1CF;
+  --ifm-color-primary-darker: #308EB6;
+  --ifm-color-primary-darkest: #257499;
+  --ifm-color-primary-light: #4EC1F0;
+  --ifm-color-primary-lighter: #57C9F1;
+  --ifm-color-primary-lightest: #73D7F3;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  
-  --ifm-footer-link-color:white;
+  --docusaurus-highlighted-code-line-bg: rgba(63, 177, 229, 0.1);
+
+  --gradient-blue: linear-gradient(90.36deg, #3FB1E5 15.63%, #4285F4 90.96%);
   --theme-features-card: #FBFBFB;
-
-  }
-  
-  [data-theme='dark'] {
-  --ifm-color-primary: var(--my-blue);
-  --ifm-color-primary-dark: darken(var(--my-green), 10%);
-  --ifm-color-primary-darker: darken(var(--my-green), 20%);
-  --ifm-color-primary-darkest: darken(var(--my-green), 30%);
-  --ifm-color-primary-light: lighten(var(--my-green), 10%);
-  --ifm-color-primary-lighter: lighten(var(--my-green), 20%);
-  --ifm-color-primary-lightest: lighten(var(--my-green), 30%);
-  
-  --ifm-color-secondary: var(--my-red);
---ifm-color-secondary-dark: darken(var(--my-red), 10%);
---ifm-color-secondary-darker: darken(var(--my-red), 20%);
---ifm-color-secondary-darkest: darken(var(--my-red), 30%);
---ifm-color-secondary-light: lighten(var(--my-red), 10%);
---ifm-color-secondary-lighter: lighten(var(--my-red), 20%);
---ifm-color-secondary-lightest: lighten(var(--my-red), 30%);
-
---ifm-color-tertiary: var(--my-blue);
---ifm-color-tertiary-dark: darken(var(--my-blue), 10%);
---ifm-color-tertiary-darker: darken(var(--my-blue), 20%);
---ifm-color-tertiary-darkest: darken(var(--my-blue), 30%);
---ifm-color-tertiary-light: lighten(var(--my-blue), 10%);
---ifm-color-tertiary-lighter: lighten(var(--my-blue), 20%);
---ifm-color-tertiary-lightest: lighten(var(--my-blue), 30%);
-
---docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-
-
-  --ifm-navbar-link-color: #B9BFE6;
-  --theme-features-card: #484E56;
-
-  
 }
+
+[data-theme='dark'] {
+  --ifm-color-primary: #73D7F3;
+  --ifm-color-primary-dark: #5CBFDF;
+  --ifm-color-primary-darker: #529EC6;
+  --ifm-color-primary-darkest: #3D7E9D;
+  --ifm-color-primary-light: #8FDFF6;
+  --ifm-color-primary-lighter: #9BE4F7;
+  --ifm-color-primary-lightest: #BFEAFF;
+  --docusaurus-highlighted-code-line-bg: rgba(63, 177, 229, 0.3);
+  
+  --theme-features-card: #484E56;
+}
+
 
 h1,
 h2,
@@ -129,3 +87,4 @@ a {
 .footer__title{
  font-weight: 900;
 }
+ 
