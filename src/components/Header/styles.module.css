@@ -13,6 +13,7 @@
 }
 
 .header_content {
+    max-width: 40vw;
     flex: 1.9;
     display: flex;
     justify-content: center;
@@ -32,6 +33,7 @@
     font-size: 48px;
     font-weight: 600;
     margin-top: 1em;
+   
 }
 
 .header_content_input {
@@ -49,15 +51,34 @@
     justify-content: center;
     align-items: center;
 }
+.video {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.video iframe {
+    aspect-ratio: 16 / 9;
+    width: 120%;
+    height: 100%;
+    padding: 15px;
+}
 
 @media screen and (max-width: 1050px) {
+    .header_content{
+        max-width: 100%;
+    }
     .header {
         flex-direction: column;
+
     }
 
     .header_content {
         margin: 0 0 3rem;
+    }
+    .video iframe {
+        min-height: 300px;
     }
 }
 

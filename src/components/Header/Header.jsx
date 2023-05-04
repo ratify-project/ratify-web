@@ -12,8 +12,8 @@ export default function Header() {
                     <a class="button  button--lg" href="docs/1.0.0/Developer/developer-getting-started">Get Started</a>
                 </div>
             </div>
-            <div className={styles.header_image}>
-                {/* <ORAScubes title="ORAS Cubes" width="100%" /> */}
+            <div className={styles.video}>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/pj8Q8nnMQWM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
         </div>
     );
