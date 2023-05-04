@@ -88,7 +88,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'Developer/developer-getting-started',
             position: 'left',
             label: 'Docs',
           },
@@ -129,7 +129,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/1.0.0/intro/',
+                to: 'docs/1.0.0/Developer/developer-getting-started',
               },
             ],
           },
