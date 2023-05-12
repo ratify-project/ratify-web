@@ -64,8 +64,14 @@
     height: 100%;
     padding: 15px;
 }
+@media screen and (max-width: 1440px){
+    .header h3 {
+        font-size: 30px;
+        /* line-height: 60px; */
+    }
+}
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1097px) {
     .header_content{
         max-width: 100%;
     }
@@ -105,5 +111,8 @@
 
     .section_padding {
         padding: 3rem;
+    }
+    .video iframe{
+        min-height: 100px;
     }
 }
