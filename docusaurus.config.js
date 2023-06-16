@@ -93,6 +93,7 @@ const config = {
             label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: 'https://killercoda.com/notaryproject/scenario/ratify', label: 'Playground', position: 'left'},
           {
             type: 'docsVersionDropdown',
             position: 'right',
