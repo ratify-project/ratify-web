@@ -130,7 +130,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/Developer/developer-getting-started',
+                to: 'docs/1.0.0-rc.5/what-is-ratify',
               },
             ],
           },
@@ -158,7 +158,10 @@ const config = {
                 label: 'Blog',
                 to: '/blog',
               },
-              
+              {
+                label: 'Playground',
+                to: 'https://killercoda.com/notaryproject/scenario/ratify',
+              },
             ],
           },
         ],
