@@ -51,7 +51,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/ShravaniAK/Ratify-Website/',
+            'https://github.com/deislabs/ratify-web/',
           lastVersion: 'current',
           versions: {
             current: {
@@ -65,7 +65,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/ShravaniAK/Ratify-Website/',
+            'https://github.com/deislabs/ratify-web/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -88,7 +88,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'Developer/developer-getting-started',
+            docId: 'what-is-ratify',
             position: 'left',
             label: 'Docs',
           },
@@ -130,7 +130,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/1.0.0/Developer/developer-getting-started',
+                to: 'docs/Developer/developer-getting-started',
               },
             ],
           },
