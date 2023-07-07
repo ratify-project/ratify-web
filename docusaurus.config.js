@@ -130,7 +130,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/1.0.0-rc.5/what-is-ratify',
+                to: 'docs/1.0.0-rc.6/what-is-ratify',
               },
             ],
           },
