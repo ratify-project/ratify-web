@@ -55,8 +55,8 @@ const config = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: '1.0.0-rc.5',
-              path: '1.0.0-rc.5',
+              label: '1.0.0-rc.6',
+              path: '1.0.0-rc.6',
             },
           },
         },
@@ -130,7 +130,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/1.0.0-rc.5/what-is-ratify',
+                to: 'docs/1.0.0-rc.6/what-is-ratify',
               },
             ],
           },
