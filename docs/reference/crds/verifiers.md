@@ -1,4 +1,4 @@
-Ratify supports many verifiers to validate different artifact types. View more CRD samples [here](../../../config/samples/). Each verifier must specify the `name` of the verifier and the `artifactType` this verifier handles. Common properties:
+Ratify supports many verifiers to validate different artifact types. View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each verifier must specify the `name` of the verifier and the `artifactType` this verifier handles. Common properties:
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -52,7 +52,7 @@ spec:
 | trustPolicyDoc   | yes     |   [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts.          |     ""    |
 
 ## Cosign
-Cosign verifier can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/), learn more about the plugin [here](../../../plugins/verifier/cosign/README.md)
+Cosign verifier can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/), learn more about the plugin [here](https://github.com/deislabs/ratify/tree/main/plugins/verifier/cosign)
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
@@ -86,7 +86,7 @@ spec:
 
 ## Schemavalidator
 
-Validate Json artifacts against JSON schemas, learn more about the plugin [here](../../../plugins/verifier/schemavalidator/README.md)
+Validate Json artifacts against JSON schemas, learn more about the plugin [here](https://github.com/deislabs/ratify/tree/main/plugins/verifier/schemavalidator)
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1

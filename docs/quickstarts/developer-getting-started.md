@@ -109,7 +109,7 @@ Install Ratify using TLS and a self signed cert.
 
 Notes:
 
-- See [other ways](../../CONTRIBUTING.md#deploy-from-local-helm-chart)  to install and TLS/mTLS options.
+- See [other ways](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-from-local-helm-chart)  to install and TLS/mTLS options.
 - If changes are made to a plugin, they will have to be re built using `make build-plugins` and copy the output to `./ratify/plugins/`.
 
 1. Supply a certificate to use with Ratify (httpserver) or use the following script to create a self-signed certificate.
@@ -211,7 +211,7 @@ kubectl run demo --image=wabbitnetworks.azurecr.io/test/notary-image:unsigned
 
 In VSCode hit F5, the cli will be called and a sample image will be verified.
 
-See [debugging Ratify with VSCode](../../CONTRIBUTING.md#debugging-ratify-with-vs-code)
+See [debugging Ratify with VSCode](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#debugging-ratify-with-vs-code)
 
 ## Logs
 
