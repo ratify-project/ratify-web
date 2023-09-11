@@ -59,7 +59,7 @@ Prior to installing Ratify on the cluster:
     ```
     kubectl apply -f instrumentation/additional-scrape-configs.yaml -n monitoring
     ```
-    - Note: if the [scrape config](../../instrumentation/prometheus-additional.yaml) stored is updated and the secret needs to be regenerated. Run this command prior:
+    - Note: if the [scrape config](https://github.com/deislabs/ratify/blob/main/instrumentation/prometheus-additional.yaml) stored is updated and the secret needs to be regenerated. Run this command prior:
         ```
         kubectl create secret generic additional-scrape-configs --from-file=instrumentation/prometheus-additional.yaml --dry-run=client -oyaml > instrumentation/additional-scrape-configs.yaml
         ```

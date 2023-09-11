@@ -7,7 +7,7 @@ Logging is a very important part of Ratify as it provides a way to debug and und
 Ratify exposes a few options for users to configure the behaviors of the logger in the helm chart values or the configuration file below.
 
 ### Configuration
-When running Ratify as a K8s add-on, users could configure the logger by setting [helm chart values](../../charts/ratify/values.yaml), e.g.
+When running Ratify as a K8s add-on, users could configure the logger by setting [helm chart values](https://github.com/deislabs/ratify/blob/main/charts/ratify/values.yaml), e.g.
 ```yaml
 logger:
   formatter: "text"
@@ -50,7 +50,7 @@ In Ratify, users could see trace-id is appeneded to each log record.
 For Ratify contributors, you only need to follow 2 steps:
 1. Define a constant for the log option or a new log option field within the expecting component struct.
 2. Replace the original `logrus.Info` with `logger.GetLogger(ctx, logOpt).Info()`, which applies to all log levels.
-e.g. [executor](../../pkg/executor/core/executor.go)
+e.g. [executor](https://github.com/deislabs/ratify/blob/main/pkg/executor/core/executor.go)
 ```go
 import "github.com/deislabs/ratify/internal/logger"
 var logOpt = logger.Option{

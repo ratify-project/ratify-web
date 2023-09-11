@@ -1,6 +1,6 @@
 A `Policy` resource defines a policy evaluating the verification results for a subject.
 
-View more CRD samples [here](../../../config/samples/policy). The `metadata.name` is the policy name which would be applied. Common properties:
+View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples/policy). The `metadata.name` is the policy name which would be applied. Common properties:
 ```yml
 apiVersion: config.ratify.deislabs.io/v1alpha1
 kind: Policy

@@ -265,7 +265,7 @@ notation verifier will load all certificates from path specified in this array
 
 2. verificationCertStores:  
 
-A [certificate store](../../config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
+A [certificate store](https://github.com/deislabs/ratify/blob/main/config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
 
  `CertificateStore` is only available in K8 runtime, VerificationCertStores supersedes verificationCerts.
 In the following example, the verifier's configuration references 4 `CertificateStore`, certStore-akv, certStore-akv1, certStore-akv2 and certStore-akv3.
@@ -304,5 +304,5 @@ spec:
 
 ```
 ##### Breaking changes
-In version v1.0.0-rc.7, Ratify updated the name of built-in verifier from `notaryv2` to `notation` in accordance with [`notaryproject spec`](https://notaryproject.dev/docs/faq/#notary-project-terms). As a result, `notaryv2` verifier is only supported in Ratify v1.0.0-rc.6 and earlier versions. If you want to upgrade to v1.0.0-rc.7 or later, please update the verifier name to `notation` in the configuration or CR. Additionally, please update `notaryv2` to `notation` in your constraint templates if verifier name was referenced. e.g. [example constraint template](../../library/notation-issuer-validation/template.yaml).
+In version v1.0.0-rc.7, Ratify updated the name of built-in verifier from `notaryv2` to `notation` in accordance with [`notaryproject spec`](https://notaryproject.dev/docs/faq/#notary-project-terms). As a result, `notaryv2` verifier is only supported in Ratify v1.0.0-rc.6 and earlier versions. If you want to upgrade to v1.0.0-rc.7 or later, please update the verifier name to `notation` in the configuration or CR. Additionally, please update `notaryv2` to `notation` in your constraint templates if verifier name was referenced. e.g. [example constraint template](https://github.com/deislabs/ratify/blob/main/library/notation-issuer-validation/template.yaml).
 Note: If both `notaryv2` and `notation` verifiers exist, Ratify might execute both of them while the `notaryv2` verifier will fail the verification.

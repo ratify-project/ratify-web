@@ -1,6 +1,6 @@
 A `Certificate Store` resource defines an array of public certificates to fetch from a provider. 
 
-View more CRD samples [here](../../../config/samples/). Each provider must specify the `name` of the certificate store.
+View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1

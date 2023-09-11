@@ -171,8 +171,8 @@ While developing for HA scenarios, the `dev.high-availability.helmfile.yaml` can
 
 Prerequisites:
 - Install helmfile
-- Build your own images (follow instructions [here](../../CONTRIBUTING.md#build-an-image-with-your-local-changes))
-- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](../../CONTRIBUTING.md#deploy-using-dev-helmfile))
+- Build your own images (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
+- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
 
 ### Update `dev.high-availability.helmfile.yaml`
 Replace `repository`, `crdRepository`, and `tag` with previously built images:
