@@ -1,10 +1,10 @@
 ---
-title: Ratify configuration
-sidebar_position: 2
+title: Overview 
+sidebar_position: 3
 ---
 
-Ratify's configuration consist of [Store](./Developer/store.mdx), [Verifier](./Developer/verifier.mdx),
-and [Executor](./Developer/executor.mdx). 
+Ratify's configuration consist of [Store](./reference/store.md), [Verifier](./reference/verifier.md),
+and [Executor](./reference/executor.md). 
 
 ## Configuration file
 When Ratify runs in cli serve mode, configuration file can be dynamically updated while the server is running, subsequent verification will be based on the updated configuration.
@@ -16,9 +16,9 @@ When running Ratify in a pod, the `ConfigMap` will be mounted in the pod at the 
 
 Currently supported components through CRDs are:
 
-- [Verifiers](../docs/references/crds/verifiers.mdx)
-- [Stores](../docs/references/crds/stores.mdx)
-- [Certificate Stores](../docs/references/crds/certificate-stores.mdx)
+- [Verifiers](./reference/verifier.md)
+- [Stores](./reference/store.md)
+- [Certificate Stores](./reference/crds/certificate-stores.md)
 
 ### Get Crds
 Our helms charts are wired up to initialize CRs based on chart values. 
@@ -33,6 +33,7 @@ kubectl get certificatestores.config.ratify.deislabs.io --namespace default
 ### Update Crds
 You can choose to add / remove / update crds. 
 Sample command to update a verifier:
+
 ```bash
 kubectl apply -f .../ratify/config/samples/config_v1alpha1_verifier_schemavalidator.yaml
 ```
