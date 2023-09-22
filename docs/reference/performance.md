@@ -1,4 +1,4 @@
-# Ratify Performance at Scale
+# Performance at Scale
 
 Ratify’s security guarantees rely on its performance at various cluster scales. This document specifies the current ratify performance capabilities. It presents the most recent performance data findings and explains how the data was collected via an automated pipeline.
 
