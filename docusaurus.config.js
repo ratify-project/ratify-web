@@ -51,12 +51,12 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/deislabs/ratify-web/',
+            'https://github.com/deislabs/ratify-web/blob/main',
           lastVersion: 'current',
           versions: {
             current: {
-              label: '1.0.0-rc.6',
-              path: '1.0.0-rc.6',
+              label: '1.0',
+              path: '1.0',
             },
           },
         },
@@ -130,7 +130,7 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: 'docs/1.0.0-rc.6/what-is-ratify',
+                to: 'docs/1.0/what-is-ratify',
               },
             ],
           },
