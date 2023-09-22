@@ -1,26 +1,27 @@
 A `Policy` resource defines a policy evaluating the verification results for a subject.
 
-View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples/policy). The `metadata.name` is the policy name which would be applied. Common properties:
+View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples/policy). The `metadata.name` MUST be set to `ratify-policy` for Ratify to apply. Ratify will ensure that only one policy is actively under evaluation by limiting the `metadata.name` to `ratify-policy`. Common properties:
 ```yml
-apiVersion: config.ratify.deislabs.io/v1alpha1
+apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Policy
 metadata:
-  name: "configpolicy"
+  name: "ratify-policy"
 spec:
+  type: "rego-policy"
   parameters: required. Parameters specific to this policy
 ```
-There would be exactly one CR existing in the cluster. That means if users apply a new CR, the old one would be replaced.
 
-Note: `metadata.name` MUST be `configpolicy` or `regopolicy` per the usage.
+Note: `spec.type` MUST be `config-policy` or `rego-policy` per the usage.
 
 ## configpolicy
 Sample spec:
 ```yml
-apiVersion: config.ratify.deislabs.io/v1alpha1
+apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Policy
 metadata:
-  name: "configpolicy"
+  name: "ratify-policy"
 spec:
+  spec: "config-policy"
   parameters:
     artifactVerificationPolicies:
       "application/vnd.cncf.notary.signature": "any"
@@ -35,11 +36,12 @@ spec:
 ## regopolicy
 Sample spec:
 ```yml
-apiVersion: config.ratify.deislabs.io/v1alpha1
+apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Policy
 metadata:
-  name: "regopolicy"
+  name: "ratify-policy"
 spec:
+  spec: "rego-policy"
   parameters:
     passthroughEnabled: false
     policy: |
