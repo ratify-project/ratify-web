@@ -109,13 +109,13 @@ CPU  grows as workload size increases; however it remains very low compared to t
 
 Jobs were sharded over 5 deployments applied simultaneously. The test pod count was evenly distributed across each Job. Overall, request durations between Jobs and Deployment were fairly similar. Jobs in general led to a higher memory usage for Ratify, hinting to a higher RPS load on Ratify. This is in line with the original hypothesis that multiple smaller workload resources could potentially trigger a higher number of concurrent requests due to the Kubernetes scheduler processing each workload resource in parallel. 
 
-#### Distributed caching (Green)
-
-This test was unfortunately inconclusive at this point. The original goal for this test was to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR, the distributed caching resulted in many request timeout issues exceeding the 429 count. This result is not expected and likely a symptom of some underlying issue. More investigation required. 
-
-#### Single Instance vs Replicas (Orange)
+#### Single Instance vs Replicas (Green)
 
 The purpose of this test is to measure the limit for a single Ratify pod to service all cluster verification/mutaton requests. Ratify single instance pod performed well up to 2k pods. At that point, memory usage grew to the out of bounds.
+
+#### Distributed caching (Orange)
+
+This test was unfortunately inconclusive at this point. The original goal for this test was to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR, the distributed caching resulted in many request timeout issues exceeding the 429 count. This result is not expected and likely a symptom of some underlying issue. More investigation required. 
 
 ### Caveats
 
