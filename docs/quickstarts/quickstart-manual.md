@@ -3,8 +3,6 @@
 
 This document outlines the **manual** production ready steps to install Ratify with Gatekeeper in admission control scenarios. Please refer to the [README.MD](../quick-start.mdx) for recommended install steps.
 
-<hr>
-
 Prerequisites:
 - Kubernetes v1.20 or higher
 - OPA Gatekeeper v3.10 or higher  
@@ -72,7 +70,7 @@ kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-imag
 kubectl get pods demo
 ```
 
-Optionally you can see the output of the pod logs via: `kubectl logs demo`
+Optionally you can see the output of the pod logs via: `kubectl logs demo -n default`
 
 - Now deploy an unsigned image
 
