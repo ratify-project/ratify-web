@@ -82,8 +82,8 @@ const config = {
       navbar: {
         title: 'Ratify',
         logo: {
-          alt: 'My Site Logo',
-          src: 'imgs/ratify-logo.svg',
+          alt: 'Ratify Logo',
+          src: 'img/ratify-logo.svg',
         },
         items: [
           {
