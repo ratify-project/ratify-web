@@ -15,7 +15,7 @@ Prerequisites:
 ### Step 1: Install Gatekeeper, Ratify, and Constraints
 
 ```bash
-curl -L https://raw.githubusercontent.com/deislabs/ratify/main/helmfile.yaml | helmfile sync -f - 
+helmfile sync -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
 ```
 
 ### Step 2: See Ratify in action
@@ -47,7 +47,7 @@ You just validated the container images in your k8s cluster!
 
 ### Step 4: Uninstall
 ```bash
-curl -L https://raw.githubusercontent.com/deislabs/ratify/main/helmfile.yaml | helmfile destroy --skip-charts -f -
+helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
 ```
 
 ### Notes
