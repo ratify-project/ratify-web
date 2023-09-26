@@ -26,7 +26,7 @@ Once the installation is completed, you can test the deployment of an image that
 
 ```bash
 kubectl run demo --image=ghcr.io/deislabs/ratify/notary-image:signed -n default
-kubectl get pods demo -m default
+kubectl get pods demo -n default
 ```
 
 Optionally you can see the output of the pod logs via: `kubectl logs demo`
