@@ -41,3 +41,8 @@ Sample command to remove a verifier:
 ```bash
 kubectl delete verifiers.config.ratify.deislabs.io/verifier-notary 
 ```
+
+### Limitations
+Currently Ratify only supports single namespace, Ratify cannot distinguish CRs with the same metadata name from different namespaces.
+To ensure predictable results, please install all CRs in a single namespace. This limitation is being tracked by issue [1061](https://github.com/deislabs/ratify/issues/1061)
+
