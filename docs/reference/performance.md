@@ -8,18 +8,18 @@ Ratify’s security guarantees rely on its performance at various cluster scales
 
 
 ## Supported Limits:
-- Single Ratify Pod: up to 1k pod clusters, where each pod results in 50 supply chain artifacts being verified.
-- HA enabled Ratify Pod with 3 replicas: up to 10k pods
+- Single Ratify Pod: supports verification requests for up to 1k pod clusters, where each pod results in 50 supply chain artifacts being verified.
+- HA enabled Ratify Pod with 3 replicas: supports verification requests for up to 10k pod clusters
     - NOTE: For Azure users with large kubernetes clusters greater than 200 pods, a medium or large ACR region MUST be used to avoid large ACR throttling.
 
 ## Major Findings:
-- Ratify is primarily **constrained by the memory consumption limits (512Mib) and the registry throttling limits** (varies by registry and region for ACR)
+- Ratify is primarily **constrained by the memory consumption limits (512Mib) and the registry throttling limits** (varies by registry service tier and region for ACR)
 - **Single instance Ratify can support up to 1k pods comfortably.** Workloads larger than that trigger high memory usage. This eventually leads to the pod being Out-of-Memory (OOM) killed. 
 - **Deployment and Job workloads result in similar Ratify performance.** Concurrent jobs with many replicas seem to yield slightly larger concurrent requests to Ratify. However, the Ratify request durations and resource consumption is similar. 
 - **Minimal registry request throttling (429 reponse) can lead to drastic performance degradation for Ratify.** In large clusters (10k pods+) in XS ACR regions, Ratify's 429 rate spikes. This leads to back-off retries that prolong each verification operation. Longer running requests can lead to more concurrent requests being processed at once, which eventually increases pod memory usage. Throttling also increases the number of request timeouts leading to the K8s workload resource attempting to recreate the pod. This in turn generates more requests to Ratify. 
 - **Ratify's memory usage is directly correlated to the number of resources on the cluster.** Memory usage is a good indicator for Ratify deployment scale out. We may consider adding a Horizontal Pod Autoscaler (HPA) based on memory consumption.
 - **Ratify's CPU usage is fairly minimal**. Although CPU usage was not measured over the course of the test, but instead measured once after, the CPU limits seem to be well below the currently limits set. We may consider lowering the CPU request.  
-- **The performance benefit of the distributed cache for high availability usage is inconclusive.** Large cluster tests with distributed cache enabled in an XS region resulted in anomalous behavior and the logs show very slow request processing. We need to investigate why there is a bottleneck compared to when distributed cache is disabled.
+- **The performance benefit of the distributed cache for high availability usage is inconclusive.** Large cluster tests with distributed cache enabled in an XS region resulted in anomalous behavior and the logs show very slow request processing. Investigation as to why there is a bottleneck compared to when distributed cache is disabled is tracked [here](https://github.com/deislabs/ratify/issues/1117)
 
 ## Testing Details
 
@@ -115,13 +115,13 @@ The purpose of this test is to measure the limit for a single Ratify pod to serv
 
 #### Distributed caching (Orange)
 
-This test was unfortunately inconclusive at this point. The original goal for this test was to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR, the distributed caching resulted in many request timeout issues exceeding the 429 count. This result is not expected and likely a symptom of some underlying issue. More investigation required. 
+This test was unfortunately inconclusive at this point. The original goal for this test was to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR, the distributed caching resulted in many request timeout issues exceeding the 429 count. This result is not expected and likely a symptom of some underlying issue. Investigation tracked [here](https://github.com/deislabs/ratify/issues/1117).
 
 ### Caveats
 
 - The testing pipeline scrapes real time CPU/Memory metrics AFTER the workload has completed. Peak CPU/Memory usage is likely higher
 - The original testing plan included a maximum of 20k pod workloads to test. This test has been excluded from the current test due to performance bottlenecks with the ClusterLoaderV2 tool. Investigation is required.
-- As already noted above, the distributed caching at largest scale (10k pods) in the smallest region yielded anomalous results. Investigation is required.
+- As already noted above, the distributed caching at largest scale (10k pods) in the smallest region yielded anomalous results. Investigation tracked [here](https://github.com/deislabs/ratify/issues/1117)
 
 ## Azure Dev Ops Pipeline Implementation
 ### Prerequisites (needs to be done once per subscription)
