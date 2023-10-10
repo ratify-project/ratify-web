@@ -22,12 +22,12 @@ Ratify installation/upgrade for HA scenarios can be done via a `helmfile` or man
 
 ```bash
 # Sync helm chart resources defined with cluster
-curl -L https://raw.githubusercontent.com/deislabs/ratify/main/high-availability.helmfile.yaml | helmfile sync -f -
+helmfile sync -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
 ```
 
 ### Uninstall Steps
 ```bash
-curl -L https://raw.githubusercontent.com/deislabs/ratify/main/high-availability.helmfile.yaml | helmfile destroy --skip-charts -f -
+helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
 ```
 ## Manual Installation Steps
 
