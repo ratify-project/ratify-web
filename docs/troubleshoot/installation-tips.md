@@ -15,11 +15,9 @@ helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gateke
 You must provide a TLS certificate for Ratify to use or enable RATIFY_CERT_ROTATION. Enable feature flag `RATIFY_CERT_ROTATION` if you don't have a ready to use TLS certificate, Ratify will rotate certificates automatically when they are about to expire.
 
 ```bash
-# download the notation verification certificate
-curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
 helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
-    --set-file notationCert=./notation.crt \
+    --set-file notationCert=<Your Notation Public Cert> \
     --set featureFlags.RATIFY_CERT_ROTATION=true
 ```
