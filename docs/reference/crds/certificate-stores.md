@@ -107,8 +107,6 @@ The main use case of certificate store is for notation verifier in Ratify, so us
 
 In brief, users must provide CA certificates or self-signed signing certificates, which means leaf certificates are not allowed to be used. Whatever certificates are provided, Ratify would keep only CA certificates and self-signed certificates. Therefore, if only leaf certificates are provided, Ratify would fail the verification directly since there are no valid certificates.
 
-For `AzureKeyVault Certificate Provider`, users must use the self-signed certificates due to some limitations on the SDK API. If users want to configure a certificate chain from root to leaf, it's recommended to use the `Inline Certificate Provider` instead.
-
 # CRD Resource Create/Update 
 During the CRD creating/updating process, some matters require attention. The CRD operation could be successful even though some invalid values or typos are provided. Examples:
 
