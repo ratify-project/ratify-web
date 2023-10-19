@@ -115,7 +115,7 @@ The purpose of this test is to measure the limit for a single Ratify pod to serv
 
 #### Distributed caching (Orange)
 
-This test was unfortunately inconclusive at this point. The original goal for this test was to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR, the distributed caching resulted in many request timeout issues exceeding the 429 count. This result is not expected and likely a symptom of some underlying issue. Investigation tracked [here](https://github.com/deislabs/ratify/issues/1117).
+The goal for this test is to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR in the largest workloads, the request processing slowed down and the cache miss rate spiked leading to request timeouts. This result is not expected and is a symptom of an underlying issue. Investigation tracked [here](https://github.com/deislabs/ratify/issues/1117). Distributed caching is imperative for external verifiers as they run as seperate processes and thus cannot share an in memory cache. Future testing will include external verifier scenarios. 
 
 ### Caveats
 
