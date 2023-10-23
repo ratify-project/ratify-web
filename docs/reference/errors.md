@@ -39,7 +39,7 @@ Ratify can generate various errors, either from its core workflow or from extern
 | Code | Description | Trouble Shooting Guide |
 | ---- | ----------- | ---------------------- |
 | VERIFY_REFERENCE_FAILURE | verify reference failure | Generic error returned when the verifier fails to verify the reference. Please check the error details for more information. |
-| VERIFY_SIGNATURE_FAILURE | verify signature failure | Verifier failed to verify signature. Please check the error details from the verifier plugin and refer to plugin's documentation for more details. |
+| VERIFY_PLUGIN_FAILURE | verify plugin failure | Verifier plugin failed to verify. Please check the error details from the verifier plugin and refer to plugin's documentation for more details. |
 | SIGNATURE_NOT_FOUND | signature not found | No signature was found. Please validate the image has signatures attached. |
 
 #### Certificate Store errors
