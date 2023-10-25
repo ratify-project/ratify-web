@@ -48,7 +48,7 @@ spec:
 | Name        | Required | Description | Default Value |
 | ----------- | -------- | ----------- | ------------- | 
 | verificationCerts      | no    |      An array of string. Notation verifier will load all certificates from path specified in this array        |   ""            |
-| verificationCertStores      | no    |    Defines a collection of cert store objects. This property supersedes the path defined in `verificationCerts`. It is assumed that the referenced certificate store exist in the Ratify installed namespace, to reference a certificate store defined in a different namespace, please specify the full namespace name. E.g. mynamespace/myCert    |       ""        |
+| verificationCertStores      | no    |    Defines a collection of cert store objects. This property supersedes the path defined in `verificationCerts`. It is assumed that the referenced certificate store exists in the Ratify installed namespace. To reference a certificate store defined in a different namespace, please specify the full namespace name. E.g. `mynamespace/myCert`    |       ""        |
 | trustPolicyDoc   | yes     |   [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts.          |     ""    |
 
 ## Cosign
