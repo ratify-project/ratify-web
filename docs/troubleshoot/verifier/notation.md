@@ -47,7 +47,10 @@ registry scope [scope] with wild card(s) is not valid, make sure it is a fully q
 ```
 
 ### Cause and Solution
-The error is self-explanatory.
+Please inspect the `registryScope` in `TrustPolicy` of Notation Verifier CR is correct by using command:
+```
+kubectl describe verifiers.config.ratify.deislabs.io
+```
 
 Check [documentation](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#selecting-a-trust-policy-based-on-artifact-uri) for more details.
 
@@ -57,7 +60,10 @@ artifact [uri] has no applicable trust policy. Trust policy applicability for a 
 ```
 
 ### Cause and Solution
-Notation verifier cannot find a trust policy matching the given artifact reference. Please check if the registryScope of trust policy is correctly set up.
+Notation verifier cannot find a trust policy matching the given artifact reference. Please check if the registryScope of trust policy is correctly set up. Run the `kubectl describe` command to get the Notation veifier configuration.
+```
+kubectl describe verifiers.config.ratify.deislabs.io
+```
 
 Check [documentation](https://notaryproject.dev/docs/quickstart/#create-a-trust-policy) for more details.
 
@@ -93,7 +99,7 @@ error while parsing the certificate subject from the digital signature. error : 
 ```
 
 ### Cause and Solution
-The error is self-explanatory. This error usually occurs when the certificate subject of a certificate from the signature is invalid. Please check the error message for specific error. The subject MUST follow [RFC 4514 DN](https://datatracker.ietf.org/doc/html/rfc4514) syntax.
+This error usually occurs when the certificate subject of a certificate from the signature is invalid. Please check the error message for specific error. The subject MUST follow [RFC 4514 DN](https://datatracker.ietf.org/doc/html/rfc4514) syntax.
 
 ## Scenario 8
 ```
@@ -101,6 +107,6 @@ error while loading the trust store, [error message]
 ```
 
 ### Cause and Solution
-The error is self-explanatory. This error usually occurs when the trust store is not configured correctly. Please check the error message for specific error.
+This error usually occurs when the trust store is not configured correctly. Please check the error message for specific error.
 
 Check [Trust Policy](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-policy) and [Trust Store](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store) specs for more details.
