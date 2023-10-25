@@ -1,0 +1,38 @@
+---
+slug: ratify-v1.0.0-is-available
+title: Ratify v1.0.0 is available
+authors: [feynmanzhou]
+tags: [verification]
+---
+
+The Ratify maintainers are proud to announce the first major release v1.0.0 for production use!
+
+Ratify is an extensible verification framework for container images and other artifacts that can examine and use custom policies that you create to approve deployments in Kubernetes. Ratify can use and coordinate any number of custom verifiers for image metadata like signatures, SBOMs, vulnerability scan reports, and so on.
+
+Ratify was launched and open-sourced on December 9, 2021. After the fast iteration with 18 releases over the past two years, the core framework becomes mature and extensible now and reaches enterprise-grade stability. Users can easily run Ratify as an External Data Provider for Gatekeeper admission controller on Kubernetes with Helm.
+
+## Notable Capabilities in this Release
+
+- Ratify as a CLI binary for verifying artifacts stored in a registry
+- Verifier, Store, Certificate Store, and Policy CRDs for simple Ratify configuration
+- TLS certificate management and rotation for mTLS service-to-service communication
+- Out-of-the-box observability: logging and prometheus metrics support
+- Extensible plugin design to support new verifier and referrer store plugins
+- High availability support (Experimental) 
+    
+## Extensible plugin design
+
+## Support dynamic configuration
+
+## Observability
+
+## Ready for large-scale scenarios
+
+## Experimental features
+
+## Brand-new website 
+
+## What's next
+
+The Ratify maintainers are considering the following features for future milestones. We appreciate all kinds of input from the community. Feel free to reach out us on the Slack channel or GitHub issues to ask questions, provide feedback, or share ideas.
+
