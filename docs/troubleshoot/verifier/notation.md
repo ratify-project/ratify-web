@@ -23,9 +23,9 @@ Below is an example of a result log that occurs when Notation verifier fails to 
   ]
 ```
 
-Users can investigate the root cause of the Notation verifier by checking the `message` field of each failed `verifierReport`. The error message could be a nested error, the Notation error is the most inner error, e.g. `artifact \"ghcr.io/deislabs/ratify/notary-image@sha256:8e3d01113285a0e4aa574da8eb9c0f112a1eb979d72f73399d7175ba3cdb1c1b\" has no applicable trust policy. Trust policy applicability for a given artifact is determined by registryScopes. To create a trust policy, see: https://notaryproject.dev/docs/quickstart/#create-a-trust-policy` in the above example.
+Users can investigate the root cause of the Notation verifier by checking the `message` field of each failed `verifierReport`. The error message could be a nested error. The Notation error is the most inner error, e.g. `artifact \"ghcr.io/deislabs/ratify/notary-image@sha256:8e3d01113285a0e4aa574da8eb9c0f112a1eb979d72f73399d7175ba3cdb1c1b\" has no applicable trust policy. Trust policy applicability for a given artifact is determined by registryScopes. To create a trust policy, see: https://notaryproject.dev/docs/quickstart/#create-a-trust-policy` in the above example.
 
-Since the other levels of the error are always the same, thid TSG would focus on different errors returned by Notation verifier.
+Since the other levels of the error are always the same, this TSG focuses on different errors returned by Notation verifier.
 
 ## Scenario 1
 ```
@@ -47,7 +47,7 @@ registry scope [scope] with wild card(s) is not valid, make sure it is a fully q
 ```
 
 ### Cause and Solution
-Please inspect the `registryScope` in `TrustPolicy` of Notation Verifier CR is correct by using command:
+Please inspect the `registryScope` in `TrustPolicy` of Notation Verifier CR and make sure it is correct by using the command:
 ```
 kubectl describe verifiers.config.ratify.deislabs.io
 ```
