@@ -11,7 +11,7 @@ Ratify is an extensible verification framework for container images and other ar
 
 Ratify was launched and open-sourced on December 9, 2021. After the fast iteration with 18 releases over the past two years, the core framework becomes mature and extensible now and reaches enterprise-grade stability. Users can easily run Ratify as an External Data Provider for Gatekeeper admission controller on Kubernetes with Helm.
 
-## Notable Capabilities in this Release
+## Notable capabilities in this Release
 
 - Ratify as a CLI binary for verifying artifacts stored in a registry
 - Verifier, Store, Certificate Store, and Policy CRDs for simple Ratify configuration
@@ -22,15 +22,27 @@ Ratify was launched and open-sourced on December 9, 2021. After the fast iterati
     
 ## Extensible plugin design
 
+Ratify framework is designed from the beginning on an extensible plugin model without any affinity towards a particular verifier or storage model. 
+Ratify uses extensible plugin architecture to enable extensibility and interoperability to support both the existing and new emerging needs of the artifact verification. Developers can easily [create a new plugin](https://ratify.dev/docs/1.0/quickstarts/creating-plugins) and integrate into Ratify ecosystem. See [Framework overview](https://ratify.dev/docs/1.0/reference/ratify-framework-overview) for details. 
+
 ## Support dynamic configuration
+
+Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivers a Kubernetes-native experience for users. The configuration takes effect dynamically so users no need to restart the running Ratify. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
 
 ## Observability
 
+Observability is the process of gaining insight into the behavior and performance of applications running on Kubernetes, in order to monitor, troubleshoot, and identify issues more effectively. 
+Ratify introduces standardized logging and prometheus metrics support in this release so that users can gather and visualize the metrics via the popular monitoring and logging stack, like Prometheus and Grafana.
+It can help ensure the stability and performance of Kubernetes deployments and Ratify system, reduce downtime and outages, and improve efficiency.
+
 ## Ready for large-scale scenarios
+
+In order to provide security and reliability guarantees for production users, Ratify maintainers finished the performance load testing and published a report with detailed performance metrics. It demonstrates Ratify is ready for large-scale deployment scenario. See [performance at scale](https://ratify.dev/docs/1.0/reference/performance/) for details.
 
 ## Experimental features
 
-## Brand-new website 
+Experimental features are intended for testing and evaluation purposes only and should not be used in production environments. For higher performance and availability requirements, Ratify can be set to run with multiple replicas and a shared state store.
+Ratify supports High Availability (HA) using a distributed cache with Dapr and Redis under the hood. See [Install Ratify for High Availability](https://ratify.dev/docs/1.0/quickstarts/ratify-high-availability).
 
 ## What's next
 
