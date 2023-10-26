@@ -267,7 +267,7 @@ notation verifier will load all certificates from path specified in this array
 
 A [certificate store](https://github.com/deislabs/ratify/blob/main/config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
 
- `CertificateStore` is only available in K8 runtime, VerificationCertStores supersedes verificationCerts.
+ `CertificateStore` is only available in K8s runtime, VerificationCertStores supersedes verificationCerts.
 In the following example, the verifier's configuration references 4 `CertificateStore`, certStore-akv, certStore-akv1, certStore-akv2 and certStore-akv3.
 
 verificationCertStores property defines a collection of cert store objects. [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts. The following example shows a generic and permissive policy. Here, ca:certs is the only trust store specified and the certs suffix corresponds to the certs certification collection listed in the verificationCertStores section.   
