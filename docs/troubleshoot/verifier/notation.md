@@ -27,6 +27,17 @@ Users can investigate the root cause of the Notation verifier by checking the `m
 
 Since the other levels of the error are always the same, this TSG focuses on different errors returned by Notation verifier.
 
+## Debugging Commands
+To inspect the Notation verifier configuration, please use ```kubectl describe``` or ```kubectl get``` command to retrieve it.
+```bash
+kubectl describe verifiers.config.ratify.deislabs.io
+```
+or
+
+```bash
+kubectl get verifiers.config.ratify.deislabs.io -o yaml
+```
+
 ## Scenario 1
 ```
 artifact URI [uri] could not be parsed, make sure it is the fully qualified OCI artifact URI without the scheme/protocol. e.g domain.com:80/my/repository@sha256:digest
@@ -47,10 +58,7 @@ registry scope [scope] with wild card(s) is not valid, make sure it is a fully q
 ```
 
 ### Cause and Solution
-Please inspect the `registryScope` in `TrustPolicy` of Notation Verifier CR and make sure it is correct by using the command:
-```
-kubectl describe verifiers.config.ratify.deislabs.io
-```
+Please inspect the `registryScope` in `TrustPolicy` of Notation Verifier CR and make sure it is correct by using the [debugging commands](#debugging-commands).
 
 Check [documentation](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#selecting-a-trust-policy-based-on-artifact-uri) for more details.
 
@@ -60,10 +68,7 @@ artifact [uri] has no applicable trust policy. Trust policy applicability for a 
 ```
 
 ### Cause and Solution
-Notation verifier cannot find a trust policy matching the given artifact reference. Please check if the registryScope of trust policy is correctly set up. Run the `kubectl describe` command to get the Notation veifier configuration.
-```
-kubectl describe verifiers.config.ratify.deislabs.io
-```
+Notation verifier cannot find a trust policy matching the given artifact reference. Please check if the registryScope of trust policy is correctly set up. Run the [debugging commands](#debugging-commands) to get the Notation veifier configuration.
 
 Check [documentation](https://notaryproject.dev/docs/quickstart/#create-a-trust-policy) for more details.
 
