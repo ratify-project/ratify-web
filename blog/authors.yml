@@ -3,3 +3,7 @@ feynmanzhou:
   title: Notary Project maintainer
   url: https://github.com/feynmanzhou
   image_url: https://github.com/feynmanzhou.png
+ratify:
+  name: Ratify maintainers
+  url: https://github.com/deislabs/ratify
+  image_url: https://raw.githubusercontent.com/deislabs/ratify/main/logo.svg
