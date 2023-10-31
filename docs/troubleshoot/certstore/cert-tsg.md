@@ -27,11 +27,11 @@ This error occurs when Ratify fails to fetch certificates from akv provider due 
 Reconciler error CertificateStore=gatekeeper-system/certstore-akv controller=certificatestore controllerGroup=config.ratify.deislabs.io controllerKind=CertificateStore error=Error fetching certificates in store certstore-akv with azurekeyvault provider
 
 error: failed to get secret objectName:Certname, objectVersion:, error: keyvault.BaseClient#GetSecret: Failure responding to request: StatusCode=403, 
-Original Error: autorest/azure: Service returned an error. Status=403 Code="Forbidden" Message="The user, group or application 'appid=app;iss=https://sts.windows.net/tenant_id/' does not have secrets get permission on key vault 'keyvaultname;location=eastus'. For help resolving this issue, please see https://go.microsoft.com/fwlink/?linkid=2125287" InnerError={"code":"***AccessDenied***"}
+Original Error: autorest/azure: Service returned an error. Status=403 Code="Forbidden" Message="The user, group or application 'appid=app;iss=https://sts.windows.net/tenant_id/' ***does not have secrets get permission*** on key vault 'keyvaultname;location=eastus'. For help resolving this issue, please see https://go.microsoft.com/fwlink/?linkid=2125287" InnerError={"code":"***AccessDenied***"}
 
 ##### Cause and Solution
 
-When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please configure keyvault policy for user-assigned managed identity with command below. 
+When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please configure keyvault policy for the identity with command below. 
 Since the permission change is external to ratify, you MUST manually trigger a fetch operation by deleting and applying the CR again.
     
     ```bash
@@ -40,3 +40,4 @@ Since the permission change is external to ratify, you MUST manually trigger a f
     --object-id ${IDENTITY_OBJECT_ID}
     ```
  
+ Please comment on issue https://github.com/deislabs/ratify/issues/1131 if you 
