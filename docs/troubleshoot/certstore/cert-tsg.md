@@ -38,6 +38,8 @@ Since the permission change is external to ratify, you MUST manually trigger a f
     az keyvault set-policy --name ${AKV_NAME} \
     --secret-permissions get \
     --object-id ${IDENTITY_OBJECT_ID}
+
+    kubectl get certificatestores.config.ratify.deislabs.io/certstore-akv -o yaml > my_certstore_akv.yaml
+    kubectl delete certificatestores.config.ratify.deislabs.io/certstore-akv
+    kubectl apply -f my_certstore_akv.yaml
     ```
- 
- Please comment on issue https://github.com/deislabs/ratify/issues/1131 if you 
