@@ -1,4 +1,4 @@
-## Troubleshoot Certificate Store Errors
+# Troubleshoot Certificate Store Errors
 
 Please use ```kubectl get``` or ```kubectl describe``` command to retrieve the error.
 ```bash
@@ -32,13 +32,16 @@ Original Error: autorest/azure: Service returned an error. Status=403 Code="Forb
 ##### Cause and Solution
 
 When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please configure keyvault policy for the identity with command below. 
-Since the permission change is external to ratify, you MUST manually trigger a fetch operation by deleting and applying the CR again.
     
     ```bash
     az keyvault set-policy --name ${AKV_NAME} \
     --secret-permissions get \
     --object-id ${IDENTITY_OBJECT_ID}
+    ```
 
+Since the permission change is external to ratify, you MUST manually trigger a fetch operation by deleting and applying the CR again.
+
+    ```bash
     kubectl get certificatestores.config.ratify.deislabs.io/certstore-akv -o yaml > my_certstore_akv.yaml
     kubectl delete certificatestores.config.ratify.deislabs.io/certstore-akv
     kubectl apply -f my_certstore_akv.yaml
