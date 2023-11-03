@@ -16,7 +16,8 @@ Ratify was [launched and open-sourced](https://cloudblogs.microsoft.com/opensour
 ## Notable capabilities in this Release
 
 - Ratify as a CLI binary for verifying artifacts stored in a registry
-- Verifier, Store, Certificate Store, and Policy CRDs for simple Ratify configuration
+- Support multiple verifiers including Notation, Cosign, and SBOM
+- Support dynamic configuration through CRD
 - TLS certificate management and rotation for mTLS service-to-service communication
 - Out-of-the-box observability: logging and prometheus metrics support
 - Extensible plugin design to support new verifier and referrer store plugins
@@ -29,6 +30,12 @@ Ratify uses extensible plugin architecture to enable extensibility and interoper
 
 ![](/img/ratify-core-principals.png)
 
+## Support dynamic configuration through CRDs
+
+Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivers a Kubernetes-native experience for users. The configuration takes effect dynamically so users no need to restart the running Ratify. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
+
+![](/img/ratify-crd.png)
+
 ## Observability
 
 Observability is the process of gaining insight into the behavior and performance of applications running on Kubernetes, in order to monitor, troubleshoot, and identify issues more effectively. 
@@ -38,10 +45,6 @@ With the rich metrics and verbose logs, it can help ensure the stability and per
 All available metrics are listed in this [doc](https://ratify.dev/docs/1.0/reference/instrumentation#metrics-supported). Refer to this [guide](https://ratify.dev/docs/1.0/reference/instrumentation#prometheus-and-grafana-setup) to build your own visualized dashboard for Ratify with Prometheus and Grafana. 
 
 ![](/img/ratify-grafana.png)
-
-## Support dynamic configuration
-
-Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivers a Kubernetes-native experience for users. The configuration takes effect dynamically so users no need to restart the running Ratify. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
 
 ## Ready for large-scale scenarios
 
@@ -59,6 +62,16 @@ With the contribution from the community, the new [Ratify website (ratify.dev)](
 ## Adopted and trusted by industry leaders
 
 Ratify has been adopted in [AKS Image Integrity](https://learn.microsoft.com/en-us/azure/aks/image-integrity) and [AWS Signer](https://docs.aws.amazon.com/signer/latest/developerguide/kubernetes-verification.html) as the verification solution. As a vendor-neutral project, the early adoption status demonstrates the Ratify project's maturity and trustworthiness in the industry. 
+
+## See it in action
+
+When deploy a signed image and another unsigned image to Kubernetes, Ratify will allow the signed image to be deployed only and deny the unsigned image deployment.
+
+![](/img/demo-short.gif)
+
+Learn signing and verification end-to-end tutorial with [Notation](https://notaryproject.dev/) and Ratify:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qih39MXyptc?si=DZB3Dbu1OoB2p7CV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## What's next
 
