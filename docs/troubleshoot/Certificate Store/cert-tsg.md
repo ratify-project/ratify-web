@@ -18,7 +18,7 @@ Detail: **azure keyvault certificate provider: failed to convert PKCS12 Value to
 Issuccess:        false  
 
 ##### Cause and Solution
-PKCS12 format certs in Key Vault with nonexportable private keys causes a parsing failure because Go is hardcoded to expect a private key. We recommend switching to a PEM certs. 
+PKCS12 format certs in Key Vault with nonexportable private keys causes a parsing failure because Go is hardcoded to expect a private key. We recommend switching to PEM certs. 
 
 ###  Access Denied
 This error occurs when Ratify fails to fetch certificates from akv provider due to permissions issues.
