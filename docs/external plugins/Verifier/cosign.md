@@ -1,12 +1,12 @@
-# Cosign Verifier
+# Cosign
 
-This README outlines how this validation framework can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/). The verifier is added as a plugin to the framework that uses [cosign](https://github.com/sigstore/cosign/) packages to invoke the verification of an image. Cosign verifier works with remote registry that can provide cosign related artifacts linked as specially formatted tag to the subject artifact. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [oras](../../pkg/referrerstore/oras) referrer store plugin that uses the OCI registry API to discover and fetch the artifacts.
+This README outlines how this validation framework can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/). The verifier is added as a plugin to the framework that uses [cosign](https://github.com/sigstore/cosign/) packages to invoke the verification of an image. Cosign verifier works with remote registry that can provide cosign related artifacts linked as specially formatted tag to the subject artifact. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [oras](../../reference/crds/stores.md#oras) referrer store plugin that uses the OCI registry API to discover and fetch the artifacts.
 
 ## Fallback in OCIRegistry store
 A configuration flag called `cosignEnabled` is introduced to the plugin configuration. If this flag is enabled, the `ListReferrers` API will attempt to query for the cosign signatures for a subject in addition to the references queried using `referrers API`. If `cosignEnabled` is `false`, then only OCI 1.1 compatible Cosign signatures will be considered. All the cosign signatures are returned as the reference artifacts with the artifact type `application/vnd.dev.cosign.artifact.sig.v1+json` This option will enable to verify cosign signatures against any registry including the ones that don't support the [notaryproject](https://github.com/notaryproject)'s `referrers` API.
 
 # Signing
-Please refer cosign documentation on how to sign an image using cosign using [key-pair based signatures]((https://github.com/sigstore/cosign/blob/main/USAGE.md) and [keyless signatures](https://github.com/sigstore/cosign/blob/main/KEYLESS.md).
+Please refer cosign documentation on how to sign an image using cosign using [key-pair based signatures](https://docs.sigstore.dev/key_management/signing_with_self-managed_keys/) and [keyless signatures](https://docs.sigstore.dev/signing/quickstart/#keyless-signing-of-a-container).
 
 # Verification
 
@@ -17,6 +17,32 @@ Following is an example `ratify` config with cosign verifier. Please note the `k
 
 ### Configuration
 
+#### Kubernetes
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-cosign
+spec:
+  name: cosign
+  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+  parameters:
+    key: /path/to/cosign.pub
+---
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Store
+metadata:
+  name: store-oras
+spec:
+  name: oras
+  parameters:
+    cacheEnabled: true
+    cosignEnabled: true
+    ttl: 10
+```
+
+
+#### CLI
 ```json
 {
     "store": {
@@ -62,6 +88,16 @@ $ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/h
       "isSuccess": true,
       "name": "cosign",
       "message": "cosign verification success. valid signatures found",
+      "extensions": 
+      {
+        "signatures": [
+          {
+            "bundleVerified": false,
+            "isSuccess": true,
+            "signatureDigest": "sha256:abc123"
+          }
+        ]
+      },
       "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
     }
   ]
@@ -76,6 +112,31 @@ This section outlines how to use `ratify` to verify the signatures signed using 
 
 ### Configuration
 
+#### Kubernetes
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-cosign
+spec:
+  name: cosign
+  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+  parameters:
+    rekorURL: https://rekor.sigstore.dev
+---
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Store
+metadata:
+  name: store-oras
+spec:
+  name: oras
+  parameters:
+    cacheEnabled: true
+    cosignEnabled: true
+    ttl: 10
+```
+
+#### CLI
 ```json
 {
     "store": {
@@ -102,6 +163,7 @@ This section outlines how to use `ratify` to verify the signatures signed using 
             {
                 "name":"cosign",
                 "artifactTypes": "application/vnd.dev.cosign.artifact.sig.v1+json",
+                "rekorURL": "https://rekor.sigstore.dev"
             }
         ]
     }
@@ -110,22 +172,8 @@ This section outlines how to use `ratify` to verify the signatures signed using 
 
 Please note that the `key` is not specified in the config. This is because the keyless verification uses ephemeral keys and certificates, which are signed automatically by the [fulcio](https://github.com/sigstore/fulcio) root CA. Signatures are stored in the [Rekor](https://github.com/sigstore/rekor) transparency log, which automatically provides an attestation as to when the signature was created.
 
-Default Rekor transparency log URL is `https://rekor.sigstore.dev`. If using a custom Rekor transparency log instance, you can customize the Rekor URL using the `rekorURL` field.
-Note: If `rekorURL` is not provided, transparency log verification is skipped. 
-
-```json
-...
-    "verifier": {
-        "version": "1.0.0",
-        "plugins": [
-            {
-                "name":"cosign",
-                "artifactTypes": "application/vnd.dev.cosign.artifact.sig.v1+json",
-                "rekorURL": "https://rekor.sigstore.dev"
-            }
-        ]
-    }
-```
+The `rekorURL` MUST be provided for keyless verification. Otherwise, signature validation will fail.
+If using a custom Rekor transparency log instance, you can customize the Rekor URL using the `rekorURL` field.
 
 ### Usage
 
@@ -139,6 +187,16 @@ $ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/h
       "isSuccess": true,
       "name": "cosign",
       "message": "cosign verification success. valid signatures found",
+      "extensions": 
+      {
+        "signatures": [
+          {
+            "bundleVerified": true,
+            "isSuccess": true,
+            "signatureDigest": "sha256:abc123"
+          }
+        ]
+      },
       "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
     }
   ]
