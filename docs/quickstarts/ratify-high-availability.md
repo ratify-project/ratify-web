@@ -111,7 +111,7 @@ curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/
 helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
-    --set-file notationCert=./notation.crt \
+    --set-file notationCerts={./notation.crt} \
     --set featureFlags.RATIFY_CERT_ROTATION=true \
     --set featureFlags.RATIFY_DAPR_CACHE_PROVIDER=true \
     --set replicaCount=3 \
