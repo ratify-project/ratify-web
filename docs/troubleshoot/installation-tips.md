@@ -1,4 +1,4 @@
-### Installation FAQ
+# Installation FAQ
 
 Please use ```kubectl describe``` or ```kubectl logs``` to see the installation error.
 
