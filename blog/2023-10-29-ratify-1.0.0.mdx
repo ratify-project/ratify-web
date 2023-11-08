@@ -7,11 +7,13 @@ tags: [verification]
 
 The Ratify maintainers are proud to announce the first major release v1.0.0 for production use!
 
-Ratify is an extensible verification framework for container images and other artifacts that can examine and use custom policies that you create to approve deployments in Kubernetes. Ratify can use and coordinate any number of custom verifiers for image metadata like signatures, SBOMs, vulnerability scan reports, and so on.
-It helps users to validate the image integrity and authenticity in containers secure supply chain, ensures your deployments are built from a trusted entity and that images haven't been tampered with since their creation.
+Ratify is an extensible verification framework for container images and other artifacts that can examine and author policies to audit existing resources in Kubernetes. Ratify can use and manage any number of custom verifiers for image metadata like signatures, SBOMs, vulnerability scan reports, and so on.
+
+It helps users to validate the image integrity and authenticity in containers secure supply chain, ensuring your deployments are built from a trusted entity and that images haven't been tampered with since their creation.
+
 ![](/img/ratify-e2e.png)
 
-Ratify was [launched and open-sourced](https://cloudblogs.microsoft.com/opensource/2021/12/09/ratify-container-supply-chain-in-kubernetes/) on December 9, 2021. After the fast iteration with 18 releases over the past two years, the core framework becomes mature and extensible now and reaches enterprise-grade stability. Users can easily run Ratify as an External Data Provider for Gatekeeper admission controller on Kubernetes with Helm.
+Ratify was [created and open-sourced](https://cloudblogs.microsoft.com/opensource/2021/12/09/ratify-container-supply-chain-in-kubernetes/) on December 9, 2021. After quickly iterating with 18 releases over the past two years, the Ratify framework has became more mature and extensible, and has now reached enterprise-grade quality. Users can easily run Ratify as an External Data Provider for [Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/) admission controller on Kubernetes with Helm.
 
 ## Notable capabilities in this Release
 
@@ -25,21 +27,21 @@ Ratify was [launched and open-sourced](https://cloudblogs.microsoft.com/opensour
     
 ## Extensible plugin design
 
-Ratify framework is designed from the beginning on an extensible plugin model without any affinity towards a particular verifier or storage model. 
-Ratify uses extensible plugin architecture to enable extensibility and interoperability to support both the existing and new emerging needs of the artifact verification. Developers can easily [create a new plugin](https://ratify.dev/docs/1.0/quickstarts/creating-plugins) and integrate into Ratify ecosystem. See [Framework overview](https://ratify.dev/docs/1.0/reference/ratify-framework-overview) for details. 
+Ratify framework was designed from the beginning on an extensible plugin model without any affinity towards a particular verifier or storage model. 
+Ratify uses an extensible plugin architecture to enable extensibility and interoperability to support both the existing and new emerging needs of the artifact verification. Developers can easily [create a new plugin](https://ratify.dev/docs/1.0/quickstarts/creating-plugins) and integrate into Ratify ecosystem. See [Framework overview](https://ratify.dev/docs/1.0/reference/ratify-framework-overview) for details. 
 
 ![](/img/ratify-core-principals.png)
 
 ## Support dynamic configuration through CRDs
 
-Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivers a Kubernetes-native experience for users. The configuration takes effect dynamically so users no need to restart the running Ratify. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
+Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivering a Kubernetes-native experience for users. The configuration takes effect dynamically so that users have no need to restart the running Ratify Pod. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
 
 ![](/img/ratify-crd.png)
 
 ## Observability
 
 Observability is the process of gaining insight into the behavior and performance of applications running on Kubernetes, in order to monitor, troubleshoot, and identify issues more effectively. 
-Ratify introduces standardized logging component and metrics exporter for Prometheus in this release so that users can gather and visualize the metrics via the popular monitoring and logging stack, like Prometheus, Grafana, and EFK.
+Ratify introduces standardized logging component and metrics exporter for Prometheus in this release so that users can gather and visualize the metrics via a popular monitoring and logging stack with Prometheus, Grafana, and EFK.
 
 With the rich metrics and verbose logs, it can help ensure the stability and performance of Kubernetes deployments and Ratify system, reduce verification request latency, system downtime and improve security posture.
 All available metrics are listed in this [doc](https://ratify.dev/docs/1.0/reference/instrumentation#metrics-supported). Refer to this [guide](https://ratify.dev/docs/1.0/reference/instrumentation#prometheus-and-grafana-setup) to build your own visualized dashboard for Ratify with Prometheus and Grafana. 
