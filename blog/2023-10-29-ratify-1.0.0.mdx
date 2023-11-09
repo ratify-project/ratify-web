@@ -1,0 +1,95 @@
+---
+slug: ratify-v1.0.0-is-available
+title: Ratify v1.0.0 is available! An extensible verification framework for software supply chain security
+authors: [ratify]
+tags: [verification]
+---
+
+The Ratify maintainers are proud to announce the first major release v1.0.0 for production use!
+
+Ratify is an extensible verification framework for container images and other artifacts that can examine and author policies to audit existing resources in Kubernetes. Ratify can use and manage any number of custom verifiers for image metadata like signatures, SBOMs, vulnerability scan reports, and so on.
+
+It helps users to validate the image integrity and authenticity in containers secure supply chain, ensuring your deployments are built from a trusted entity and that images haven't been tampered with since their creation.
+
+![](/img/ratify-e2e.png)
+
+Ratify was [created and open-sourced](https://cloudblogs.microsoft.com/opensource/2021/12/09/ratify-container-supply-chain-in-kubernetes/) on December 9, 2021. After quickly iterating with 18 releases over the past two years, the Ratify framework has became more mature and extensible, and has now reached enterprise-grade quality. Users can easily run Ratify as an External Data Provider for [Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/) admission controller on Kubernetes with Helm.
+
+## Notable capabilities in this Release
+
+- Ratify as a CLI binary for verifying artifacts stored in a registry
+- Support multiple verifiers including Notation, Cosign, and SBOM
+- Support dynamic configuration through CRD
+- TLS certificate management and rotation for mTLS service-to-service communication
+- Out-of-the-box observability: logging and prometheus metrics support
+- Extensible plugin design to support new verifier and referrer store plugins
+- High availability support (Experimental) 
+    
+## Extensible plugin design
+
+Ratify framework was designed from the beginning on an extensible plugin model without any affinity towards a particular verifier or storage model. 
+Ratify uses an extensible plugin architecture to enable extensibility and interoperability to support both the existing and new emerging needs of the artifact verification. Developers can easily [create a new plugin](https://ratify.dev/docs/1.0/quickstarts/creating-plugins) and integrate into Ratify ecosystem. See [Framework overview](https://ratify.dev/docs/1.0/reference/ratify-framework-overview) for details. 
+
+![](/img/ratify-core-principals.png)
+
+## Support dynamic configuration through CRDs
+
+Ratify supports updating its common configuration through Kubernetes CRDs using kubectl commands, delivering a Kubernetes-native experience for users. The configuration takes effect dynamically so that users have no need to restart the running Ratify Pod. There are four CRDs including Certificate Store, Policy, Store, and Verifier. You can see [CRD reference docs](https://ratify.dev/docs/1.0/reference/crds/certificate-stores) for details.
+
+![](/img/ratify-crd.png)
+
+## Observability
+
+Observability is the process of gaining insight into the behavior and performance of applications running on Kubernetes, in order to monitor, troubleshoot, and identify issues more effectively. 
+Ratify introduces standardized logging component and metrics exporter for Prometheus in this release so that users can gather and visualize the metrics via a popular monitoring and logging stack with Prometheus, Grafana, and EFK.
+
+With the rich metrics and verbose logs, it can help ensure the stability and performance of Kubernetes deployments and Ratify system, reduce verification request latency, system downtime and improve security posture.
+All available metrics are listed in this [doc](https://ratify.dev/docs/1.0/reference/instrumentation#metrics-supported). Refer to this [guide](https://ratify.dev/docs/1.0/reference/instrumentation#prometheus-and-grafana-setup) to build your own visualized dashboard for Ratify with Prometheus and Grafana. 
+
+![](/img/ratify-grafana.png)
+
+## Ready for large-scale scenarios
+
+In order to provide security and reliability guarantees for production users in a large-scale deployment scenario, Ratify maintainers finished the load performance testing and published a performance report with detailed performance metrics. It demonstrates Ratify is ready for large-scale deployment scenario. See [performance at scale](https://ratify.dev/docs/1.0/reference/performance/) for details.
+
+## High Availability (Experimental)
+
+For higher performance and availability requirements, Ratify can be set to run with multiple replicas and a shared state store.
+Ratify supports High Availability (HA) using a distributed cache with Dapr and Redis under the hood. HA is an experimental feature in Ratify v1.0.0. Experimental features are intended for testing and evaluation purposes only and should not be used in production environments. See [Install Ratify for High Availability](https://ratify.dev/docs/1.0/quickstarts/ratify-high-availability) to set up an HA cluster.
+
+## Brand-new website
+
+With the contribution from the community, the new [Ratify website (ratify.dev)](https://ratify.dev/) is launched along with the major release. All Ratify documentation has also been migrated from the code repository to the website repository. It provides friendly user experience for readers.
+
+## Adopted and trusted by industry leaders
+
+Ratify has been adopted in [AKS Image Integrity](https://learn.microsoft.com/en-us/azure/aks/image-integrity) and [AWS Signer](https://docs.aws.amazon.com/signer/latest/developerguide/kubernetes-verification.html) as the verification solution. As a vendor-neutral project, the early adoption status demonstrates the Ratify project's maturity and trustworthiness in the industry. 
+
+## See it in action
+
+When deploy a signed image and another unsigned image to Kubernetes, Ratify will allow the signed image to be deployed only and deny the unsigned image deployment.
+
+![](/img/demo-short.gif)
+
+Learn signing and verification end-to-end tutorial with [Notation](https://notaryproject.dev/) and Ratify:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qih39MXyptc?si=DZB3Dbu1OoB2p7CV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+## What's next
+
+The Ratify maintainers are considering the following major features for the next milestone. 
+
+- Support verifying SBOM of a container image
+- Support verifying vulnerability reports of a container image 
+- Multi-tenancy support
+
+The detailed issues for the next release are tracked in the [v1.1.0 milestone](https://github.com/deislabs/ratify/milestone/15). 
+We appreciate all kinds of input from the community. Feel free to reach out us on the [Slack channel](https://cloud-native.slack.com/archives/C03T3PEKVA9) or [GitHub issues](https://github.com/deislabs/ratify/issues) to ask questions, provide feedback, or share ideas.
+
+## Acknowledgements
+
+The Ratify team wants to thank the entire Ratify community for all the activity and engagement that has been vital for helping the project grow and reach this major milestone.
+
+## Try it now
+
+You can follow this [quick start](https://ratify.dev/docs/1.0/quick-start) to try Ratify v1.0.0 and signature verification demo within minutes.
