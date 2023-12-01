@@ -58,6 +58,7 @@ const config = {
               path: '1.0',
             }
           },
+          includeCurrentVersion: false,
         },
         blog: {
           showReadingTime: true,
