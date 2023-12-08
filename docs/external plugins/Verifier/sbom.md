@@ -25,7 +25,7 @@ Alice has a Kubernetes cluster. The software she deploys to her cluster depends 
 Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
 1. Use syft to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
     ```shell
-    syft -o spdx-json --file sbom.spdx.json ${TEST_REGISTRY}/sbom:v0
+    syft -o spdx-json --file sbom.spdx.json myregistry.io/sbom/alpine:3.18.2
     ```
     
 2. A tool such as `oras` is used to package, attach, and then push the report to registry
@@ -144,7 +144,7 @@ helm install ratify \
 Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
 1. Use syft to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
     ```shell
-    syft -o spdx-json --file sbom.spdx.json ${TEST_REGISTRY}/sbom:v0
+    syft -o spdx-json --file sbom.spdx.json myregistry.io/sbom/alpine:3.18.2
     ```
     
 2. A tool such as `oras` is used to package, attach, and then push the report to registry
