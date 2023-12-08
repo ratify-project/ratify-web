@@ -6,12 +6,11 @@ This document outlines how Ratify can be used to verify sbom (Software bill of m
 
 ## Table of Contents
 
-* [SBOM with License and Package Validation](#example-scenario)
+* [SBOM with License and Package Validation](#sbom-with-license-and-package-validation)
 * [SBOM with Signature Validation](#sbom-with-signature-validation)
 * [Configuration](#configuration)
-* [Future improvement](#configuration)
+* [Future improvement](#future-improvements)
 * [FAQ](#faq)
-
 
 ## SBOM with License and Package Validation
 
@@ -111,7 +110,7 @@ time=2023-12-07T20:02:17.238355853Z level=info msg=verify result for subject myr
   ]
 } 
 ```
-## Vulnerability Report with Signature Validation
+## SBOM with Signature Validation
 
 Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
 - does not contain licenses that could conflict with her business interest
