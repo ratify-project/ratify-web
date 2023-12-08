@@ -161,7 +161,7 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
         --set featureFlags.RATIFY_CERT_ROTATION=true \
         --set akvCertConfig.enabled=true \
         --set akvCertConfig.vaultURI=${VAULT_URI} \
-        --set akvCertConfig.certificates[0].certificateName=${KEY_NAME} \
+        --set akvCertConfig.cert1Name=${KEY_NAME} \
         --set akvCertConfig.tenantId=${TENANT_ID} \
         --set oras.authProviders.azureWorkloadIdentityEnabled=true \
         --set azureWorkloadIdentity.clientId=${IDENTITY_CLIENT_ID}

@@ -111,7 +111,7 @@ kubectl create secret docker-registry ratify-regcred -n <ratify-namespace> --doc
 helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
-    --set-file notationCerts={./notation.crt} \
+    --set-file notationCert=./notation.crt \
     --set oras.authProviders.k8secretsEnabled=true
 ```
 

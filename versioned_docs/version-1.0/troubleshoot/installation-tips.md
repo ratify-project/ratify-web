@@ -18,6 +18,6 @@ You must provide a TLS certificate for Ratify to use or enable RATIFY_CERT_ROTAT
 helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
-    --set-file notationCerts={<Your Notation Public Cert>} \
+    --set-file notationCert=<Your Notation Public Cert> \
     --set featureFlags.RATIFY_CERT_ROTATION=true
 ```
