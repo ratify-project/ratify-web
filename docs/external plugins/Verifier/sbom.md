@@ -238,7 +238,7 @@ spec:
   parameters:
     disallowedPackages:
     - name: busybox
-      version: 
+      version: 1.36.1-r0
     disallowedLicenses: 
     - MPL
 ```
