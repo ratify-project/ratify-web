@@ -1,18 +1,19 @@
 # SBOM Validation
 
-This document outlines how Ratify can be used to verify sbom (Software bill of material). The `sbom` verifier is added as a plugin to the Ratify verification framework. Currently the sbom verifier supports the following report types:
-
+This document outlines how Ratify can be used to verify sbom (Software bill of material). The `sbom` verifier is added as a plugin to the Ratify verification framework.  Currently the sbom verifier is in 2.0.0-alpha release, and it supports the following sbom validation:
 - sbom attached to the subject image as a referrer artifact
-- Reports in SARIF format
-- Reports generated in spdx+json format
+- sbom generated in spdx+json format
 
 ## Table of Contents
 
-* [Example Scenario](#example-scenario)
-* [Configuration](#configuration)
+* [SBOM with License and Package Validation](#example-scenario)
 * [SBOM with Signature Validation](#sbom-with-signature-validation)
+* [Configuration](#configuration)
+* [Future improvement](#configuration)
+* [FAQ](#faq)
 
-## Example Scenario 
+
+## SBOM with License and Package Validation
 
 Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
 - does not contain licenses that could conflict with her business interest
@@ -20,10 +21,36 @@ Alice has a Kubernetes cluster. The software she deploys to her cluster depends 
 
 ### Walkthrough
 
-#### 1. Installation and configuration
+#### 1. Generate SBOM and attach to your image
+
+Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
+1. Use syft to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
+    ```shell
+    syft -o spdx-json --file sbom.spdx.json ${TEST_REGISTRY}/sbom:v0
+    ```
+    
+2. A tool such as `oras` is used to package, attach, and then push the report to registry
+    - `artifact-type` MUST be `application/spdx+json`
+    ```shell
+    oras attach \
+        --artifact-type application/spdx+json \
+        myregistry.io/sbom/alpine:3.18.2 \
+        sbom.spdx.json:application/spdx+json
+    ```
+
+The resulting image will have a single SBOM artifact attached:
+
+```shell
+> oras discover myregistry.io/sbom/alpine:3.18.2 -o tree
+myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62
+└── application/spdx+json
+    └── sha256:6944ae19f248ed93a494c528a839d3eac4c33df6ca81d6f762a0483af8b2b87f
+```
+
+#### 2. Ratfy Installation and configuration
 First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to installs Gatekeeper on the cluster. 
 
-Second, install Ratify and configure the sbom verifier with disallowed license and package information.
+Second, install Ratify and configure the sbom verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. Copy left license `MPL` are also disallowed due to license restrictions.
 
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
@@ -31,92 +58,238 @@ helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
     --set featureFlags.RATIFY_CERT_ROTATION=true \
-    --set vulnerabilityreport.enabled=true \
-    TO FIX command
+    --set sbom.enabled=true \
+    --set sbom.disallowedLicenses={"MPL"} \
+    --set sbom.disallowedPackages[0].name="busybox" \
+    --set sbom.disallowedPackages[0].version="1.36.1-r0"
     
 ```
-#### 2. Generate SBOM and attach to your image
 
-Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/vuln/alpine:3.18.2`. A reference artifact is generated:
-1. Use Trivy to scan `myregistry.io/vuln/alpine:3.18.2` and output a report in SARIF format
-    ```shell
-    trivy image -q -f sarif myregistry.io/vuln/alpine:3.18.2 > trivy-sarif.json
-    ```
-    
-2. A tool such as `oras` is used to package, attach, and then push the report to registry
-    - `artifact-type` MUST be `application/sarif+json`
-    - `org.opencontainers.image.created` annotation with RFC3339 formatted current timestamp
-    ```shell
-    oras attach \
-        --artifact-type application/sarif+json \
-        --annotation "org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-        myregistry.io/vuln/alpine:3.18.2 \
-        trivy-sarif.json:application/sarif+json
-    ```
-
-The resulting image will have a single SARIF vulnerability report artifact attached:
-
-```shell
-> oras discover myregistry.io/vuln/alpine:3.18.2 -o tree
-myregistry.io/vuln/alpine@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70
-└── application/sarif+json
-    └── sha256:6170ef41e5a7c7088f86e3bc6b9c370cf97e613f7c7e359628c0119ec7d3d5f4
-```
 #### 3. Deploying test image
-Finally we will attempt to deploy our test image `myregistry.io/vuln/alpine:3.18.2`. We expect this to FAIL since our vulnerability report indicates multiple HIGH and CRITICAL level severities:
+Finally we will attempt to deploy our test image `myregistry.io/sbom/alpine:3.18.2`. We expect this to FAIL since the SBOM contains disallowed packages busybox:
 
 ```shell
-> kubectl run vuln-alpine-image -n default --image=myregistry.io/vuln/alpine:3.18.2
-Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [vulnerability-report-validation-constraint] Subject failed verification: myregistry.io/vuln/alpine@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70
+> kubectl run alpine-image -n default --image=myregistry.io/sbom/alpine:3.18.2, the output
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: Subject failed verification: myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62
 ```
 
 Taking a look at the Ratify logs reveals the failing report:
 
 ```json
 > kubectl logs deploy/ratify -n gatekeeper-system
-time=2023-11-20T12:00:00Z level=info msg=verify result for subject myregistry.io/vuln/alpine@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70: {
+time=2023-12-07T20:02:17.238355853Z level=info msg=verify result for subject myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62: {
   "verifierReports": [
     {
-      "subject": "myregistry.io/vuln/alpine@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70",
+      "subject": "myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62",
       "isSuccess": false,
-      "name": "vulnerabilityreport",
-      "message": "vulnerability report validation failed",
+      "name": "verifier-sbom",
+      "message": "SBOM validation failed.",
       "extensions": {
-        "scanner": "trivy",
-        "severityViolations": [
+        "creationInfo": {
+          "created": "2023-12-07T19:22:42.448010842Z",
+          "creators": [
+            "Organization: Anchore, Inc",
+            "Tool: syft-0.36.0"
+          ],
+          "licenseListVersion": "3.15"
+        },
+        "packageViolations": [
           {
-            "defaultConfiguration": {
-              "level": "error"
-            },
-            "fullDescription": {
-              "text": "There is a stack overflow vulnerability in ash.c:6030 in busybox before 1.35. In the environment of Internet of Vehicles, this vulnerability can be executed from command to arbitrary code execution."
-            },
-            "help": {
-              "markdown": "**Vulnerability CVE-2022-48174**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|CRITICAL|ssl_client|1.36.1-r1|[CVE-2022-48174](https://avd.aquasec.com/nvd/cve-2022-48174)|\n\nThere is a stack overflow vulnerability in ash.c:6030 in busybox before 1.35. In the environment of Internet of Vehicles, this vulnerability can be executed from command to arbitrary code execution.",
-              "text": "Vulnerability CVE-2022-48174\nSeverity: CRITICAL\nPackage: ssl_client\nFixed Version: 1.36.1-r1\nLink: [CVE-2022-48174](https://avd.aquasec.com/nvd/cve-2022-48174)\nThere is a stack overflow vulnerability in ash.c:6030 in busybox before 1.35. In the environment of Internet of Vehicles, this vulnerability can be executed from command to arbitrary code execution."
-            },
-            "helpUri": "https://avd.aquasec.com/nvd/cve-2022-48174",
-            "id": "CVE-2022-48174",
-            "name": "OsPackageVulnerability",
-            "properties": {
-              "precision": "very-high",
-              "security-severity": "9.8",
-              "tags": [
-                "vulnerability",
-                "security",
-                "CRITICAL"
-              ]
-            },
-            "shortDescription": {
-              "text": "stack overflow vulnerability in ash.c leads to arbitrary code execution"
-            }
+            "License": "GPL-2.0-only",
+            "Name": "busybox",
+            "Version": "1.36.1-r0"
           },
-          ...
+          {
+            "License": "GPL-2.0-only",
+            "Name": "busybox-binsh",
+            "Version": "1.36.1-r0"
+          }
         ]
-      }
+      },
+      "artifactType": "application/spdx+json"
+    }
+  ]
+} 
+```
+## Vulnerability Report with Signature Validation
+
+Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
+- does not contain licenses that could conflict with her business interest
+- does not contain any vulnerable packages
+
+Furthermore, the most recent report being validated must have a verified Notary Project signature attached to it.
+
+### Installation 
+First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to install Gatekeeper. 
+
+Second, install Ratify with the sbom verifier enabled and configured. The sbom verifier must also be configured and cert provided. Here, we will assume the report is signed using the quickstart image's signing key.
+
+```bash
+helm repo add ratify https://deislabs.github.io/ratify
+# download the notary verification certificate
+curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
+helm install ratify \
+    ratify/ratify --atomic \
+    --namespace gatekeeper-system \
+    --set featureFlags.RATIFY_CERT_ROTATION=true \
+    --set sbom.enabled=true \
+    --set sbom.notaryProjectSignatureRequired=true \
+    --set sbom.disallowedLicenses={"MPL"} \
+    --set sbom.disallowedPackages[0].name="busybox" \
+    --set sbom.disallowedPackages[0].version="1.36.1-r0"
+    
+```
+
+### 1. Generate, sign the SBOM and attach to your image
+
+Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
+1. Use syft to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
+    ```shell
+    syft -o spdx-json --file sbom.spdx.json ${TEST_REGISTRY}/sbom:v0
+    ```
+    
+2. A tool such as `oras` is used to package, attach, and then push the report to registry
+    - `artifact-type` MUST be `application/spdx+json`
+    ```shell
+    oras attach \
+        --artifact-type application/spdx+json \
+        myregistry.io/sbom/alpine:3.18.2 \
+        sbom.spdx.json:application/spdx+json
+    ```
+
+3. Use [`notation`](https://notaryproject.dev/) to sign the report
+  ```shell
+  report_digest=$(oras discover myregistry.io/sbom/alpine:3.18.2 -o json | jq .manifests[0].digest | tr -d \")
+  notation sign myregistry.io/sbom/alpine@$report_digest
+  ```
+
+TODO: update this section
+The resulting image will have a single sbom artifact attached with Notary Project signature attached:
+
+```shell
+> oras discover myregistry.io/sbom/alpine:3.18.2 -o tree
+myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62
+└── application/spdx+json
+    └── sha256:6944ae19f248ed93a494c528a839d3eac4c33df6ca81d6f762a0483af8b2b87f
+        └── application/vnd.cncf.notary.signature
+            └── sha256:3ed4d26f01c6dc5b410e2370031d2222dd27f1cfa16fca74dff2966f9bac9df9
+```
+
+Finally we will attempt to deploy our test image `myregistry.io/sbom/alpine:3.18.2`. We expect this to FAIL since our package busybox is not allowed.
+
+```
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac9af2df4ba06b26f62",
+      "isSuccess": false,
+      "name": "verifier-sbom",
+      "message": "SBOM validation failed.",
+      "extensions": {
+        "creationInfo": {
+          "created": "2023-12-07T19:22:42.448010842Z",
+          "creators": [
+            "Organization: Anchore, Inc",
+            "Tool: syft-0.36.0"
+          ],
+          "licenseListVersion": "3.15"
+        },
+        "packageViolations": [
+          {
+            "License": "GPL-2.0-only",
+            "Name": "busybox",
+            "Version": "1.36.1-r0"
+          },
+          {
+            "License": "GPL-2.0-only",
+            "Name": "busybox-binsh",
+            "Version": "1.36.1-r0"
+          }
+        ]
+      },
+      "nestedResults": [
+        {
+          "subject": "myregistry.io/sbom/alpine@sha256:6944ae19f248ed93a494c528a839d3eac4c33df6ca81d6f762a0483af8b2b87f",
+          "isSuccess": true,
+          "name": "notation",
+          "message": "signature verification success",
+          "extensions": {
+            "Issuer": "CN=wabbit-networks.io,O=Notary,L=Seattle,ST=WA,C=US",
+            "SN": "CN=wabbit-networks.io,O=Notary,L=Seattle,ST=WA,C=US"
+          },
+          "artifactType": "application/vnd.cncf.notary.signature"
+        }
+      ],
+      "artifactType": "application/spdx+json"
     }
   ]
 }
-
 ```
- 
+## Configuration
+Sample YAML
+```json
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-sbom
+spec:
+  name: sbom
+  artifactTypes: application/spdx+json
+  parameters:
+    disallowedPackages:
+    - name: busybox
+      version: 
+    disallowedLicenses: 
+    - MPL
+```
+| Name                  | Required | Path                                  | Description                                                                                                                                                                                          | Default Value                      |
+| --------------------- | -------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| disallowedPackages            | No       | spec.parameters.disallowedPackages            | Array of disallowed packages. If version is empty, all packages with matching name will be disallowed.                                                                                                                                                              | []                                |
+| disallowedLicenses  | No       | spec.parameters.disallowedLicenses  | String array of disallowed licenses.  | []                                 |
+
+### CLI
+
+Sample JSON
+```json
+{
+    "store": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "oras",
+                "useHttp": true
+            }
+        ]
+    },
+    "policy": {
+        "version": "1.0.0",
+        "plugin": {
+            "name": "configPolicy",
+            "artifactVerificationPolicies": {
+                "application/spdx+json": "all"
+            }
+        }
+    },
+    "verifier": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "sbom",
+                "artifactTypes": "application/spdx+json",
+                "disallowedLicenses": ["MPL"],
+                "disallowedPackages":[{"name":"busybox","version":"1.36.1-r0"}]
+            }
+        ]
+    }
+}
+```
+### Future Improvements
+Please vote on these issues to help us prioritize:
+- [SBOM Verifier to support other formats](https://github.com/deislabs/ratify/issues/1206)
+- License check is limited
+
+### FAQ
+
+#### Why are there multiple external verifiers that can verify SBOMs?
+These verifiers are authored by various contributors to fit their project need. The license checker implements a strict validation against the allowed licenses list, where as the SBOM verifier works against a disallowed license and package list.
