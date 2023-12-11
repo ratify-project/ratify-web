@@ -14,7 +14,7 @@ This document outlines how Ratify can be used to verify SBOM (Software bill of m
 
 ## SBOM with License and Package Validation
 
-Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
+Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components. She wants to make sure container images meet the following criteria:
 - does not contain licenses that could conflict with her business interest
 - does not contain any vulnerable packages
 
@@ -49,7 +49,7 @@ myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac
 #### 2. Ratfy Installation and configuration
 First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to installs Gatekeeper on the cluster. 
 
-Second, install Ratify and configure the SBOM verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. [Copy left ](https://www.gnu.org/licenses/copyleft.en.html) license such as `MPL` are also disallowed due to license restrictions.
+Second, install Ratify and configure the SBOM verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. [Copy left ](https://www.gnu.org/licenses/copyleft.en.html) license such as `MPL` is also disallowed due to license restrictions.
 
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
@@ -112,7 +112,7 @@ time=2023-12-07T20:02:17.238355853Z level=info msg=verify result for subject myr
 ```
 ## SBOM with Signature Validation
 
-Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
+Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components. She wants to make sure container images meet the following criteria:
 - does not contain licenses that could conflict with her business interest
 - does not contain any vulnerable packages
 
