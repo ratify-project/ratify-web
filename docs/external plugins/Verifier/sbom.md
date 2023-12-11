@@ -1,8 +1,8 @@
 # SBOM Validation
 
-This document outlines how Ratify can be used to verify sbom (Software bill of material). The `sbom` verifier is added as a plugin to the Ratify verification framework.  Currently the sbom verifier is in 2.0.0-alpha release, and it supports the following sbom validation:
-- sbom attached to the subject image as a referrer artifact
-- sbom generated in spdx+json format
+This document outlines how Ratify can be used to verify SBOM (Software bill of material). The `sbom` verifier is added as a plugin to the Ratify verification framework.  Currently the SBOM verifier is in 2.0.0-alpha release, and it supports the following SBOM validation:
+- SBOM attached to the subject image as a referrer artifact
+- SBOM generated in [JSON(.spdx.json)](https://spdx.dev/learn/overview/) format
 
 ## Table of Contents
 
@@ -22,8 +22,8 @@ Alice has a Kubernetes cluster. The software she deploys to her cluster depends 
 
 #### 1. Generate SBOM and attach to your image
 
-Use a sbom generator such as syft to generate an sbom for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
-1. Use syft to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
+Use a SBOM generator such as syft to generate an SBOM for your iamge  `myregistry.io/sbom/alpine:3.18.2`. A reference artifact is generated:
+1. Use [syft](https://github.com/anchore/syft) to scan `myregistry.io/sbom/alpine:3.18.2` and save the output file
     ```shell
     syft -o spdx-json --file sbom.spdx.json myregistry.io/sbom/alpine:3.18.2
     ```
@@ -34,7 +34,7 @@ Use a sbom generator such as syft to generate an sbom for your iamge  `myregistr
     oras attach \
         --artifact-type application/spdx+json \
         myregistry.io/sbom/alpine:3.18.2 \
-        sbom.spdx.json:application/spdx+json
+        sbom.spdx.json
     ```
 
 The resulting image will have a single SBOM artifact attached:
@@ -49,7 +49,7 @@ myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac
 #### 2. Ratfy Installation and configuration
 First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to installs Gatekeeper on the cluster. 
 
-Second, install Ratify and configure the sbom verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. Copy left license `MPL` are also disallowed due to license restrictions.
+Second, install Ratify and configure the SBOM verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. [Copy left ](https://www.gnu.org/licenses/copyleft.en.html) license such as `MPL` are also disallowed due to license restrictions.
 
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
@@ -121,7 +121,7 @@ Furthermore, the most recent report being validated must have a verified Notary 
 ### Installation 
 First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to install Gatekeeper. 
 
-Second, install Ratify with the sbom verifier enabled and configured. The sbom verifier must also be configured and cert provided. Here, we will assume the report is signed using the quickstart image's signing key.
+Second, install Ratify with the SBOM verifier enabled and configured. The SBOM verifier must also be configured and cert provided. Here, we will assume the report is signed using the quickstart image's signing key.
 
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
@@ -131,6 +131,7 @@ helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
     --set featureFlags.RATIFY_CERT_ROTATION=true \
+    --set-file notationCert=./notation.crt \
     --set sbom.enabled=true \
     --set sbom.notaryProjectSignatureRequired=true \
     --set sbom.disallowedLicenses={"MPL"} \
@@ -153,7 +154,7 @@ Use a sbom generator such as syft to generate an sbom for your iamge  `myregistr
     oras attach \
         --artifact-type application/spdx+json \
         myregistry.io/sbom/alpine:3.18.2 \
-        sbom.spdx.json:application/spdx+json
+        sbom.spdx.json
     ```
 
 3. Use [`notation`](https://notaryproject.dev/) to sign the report
