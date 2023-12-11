@@ -49,7 +49,7 @@ myregistry.io/sbom/alpine@sha256:96f270a2d97f70713ef7bd6c4b80552178bf97fc6bd75ac
 #### 2. Ratfy Installation and configuration
 First, follow the first step of the [manual quickstart](../../quickstarts/quickstart-manual.md) to installs Gatekeeper on the cluster. 
 
-Second, install Ratify and configure the sbom verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. Copy left license `MPL` are also disallowed due to license restrictions.
+Second, install Ratify and configure the sbom verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads to arbitrary code execution. Copy left license `MPL` is also disallowed due to license restrictions.
 
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
