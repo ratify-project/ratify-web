@@ -112,7 +112,7 @@ time=2023-12-07T20:02:17.238355853Z level=info msg=verify result for subject myr
 ```
 ## SBOM with Signature Validation
 
-Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
+Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components. She wants to make sure the container images meet the following criteria:
 - does not contain licenses that could conflict with her business interest
 - does not contain any vulnerable packages
 
