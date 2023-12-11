@@ -14,7 +14,7 @@ This document outlines how Ratify can be used to verify sbom (Software bill of m
 
 ## SBOM with License and Package Validation
 
-Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components, she wants to make sure the container images meets the following criteria:
+Alice has a Kubernetes cluster. The software she deploys to her cluster depends on many open source components. She wants to make sure the container images meet the following criteria:
 - does not contain licenses that could conflict with her business interest
 - does not contain any vulnerable packages
 
