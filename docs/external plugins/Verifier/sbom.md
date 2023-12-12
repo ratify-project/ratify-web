@@ -63,7 +63,11 @@ helm install ratify \
     --set sbom.disallowedPackages[0].version="1.36.1-r0"
     
 ```
-
+Third, deploy a `demo` constraint.
+```
+kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+```
 #### 3. Deploying test image
 Finally we will attempt to deploy our test image `myregistry.io/sbom/alpine:3.18.2`. We expect this to FAIL since the SBOM contains disallowed packages busybox:
 
@@ -123,6 +127,12 @@ First, follow the first step of the [manual quickstart](../../quickstarts/quicks
 
 Second, install Ratify with the SBOM verifier enabled and configured. The SBOM verifier must also be configured and cert provided. Here, we will assume the report is signed using the quickstart image's signing key.
 
+Third, deploy a `demo` constraint.
+```
+kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+```
+
 ```bash
 helm repo add ratify https://deislabs.github.io/ratify
 # download the notary verification certificate
@@ -131,7 +141,7 @@ helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
     --set featureFlags.RATIFY_CERT_ROTATION=true \
-    --set-file notationCert=./notation.crt \
+    --set-file notationCerts={./notation.crt} \
     --set sbom.enabled=true \
     --set sbom.notaryProjectSignatureRequired=true \
     --set sbom.disallowedLicenses={"MPL"} \
@@ -163,7 +173,6 @@ Use a sbom generator such as syft to generate an sbom for your iamge  `myregistr
   notation sign myregistry.io/sbom/alpine@$report_digest
   ```
 
-TODO: update this section
 The resulting image will have a single sbom artifact attached with Notary Project signature attached:
 
 ```shell
@@ -293,3 +302,5 @@ Please vote on these issues to help us prioritize:
 
 #### Why are there multiple external verifiers that can verify SBOMs?
 These verifiers are authored by various contributors to fit their project need. The license checker implements a strict validation against the allowed licenses list, where as the SBOM verifier works against a disallowed license and package list.
+
+The licensechecker verifier has been DEPRECATED and will be removed in future releases. Please use the SBOM verifier for license checks moving forward. Package license verification is associated typically with SBOMs. As such, Ratify has decided to incorporate package license filtering in SBOM verification.
