@@ -50,11 +50,12 @@ The verifier configuration is [TBD] YAML/JSON  with the following properties
 
 ##### Plugin Configuration objects
 
-The following are the keys used to describe configuration of  individual plugins.
+The following are the keys used to describe configuration of individual plugins.
 
 | Property | Type | IsRequired | Description |
 | -------- | -------- | -------- | --------- |
-| name     | string     | true     |The name of the plugin that should match with plugin binary on disk. Must not contain characters disallowed in file paths for the system (e.g. / or \) |
+| name     | string     | true     |The name of the plugin that should match with plugin binary on disk. Must not contain characters disallowed in file paths for the system (e.g. / or \). From version 1.1.0, `name` can be customized when `type` has been specified. This feature is backward compatible, when `type` is not provided, `name` would behave like `type`.|
+| type     | string     | false     |The type of the plugin that should match with plugin binary on disk. Must not contain characters disallowed in file paths for the system (e.g. / or \) |
 | pluginBinDirs     | array     | false     |The list of paths to look for the plugin binary to execute. Default: the home path of the framework. |
 | artifactTypes     | array     | true     |The list of artifact types for which this verifier plugin has to be executed. [TBD] May change to `matchingLabels` |
 | nestedReferences     | array     | false     |The list of artifact types for which this verifier should initiate nested verification. [TBD] This is subject to change as it is under review |
@@ -85,6 +86,7 @@ An interace defined in ```golang```:
 ```go=
 type ReferenceVerifier interface {
  Name() string
+ Type() string
  CanVerify(ctx context.Context, referenceDescriptor ocispecs.ReferenceDescriptor) bool
  Verify(ctx context.Context,
   subjectReference common.Reference,
@@ -99,6 +101,10 @@ type ReferenceVerifier interface {
 #### Name
 
 The method is used to get the name of the verifier.
+
+#### Type
+
+The method is used to get the type of the verifier.
 
 #### CanVerify
 

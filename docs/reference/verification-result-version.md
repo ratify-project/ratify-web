@@ -134,6 +134,9 @@ definitions:
       name:
         type: string
         description: The name of the verifier that performed the verification
+      type:
+        type: string
+        description: The type of the verifier that performed the verification, optional
       extensions:
         type: object
         description: Any extended information about the verification result
@@ -153,7 +156,8 @@ definitions:
         {
           "isSuccess": true,
           "message": "SBOM verification success. The schema is good.",
-          "name": "sbom",
+          "name": "verifier-sbom",
+          "type": "sbom",
           "extensions": {
             "created": "2023-05-11T05:20:43Z",
             "creators": [
@@ -173,7 +177,8 @@ definitions:
             {
               "isSuccess": true,
               "message": "signature verification success",
-              "name": "notation",
+              "name": "verifier-notation",
+              "type": "notation",
               "extensions": {
                 "Issuer": "CN=ratify-bats-test,O=Notary,L=Seattle,ST=WA,C=US",
                 "SN": "CN=ratify-bats-test,O=Notary,L=Seattle,ST=WA,C=US"
