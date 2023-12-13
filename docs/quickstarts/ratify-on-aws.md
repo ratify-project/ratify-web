@@ -8,15 +8,23 @@ This guide assumes you are starting from scratch, but portions of the guide can 
 
 ## Table of Contents
 
-1. [Prerequisites](#prerequisites)
-2. [Setting Up ECR](#set-up-ecr)
-3. [Setting Up EKS](#set-up-eks)
-4. [Prepare Container Image](#prepare-container-image)
-5. [Configure Ratify](#configure-ratify)
-6. [Deploy Ratify](#deploy-ratify)
-7. [Deploy Container Image](#deploy-container-image)
-8. [Other AWS Integrations](#other-aws-integrations)
-9. [Cleaning Up](#cleaning-up)
+- [Ratify on AWS](#ratify-on-aws)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Set Up ECR](#set-up-ecr)
+  - [Set Up EKS](#set-up-eks)
+  - [Prepare Container Image](#prepare-container-image)
+    - [Using Cosign](#using-cosign)
+    - [Using Notation](#using-notation)
+  - [Configure Ratify](#configure-ratify)
+    - [Ratify](#ratify)
+    - [Gatekeeper](#gatekeeper)
+  - [Deploy Ratify](#deploy-ratify)
+  - [Deploy Container Image](#deploy-container-image)
+  - [Other AWS Integrations](#other-aws-integrations)
+    - [IAM Roles for Service Accounts](#iam-roles-for-service-accounts)
+    - [AWS Signer](#aws-signer)
+  - [Cleaning Up](#cleaning-up)
 
 ## Prerequisites
 
@@ -198,7 +206,8 @@ helm install gatekeeper/gatekeeper  \
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
 ```
 
 Once Gatekeeper has been deployed into the cluster, we can deploy Ratify with the provided helm chart. For validating cosign signatures, we can deploy Ratify configured with the public key we created earlier:
