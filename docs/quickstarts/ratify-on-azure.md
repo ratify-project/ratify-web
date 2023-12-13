@@ -145,7 +145,8 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
     ```
 
 2. Install Ratify on AKS from helm chart:

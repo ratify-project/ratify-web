@@ -19,7 +19,8 @@ helm install gatekeeper/gatekeeper  \
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
 ```
 
 > NOTE: `validatingWebhookTimeoutSeconds` and `mutationWebhookTimeoutSeconds` increased from 3 to 5 and 1 to 2 respectively, so all Ratify operations complete in complex scenarios. See [discussion here](https://github.com/deislabs/ratify/issues/269) to remove this requirement. Kubernetes v1.20 or higher is REQUIRED to increase timeout. Timeout is configurable in helm chart under `provider.timeout` section.   

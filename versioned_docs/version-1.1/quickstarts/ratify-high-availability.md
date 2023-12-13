@@ -52,7 +52,8 @@ helm install gatekeeper/gatekeeper  \
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
 ```
 
 ### Install Redis
