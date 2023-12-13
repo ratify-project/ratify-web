@@ -7,16 +7,18 @@ By the end of this guide you will have a public ECR repository, an EKS cluster w
 This guide assumes you are starting from scratch, but portions of the guide can be skipped if you have an existing EKS cluster, ECR repository, or AWS Signer resources.
 
 ## Table of Contents
-1. [Prerequisites](#prerequisites)
-2. [Set up ECR](#set-up-ecr)
-3. [Set up EKS](#set-up-eks)
-4. [Prepare Container Image](#prepare-container-image)
-5. [Sign Container Image](#sign-container-image)
-6. [Deploy Gatekeeper](#deploy-gatekeeper)
-7. [Configure IAM Permissions](#configure-iam-permissions)
-8. [Deploy Ratify](#deploy-ratify)
-9. [Deploy Container Image](#deploy-container-image)
-10. [Cleaning Up](#cleaning-up)
+- [Ratify with AWS Signer](#ratify-with-aws-signer)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Set Up ECR](#set-up-ecr)
+  - [Set up EKS](#set-up-eks)
+  - [Prepare Container Image](#prepare-container-image)
+  - [Sign Container Image](#sign-container-image)
+  - [Deploy Gatekeeper](#deploy-gatekeeper)
+  - [Configure IAM Permissions](#configure-iam-permissions)
+  - [Deploy Ratify](#deploy-ratify)
+  - [Deploy Container Image](#deploy-container-image)
+  - [Cleaning Up](#cleaning-up)
 
 ## Prerequisites
 
@@ -138,7 +140,8 @@ helm install gatekeeper/gatekeeper  \
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
 ```
 
 Next, we need to deploy a Gatekeeper policy and constraint. For this guide, we will use a sample policy and constraint that requires images to have at least one trusted signature.

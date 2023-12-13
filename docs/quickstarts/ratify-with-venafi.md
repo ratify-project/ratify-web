@@ -7,12 +7,14 @@ By the end of this guide you will have a Kubernetes cluster with Gatekeeper and 
 This guide assumes you have a working Kubernetes cluster and [Venafi CodeSign Protect](https://venafi.com/codesign-protect/) platform.  Portions of this guide can be skipped if you have an existing cluster and/or repository.
 
 ## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Prepare Container Image](#prepare-container-image)
-- [Sign Container Image](#sign-container-image)
-- [Deploy Gatekeeper](#deploy-gatekeeper)
-- [Deploy Ratify](#deploy-ratify)
-- [Deploy Container Image](#deploy-container-image)
+- [Ratify with Venafi CodeSign Protect](#ratify-with-venafi-codesign-protect)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Prepare Container Image](#prepare-container-image)
+  - [Sign Container Image](#sign-container-image)
+  - [Deploy Gatekeeper](#deploy-gatekeeper)
+  - [Deploy Ratify](#deploy-ratify)
+  - [Deploy Container Image](#deploy-container-image)
 
 ## Prerequisites
 
@@ -94,7 +96,8 @@ helm install gatekeeper/gatekeeper  \
     --namespace gatekeeper-system --create-namespace \
     --set enableExternalData=true \
     --set validatingWebhookTimeoutSeconds=5 \
-    --set mutatingWebhookTimeoutSeconds=2
+    --set mutatingWebhookTimeoutSeconds=2 \
+    --set externaldataProviderResponseCacheTTL=10s
 ```
 
 Next, we need to deploy a Gatekeeper policy and constraint. For this guide, we will use a sample policy and constraint that requires images to have at least one trusted signature.
