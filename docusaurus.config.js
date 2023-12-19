@@ -51,13 +51,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/deislabs/ratify-web/blob/main',
-          versions: {
-            "1.0": {
-              label: '1.0',
-              path: '1.0',
-            }
-          }
+            'https://github.com/deislabs/ratify-web/blob/main'
         },
         blog: {
           showReadingTime: true,
