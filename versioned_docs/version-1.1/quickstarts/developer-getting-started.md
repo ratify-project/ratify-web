@@ -99,7 +99,7 @@ helm install gatekeeper/gatekeeper  \
     --version=${GATEKEEPER_VERSION} \
     --set validatingWebhookTimeoutSeconds=5 \
     --set mutatingWebhookTimeoutSeconds=2 \
-    --set externaldataProviderResponseCacheTTL=10s
+    --set externaldataProviderResponseCacheTTL=10s    
 ```
 
 ## Ratify
