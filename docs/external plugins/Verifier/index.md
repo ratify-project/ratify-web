@@ -1,4 +1,4 @@
-# External Verifiers
+# Verifiers
 
 Ratify currently build [external verifiers](https://github.com/deislabs/ratify/tree/main/plugins/verifier) below.
  
