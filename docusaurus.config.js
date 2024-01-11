@@ -72,6 +72,13 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      algolia:{
+        apiKey:'22f800332771c65f3bd7110dc87689c3',
+        contexualSearch:true,
+        indexName:'ratify',
+        appId:'1E1M1B8RZA',
+      },
+
       navbar: {
         title: 'Ratify',
         logo: {
