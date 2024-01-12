@@ -30,8 +30,8 @@ spec:
   parameters:
     verificationCertStores:  # certificates for validating signatures
       certs: # name of the trustStore
-        - certstore-akv # name of the certificate store CRD to include in this trustStore
-        - certstore-akv1 
+        - default/certstore-akv # namespace/name of the certificate store CRD to include in this trustStore
+        - default/certstore-akv1 
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
