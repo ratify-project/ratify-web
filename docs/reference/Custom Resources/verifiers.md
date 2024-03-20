@@ -1,3 +1,5 @@
+# Verifier
+
 Ratify supports many verifiers to validate different artifact types. View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each verifier must specify the `name` of the verifier and the `artifactType` this verifier handles. Common properties:
 
 ```yml

@@ -1,3 +1,5 @@
+# Store
+
 A `Store` resource defines how to discover and retrieve reference types for a subject.
 Please review doc [here](https://github.com/deislabs/ratify/blob/main/docs/reference/store.md) for a full list of store capabilities. 
 To see more sample store configuration, click [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each resource must specify the `name` of the store.

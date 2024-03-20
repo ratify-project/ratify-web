@@ -1,3 +1,8 @@
+# Certificate Store (Deprecated)
+
+>[!WARNING]
+> `CertificateStore` is **DEPRECATED** in favor of `KeyManagementProvider`. Please migrate to [`KeyManagementProvider`](./key-management-providers.md). Support will be removed in `v2.0.0`
+
 A `Certificate Store` resource defines an array of public certificates to fetch from a provider. 
 
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
@@ -17,7 +22,6 @@ status: # supported in version >= config.ratify.deislabs.io/v1beta1
   properties: # provider specific properties of the fetched certificates. If the current certificate fetch operation fails, this property displays the properties of last successfully cached certificate
 ```
 
-# Certificate Store Provider
 ## AzureKeyVault Certificate Provider
 See notation integration example [here](../../reference/verifier.md#section-6-built-in-verifiers)
 ```yml
