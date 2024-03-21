@@ -27,26 +27,27 @@ Ratify can generate various errors, either from its core workflow or from extern
 ### Errors from external/built-in plugins
 
 #### Generic plugin errors
-| Code | Description | Trouble Shooting Guide |
-| ---- | ----------- | ---------------------- |
-| PLUGIN_INIT_FAILURE | plugin init failure | The plugin fails to be initialized. Please check error details and validate the plugin config is correctly provided. |
-| PLUGIN_NOT_FOUND | plugin not found | No plugin was found. Verify the required plugin is supported by Ratify and check the plugin name is entered correctly. |
-| DOWNLOAD_PLUGIN_FAILURE | download plugin failure | Failed to download plugin. Please verify the provided plugin configuration is correct and check the error details for further investigation. Refer to https://github.com/deislabs/ratify/blob/main/docs/reference/dynamic-plugins.md for more information. |
-| CERT_INVALID | cert invalid | The certificate is invalid. Please verify the provided inline certificates or certificates fetched from key vault are in valid format. Refer to https://github.com/deislabs/ratify/blob/main/docs/reference/crds/certificate-stores.md for more information. |
-| PROVIDER_NOT_FOUND | provider not found | No provider was found. Please verify that the necessary policy provider has been registered and that the provider's name has been entered correctly. |
+| Code                    | Description             | Trouble Shooting Guide                                                                                                                                                                                                                                       |
+| ----------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| PLUGIN_INIT_FAILURE     | plugin init failure     | The plugin fails to be initialized. Please check error details and validate the plugin config is correctly provided.                                                                                                                                         |
+| PLUGIN_NOT_FOUND        | plugin not found        | No plugin was found. Verify the required plugin is supported by Ratify and check the plugin name is entered correctly.                                                                                                                                       |
+| DOWNLOAD_PLUGIN_FAILURE | download plugin failure | Failed to download plugin. Please verify the provided plugin configuration is correct and check the error details for further investigation. Refer to https://github.com/deislabs/ratify/blob/main/docs/reference/dynamic-plugins.md for more information.   |
+| CERT_INVALID            | cert invalid            | The certificate is invalid. Please verify the provided inline certificates or certificates fetched from key vault are in valid format. Refer to https://github.com/deislabs/ratify/blob/main/docs/reference/crds/certificate-stores.md for more information. |
+| PROVIDER_NOT_FOUND      | provider not found      | No provider was found. Please verify that the necessary policy provider has been registered and that the provider's name has been entered correctly.                                                                                                         |
 
 #### Verifier errors
-| Code | Description | Trouble Shooting Guide |
-| ---- | ----------- | ---------------------- |
-| VERIFY_REFERENCE_FAILURE | verify reference failure | Generic error returned when the verifier fails to verify the reference. Please check the error details for more information. |
-| VERIFY_PLUGIN_FAILURE | verify plugin failure | Verifier plugin failed to verify. Please check the error details from the verifier plugin and refer to plugin's documentation for more details. |
-| SIGNATURE_NOT_FOUND | signature not found | No signature was found. Please validate the image has signatures attached. |
+| Code                     | Description              | Trouble Shooting Guide                                                                                                                          |
+| ------------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| VERIFY_REFERENCE_FAILURE | verify reference failure | Generic error returned when the verifier fails to verify the reference. Please check the error details for more information.                    |
+| VERIFY_PLUGIN_FAILURE    | verify plugin failure    | Verifier plugin failed to verify. Please check the error details from the verifier plugin and refer to plugin's documentation for more details. |
+| SIGNATURE_NOT_FOUND      | signature not found      | No signature was found. Please validate the image has signatures attached.                                                                      |
 
-#### Certificate Store errors
+#### Key Management Provider & Certificate Store errors
 
-| Code | Description  | Trouble Shooting Guide |
-| ---- | -----------  | ---------------------- |
-| KEY_VAULT_OPERATION_FAILURE | key vault operation failed | Please validate correct key vault configuration is provided or check the error details for further investigation. Please review steps in [ratify-on-azure](../quickstarts/ratify-on-azure.md) for configuring Key Vault. | 
+| Code                        | Description                                                                         | Trouble Shooting Guide                                                                                                                                                                                                   |
+| --------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| KEY_VAULT_OPERATION_FAILURE | key vault operation failed                                                          | Please validate correct key vault configuration is provided or check the error details for further investigation. Please review steps in [ratify-on-azure](../quickstarts/ratify-on-azure.md) for configuring Key Vault. |
+| KEY_MANAGEMENT_CONFLICT     | CertificateStore resource should NOT exist alongside KeyManagementProvider resource | If using helm to upgrade/install, please manually delete the dangling `CertificateStore` resource. If using self-managed `CertificateStore`, migrate to KeyManagementProvider resource with a UNIQUE name. |
 
 #### Referrer Store errors
 | Code | Description  | Trouble Shooting Guide |
