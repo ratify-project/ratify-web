@@ -1,39 +1,57 @@
 # Verifier
 
-Ratify supports many verifiers to validate different artifact types. View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each verifier must specify the `name` of the verifier and the `artifactType` this verifier handles. Common properties:
+Ratify supports many verifiers to validate different artifact types. Please refer to [external plugins](../../external%20plugins/Verifier/) documentation for details on supported external verifiers. 
+
+Each verifier must specify the `name` (OR `type` for `KeyManagementProvider`) of the verifier and the `artifactType` this verifier handles. 
+
+Common properties:
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
 metadata:
-  name: verifier-notation
+  name: test-verifier
 spec:
-  name: required, name of the verifier
-  artifactType: required, the type of artifact this verifier handles
-  address: optional. Plugin path, defaults to value of env "RATIFY_CONFIG" or "~/.ratify/plugins"
-  version: optional. Version of the external plugin, defaults to 1.0.0. On ratify initialization, the specified version will be validated against the supported plugin version.
-  source:  optional. Source location to download the plugin binary, learn more at docs/reference/dynamic-plugins.md
-    artifact:  e.g. wabbitnetworks.azurecr.io/test/sample-verifier-plugin:v1
-  parameters: optional. Parameters specific to this verifier
+  name: # REQUIRED: [string], the unique type of the verifier (notation, cosign)
+  type: # KeyManagementProvider REQUIRED: [string], only relevant for KMP. equivalent to name field. (inline, azurekeyvault)
+  artifactType: # REQUIRED: [string], comma seperated list, artifact type this verifier handles
+  address: # OPTIONAL: [string], Plugin path, defaults to value of env "RATIFY_CONFIG" or "~/.ratify/plugins"
+  version: # OPTIONAL: [string], Version of the external plugin, defaults to 1.0.0. On ratify initialization, the specified version will be validated against the supported plugin version.
+  source:
+    artifact: # OPTIONAL: [string], Source location to download the plugin binary, learn more at docs/reference/dynamic-plugins.md e.g. wabbitnetworks.azurecr.io/test sample-verifier-plugin:v1
+  parameters: # OPTIONAL: [object] Parameters specific to this verifier
 ```
- 
 
 ## Notation
+
+Notation is a built in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
+
+There are two ways to configure verification certificates:
+
+1. `verificationCerts`: Notation verifier will load all certificates from path specified in this array.
+
+2. `verificationCertStores`: Defines a collection of Notary Project [Trust Stores](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store). Notary Project specification defines a [Trust Policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md), which is a policy construct to specify which identities and Trust Stores are trusted to produce artifacts in a verification. The name of KMP resource(s) must be accurately provided. When a KMP name is specifed, the notation verifier will be configured to trust all certificates fetched from that particular KMP resource. 
+
+> NOTE: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
+
+> **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `CertificateStore` resources when a matching `KMP` with same name is found.
+
+In the following example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv, kmp-akv1. Here, `ca:certs` is the only trust store specified and the `certs` suffix corresponds to the `certs` certification collection listed in the `verificationCertStores` section.
 
 Sample Notation yaml spec:
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
 metadata:
-  name: verifier-notation
+  name: notation-wabbit
 spec:
   name: notation
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
-    verificationCertStores:  # certificates for validating signatures
+    verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
       certs: # name of the trustStore
-        - default/certstore-akv # namespace/name of the certificate store CRD to include in this trustStore
-        - default/certstore-akv1 
+        - default/kmp-akv # namespace/name of the key management provider CRD to include in this trustStore
+        - default/kmp-akv1 
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -48,61 +66,8 @@ spec:
             - "*"
 ```
 
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| verificationCerts      | no    |      An array of string. Notation verifier will load all certificates from path specified in this array        |   ""            |
-| verificationCertStores      | no    |    Defines a collection of cert store objects. This property supersedes the path defined in `verificationCerts`. It is assumed that the referenced certificate store exists in the Ratify installed namespace. To reference a certificate store defined in a different namespace, please specify the full namespace name. E.g. `mynamespace/myCert`    |       ""        |
-| trustPolicyDoc   | yes     |   [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts.          |     ""    |
-
-## Cosign
-Cosign verifier can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/), learn more about the plugin [here](https://github.com/deislabs/ratify/tree/main/plugins/verifier/cosign)
-```yml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: verifier-cosign
-spec:
-  name: cosign
-  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
-  parameters:
-    key: /usr/local/ratify-certs/cosign/cosign.pub
-```
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| key      | yes    |     Path to the public key used for validating the signature    |   ""            |
-
-## Sbom
-```yml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: verifier-sbom
-spec:
-  name: sbom
-  artifactTypes: org.example.sbom.v0
-  parameters: 
-    nestedReferences: application/vnd.cncf.notary.signature
-```
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| nestedReferences      | no    | If nestedReferences contains any string value, the nested artifact will also be verified. For example, customer might want to enforce notation signatures on all sboms.|   ""            |
-
-## Schemavalidator
-
-Validate Json artifacts against JSON schemas, learn more about the plugin [here](https://github.com/deislabs/ratify/tree/main/plugins/verifier/schemavalidator)
-
-```yml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: verifier-schemavalidator
-spec:
-  name: schemavalidator
-  artifactTypes: vnd.aquasecurity.trivy.report.sarif.v1
-  parameters: 
-    schemas:
-      application/sarif+json: https://json.schemastore.org/sarif-2.1.0-rtm.5.json
-```
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| schemas      | yes    |     A mapping between the schema name to the schema path. The path can be either a URL or a canonical file path that starts with `file://` |   ""            |
+| Name                   | Required | Description                                                                                                                                                                                                                                                                                                                                      | Default Value |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| verificationCerts      | no       | An array of string. Notation verifier will load all certificates from path specified in this array                                                                                                                                                                                                                                               | ""            |
+| verificationCertStores | no       | Defines a collection of cert store objects. This property supersedes the path defined in `verificationCerts`. It is assumed that the referenced key management provider exists in the Ratify installed namespace. To reference a certificate store defined in a different namespace, please specify the full namespace name. E.g. `mynamespace/myCert` | ""            |
+| trustPolicyDoc         | yes      | [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts.                                                                                                                                                | ""            |

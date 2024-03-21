@@ -1,6 +1,6 @@
 # Key Management Provider
 
-> `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED.
+> **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED.
 
 A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and x.509 certificates. Notation and cosign verifiers can consume KMP resources to use during signature verification. Please refer to respective Notation and Cosign verifier documentation on how to consume `KMP`. 
 
@@ -66,13 +66,13 @@ spec:
 
 ### Limitation
 
-If `keys` are configured, the managed identity with `clientID` specified must be assigned the correct permissions to list, view, download, and fetch keys in the configured Key Vault.
+- If `keys` are configured, the managed identity with `clientID` specified MUST be assigned the correct permissions to list, view, download, and fetch keys in the configured Key Vault.
 
-Azure keyvault Certificates are built on top of keys and secrets. When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain, please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
+- Azure Key Vault Certificates are built on top of keys and secrets. When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
 
-Please also ensure the certificate is in PEM format, PKCS12 format with nonexportable private keys can not be parsed due to limitation of Golang certificate library.
+- Please also ensure the certificate is in PEM format, PKCS12 format with nonexportable private keys can not be parsed due to limitation of Golang certificate library.
 
-Azure Key Vault setup guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
+- Azure Key Vault setup guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
 > Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using an [inline key management provider](#inline) to reduce risk of exposing a private key.
 

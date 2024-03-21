@@ -264,21 +264,20 @@ policy:
 
 #### Notation
 Notation is a built in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
+
 There are two ways to configure verification certificates:
 
-1. verificationCerts:  
-notation verifier will load all certificates from path specified in this array  
+1. `verificationCerts`: Notation verifier will load all certificates from path specified in this array.
 
-2. verificationCertStores:  
+2. `verificationCertStores`: Defines a collection of Notary Project [Trust Stores](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store). Notary Project specification defines a [Trust Policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md), which is a policy construct to specify which identities and Trust Stores are trusted to produce artifacts in a verification. The name of KMP resource(s) must be accurately provided. When a KMP name is specifed, the notation verifier will be configured to trust all certificates fetched from that particular KMP resource. 
 
-A [certificate store](https://github.com/deislabs/ratify/blob/main/config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
+> NOTE: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
 
- `CertificateStore` is only available in K8s runtime, VerificationCertStores supersedes verificationCerts.
-In the following example, the verifier's configuration references 4 `CertificateStore`, certStore-akv, certStore-akv1, certStore-akv2 and certStore-akv3.
+> **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `CertificateStore` resources when a matching `KMP` with same name is found.
 
-verificationCertStores property defines a collection of cert store objects. [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts. The following example shows a generic and permissive policy. Here, ca:certs is the only trust store specified and the certs suffix corresponds to the certs certification collection listed in the verificationCertStores section.   
+In the following example, the verifier's configuration references 4 `KeyManagementProvider`s, kmp-akv, kmp-akv1, kmp-akv2 and kmp-akv3. It shows a generic and permissive policy. Here, `ca:certs` is the only trust store specified and the `certs` suffix corresponds to the `certs` certification collection listed in the `verificationCertStores` section.
 
-A sample notation verifier with verificationCertStores defined:
+A sample notation verifier with `verificationCertStores` defined:
 ```json=
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
@@ -290,11 +289,11 @@ spec:
   parameters:
     verificationCertStores:
       certs:
-          - certStore-akv
-          - certStore-akv1
+          - kmp-akv
+          - kmp-akv1
       certs1:
-          - certStore-akv2
-          - certStore-akv3
+          - kmp-akv2
+          - kmp-akv3
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
