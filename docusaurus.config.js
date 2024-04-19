@@ -11,7 +11,7 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://ratify.dev/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -72,6 +72,12 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/ratify-logo.svg',
+      algolia:{
+        apiKey:'22f800332771c65f3bd7110dc87689c3',
+        contexualSearch:true,
+        indexName:'ratify',
+        appId:'1E1M1B8RZA',
+      },
       navbar: {
         title: 'Ratify',
         logo: {

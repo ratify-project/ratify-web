@@ -152,17 +152,18 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
 2. Install Ratify on AKS from helm chart:
 
     ```bash
-    # Add a Helm repo
+    # Add and Update the Helm repo
     helm repo add ratify https://deislabs.github.io/ratify
+    helm repo update
 
     # Install Ratify
     helm install ratify \
-        ./charts/ratify --atomic \
+        ratify/ratify --atomic \
         --namespace ${RATIFY_NAMESPACE} --create-namespace \
         --set featureFlags.RATIFY_CERT_ROTATION=true \
         --set akvCertConfig.enabled=true \
         --set akvCertConfig.vaultURI=${VAULT_URI} \
-        --set akvCertConfig.certificates[0].certificateName=${KEY_NAME} \
+        --set akvCertConfig.certificates[0].certificateName=${CERT_NAME} \
         --set akvCertConfig.tenantId=${TENANT_ID} \
         --set oras.authProviders.azureWorkloadIdentityEnabled=true \
         --set azureWorkloadIdentity.clientId=${IDENTITY_CLIENT_ID}
@@ -180,19 +181,19 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
 3. Install Ratify on AKS from helm chart:
 
     ```bash
-    # Add a Helm repo
+    # Add and Update the Helm repo
     helm repo add ratify https://deislabs.github.io/ratify
     helm repo update
 
     # Install Ratify
     helm install ratify \
-        ./charts/ratify --atomic \
+        ratify/ratify --atomic \
         --namespace gatekeeper-system --create-namespace \
         --set provider.enableMutation=false \
         --set featureFlags.RATIFY_CERT_ROTATION=true \
         --set akvCertConfig.enabled=true \
         --set akvCertConfig.vaultURI=${VAULT_URI} \
-        --set akvCertConfig.cert1Name=${KEY_NAME} \
+        --set akvCertConfig.cert1Name=${CERT_NAME} \
         --set akvCertConfig.tenantId=${TENANT_ID} \
         --set oras.authProviders.azureWorkloadIdentityEnabled=true \
         --set azureWorkloadIdentity.clientId=${IDENTITY_CLIENT_ID}
