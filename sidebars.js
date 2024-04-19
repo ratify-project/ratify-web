@@ -22,12 +22,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Quick Start',
-      items: ['docs/quickstarts/ratify-on-aws', 'docs/quickstarts/ratify-on-azure'],
+      items: ['quickstarts/ratify-on-aws', 'quickstarts/ratify-on-azure'],
     },
     {
       type: 'category',
       label: 'References',
-      items: ['docs/reference/executor', 'docs/reference/error'],
+      items: ['reference/executor', 'reference/error'],
     },
   ],
 
