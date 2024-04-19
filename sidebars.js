@@ -27,7 +27,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'References',
-      items: ['reference/executor', 'reference/error'],
+      items: ['reference/executor', 'reference/errors'],
     },
   ],
 
