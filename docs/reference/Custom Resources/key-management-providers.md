@@ -2,7 +2,7 @@
 
 > **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED.
 
-A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and x.509 certificates. Notation and cosign verifiers can consume KMP resources to use during signature verification. Please refer to respective Notation and Cosign verifier documentation on how to consume `KMP`. 
+A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective Notation and Cosign verifier documentation on how to consume `KMP`.
 
 ## Inline
 
@@ -63,10 +63,9 @@ spec:
 | keys[*].name            | yes      | key name (as shown in key vault)                                                          | ""            |
 | keys[*].version         | no       | version identifier (as shown in key vault). If not provided, latest version will be used  | ""            |
 
-
 ### Limitation
 
-- If `keys` are configured, the managed identity with `clientID` specified MUST be assigned the correct permissions to list, view, download, and fetch keys in the configured Key Vault.
+- If `keys` are configured, the managed identity with `clientID` specified MUST be assigned the correct permissions to list, view, and download keys in the configured Key Vault.
 
 - Azure Key Vault Certificates are built on top of keys and secrets. When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
 
@@ -79,16 +78,19 @@ spec:
 ## Status
 
 Get an overview of KMPs status:
+
 ```bash
 kubectl get keymanagementproviders.config.ratify.deislabs.io 
 ```
 
 Get specific status of each certificate/key fetched in a single KMP
+
 ```bash
 kubectl get keymanagementproviders.config.ratify.deislabs.io/<INSERT KMP NAME>
 ```
 
-## Resource Create/Update 
+## Resource Create/Update
+
 During KMP resource creation, the resource may successfully create even though the provider-specific schema is invalid.
 
 For example:

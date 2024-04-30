@@ -16,11 +16,12 @@ When running Ratify in a pod, the `ConfigMap` will be mounted in the pod at the 
 
 Currently supported components through CRDs are:
 
-- [Verifiers](./reference/verifier.md)
-- [Stores](./reference/store.md)
-- [Certificate Stores](./reference/crds/certificate-stores.md)
+- [Verifiers](./reference/Custom%20Resources/verifiers.md)
+- [Stores](./reference/Custom%20Resources/stores.md)
+- [Key Management Providers](./reference/Custom%20Resources/key-management-providers.md)
+- [Policy Provider](./reference/Custom%20Resources/policies.md)
 
-### Get Crds
+### Get CRDs
 Our helms charts are wired up to initialize CRs based on chart values. 
 After Ratify installation, you can use the `kubectl` command to review the currently active configuration.
 
