@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Schema Validator
 
 This document outlines how Ratify can be used to verify the schema of any reference artifact. The `schemavalidator` verifier is added as a plugin to the Ratify verification framework. Currently the schema validator verifier supports JSON schema validation.

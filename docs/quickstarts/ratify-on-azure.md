@@ -1,5 +1,6 @@
 ---
-title: Ratify on Azure 
+title: Ratify on Azure
+sidebar_position: 2
 ---
 
 # Ratify on Azure: Allow only signed images to be deployed on AKS with Notation and Ratify

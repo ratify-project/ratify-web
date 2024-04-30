@@ -136,11 +136,11 @@ NOTE: ORAS will attempt to use anonymous access if the authentication provider f
 
 ### Supported Providers
 
-1. Docker Config file
-1. Azure Workload Identity
+1. [Docker Config file](#docker-config)
+1. [Azure Workload Identity](#azure-workload-identity)
+1. [Kubernetes Secrets](#kubernetes-secrets)
+1. [AWS IAM Roles for Service Accounts (IRSA)](#aws-iam-roles-for-service-accounts-irsa)
 1. Azure Managed Identity
-1. Kubernetes Secrets
-1. AWS IAM Roles for Service Accounts (IRSA)
 
 #### Docker Config
 

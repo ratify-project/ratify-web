@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Cosign
 
 This README outlines how this validation framework can be used to verify signatures generated using [cosign](https://github.com/sigstore/cosign/). The verifier is added as a plugin to the framework that uses [cosign](https://github.com/sigstore/cosign/) packages to invoke the verification of an image. Cosign verifier works with remote registry that can provide cosign related artifacts linked as specially formatted tag to the subject artifact. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [oras](../Store/oras.md) referrer store plugin that uses the OCI registry API to discover and fetch the artifacts.
