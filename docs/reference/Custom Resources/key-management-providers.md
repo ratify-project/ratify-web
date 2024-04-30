@@ -1,6 +1,6 @@
 # Key Management Provider
 
-> **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED.
+> **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED. See migration [guide](#migrating-from-certificatestore-to-kmp).
 
 A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective Notation and Cosign verifier documentation on how to consume `KMP`.
 
@@ -99,3 +99,27 @@ For example:
 2. The `vaultURI` is missing in the Azure Key Vault KMP.
 
 Please follow the steps [here](#status) to confirm status of the KMP.
+
+## Migrating from `CertificateStore` to KMP
+
+`CertificateStore` resource is deprecated starting in `v1.2.0`. Ratify will continue to support `CertificateStore` functionality until `v2.0.0` at which time it will be removed.
+
+All existing functionality available in `CertificateStore` is available in `KeyManagementProvider`.
+
+### Inline CertificateStore to Inline KMP
+
+- `CertificateStore`'s `.parameters.value` = `KeyManagementProvider`'s `.parameters.value`
+- `KeyManagementProvider`'s `.parameters.contentType` is required and must be `key` OR `certificate`. This must be added when migrating.
+
+### Azure Key Vault CertificateStore to Azure Key Vault Key Management Provider
+
+- `CertificateStore`'s `.parameters.clientID` = `KeyManagementProvider`'s `.parameters.clientID`
+- `CertificateStore`'s `.parameters.tenantID` = `KeyManagementProvider`'s `.parameters.tenantID`
+- `CertificateStore`'s `.parameters.vaultURI` = `KeyManagementProvider`'s `.parameters.vaultURI`
+- `CertificateStore`'s `.parameters.certificates` is a string equivalent to `KeyManagementProvider`'s `.parameters.certificates[]` array.
+  - In the string formatted `.parameters.certificates` field, `certificateName` = `certificates[*].name`
+  - In the string formatted `.parameters.certificates` field, `certificateVersion` = `certificates[*].version`
+
+### Notation Verifier
+
+Notation verifier's `verificationCertStores` array must be updated to reference the `KeyManagementProvider` resource name
