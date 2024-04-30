@@ -9,12 +9,16 @@ The default Ratify installation relies on a single Ratify pod processing all req
 Ratify installation/upgrade for HA scenarios can be done via a `helmfile` or manual installation steps. Both options are outlined in this document.
 
 ## Automated Installation
-> Note: Helmfile does not have a stable release and thus is NOT recommended for production environments 
-**Prerequisites**
+
+> Note: Helmfile does not have a stable release and thus is NOT recommended for production environments
+
+### Prerequisites
+
 ```bash
 # Download and install yq
-	curl -L https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 --output /usr/bin/yq && chmod +x /usr/bin/yq
+  curl -L https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 --output /usr/bin/yq && chmod +x /usr/bin/yq
 ```
+
 ```bash
 # Download and install helmfile
   curl -LO https://github.com/helmfile/helmfile/releases/download/v0.155.0/helmfile_0.155.0_linux_amd64.tar.gz
@@ -30,12 +34,15 @@ helmfile sync -f git::https://github.com/deislabs/ratify.git@high-availability.h
 ```
 
 ### Uninstall Steps
+
 ```bash
 helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
 ```
+
 ## Manual Installation Steps
 
 ### Add Helm Chart Dependencies
+
 ```bash
 helm repo add dapr https://dapr.github.io/helm-charts/
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -45,11 +52,13 @@ helm repo update
 ```
 
 ### Install Dapr
+
 ```bash
 helm upgrade --install dapr dapr/dapr --namespace dapr-system --create-namespace --wait
 ```
 
 ### Install Gatekeeper
+
 ```bash
 helm install gatekeeper/gatekeeper  \
     --name-template=gatekeeper \
@@ -61,11 +70,13 @@ helm install gatekeeper/gatekeeper  \
 ```
 
 ### Install Redis
+
 ```bash
 helm upgrade --install redis bitnami/redis --namespace gatekeeper-system --set image.tag="7.0-debian-11" --wait
 ```
 
-Apply dapr state store encyrption secret using a generated key
+Apply dapr state store encyrption secret using a generated key:
+
 ```bash
 SIGN_KEY=$(openssl rand 16 | hexdump -v -e '/1 "%02x"' | base64)
 
@@ -81,7 +92,8 @@ EOF
 kubectl apply -f dapr-redis-secret.yaml -n gatekeeper-system
 ```
 
-Apply dapr state store Component custom resource
+Apply dapr state store Component custom resource:
+
 ```bash
 cat <<EOF > dapr-redis.yaml
 apiVersion: dapr.io/v1alpha1
@@ -110,6 +122,7 @@ kubectl apply -f dapr-redis.yaml -n gatekeeper-system
 ```
 
 ### Install Ratify
+
 ```bash
 # download the notation verification certificate
 curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
@@ -120,14 +133,15 @@ helm install ratify \
     --set featureFlags.RATIFY_CERT_ROTATION=true \
     --set featureFlags.RATIFY_DAPR_CACHE_PROVIDER=true \
     --set replicaCount=3 \
-	--set provider.cache.type="dapr" \
-	--set provider.cache.name="dapr-redis"
+    --set provider.cache.type="dapr" \
+    --set provider.cache.name="dapr-redis"
 ```
 
 ### See Ratify in action
 
-- Deploy a `demo` constraint.
-```
+- Deploy a `demo` constraint
+
+```bash
 kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
 kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
 ```
@@ -158,7 +172,9 @@ Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" deni
 You just validated the container images in your k8s cluster!
 
 ### Uninstall Ratify
-Notes: Helm does NOT support upgrading CRDs, so uninstalling Ratify will require you to delete the CRDs manually. Otherwise, you might fail to install CRDs of newer versions when installing Ratify.
+
+> Note: Helm does NOT support upgrading CRDs, so uninstalling Ratify will require you to delete the CRDs manually. Otherwise, you might fail to install CRDs of newer versions when installing Ratify
+
 ```bash
 kubectl delete -f https://deislabs.github.io/ratify/library/default/template.yaml
 kubectl delete -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
@@ -172,15 +188,19 @@ helm delete gatekeeper -n gatekeeper-system
 ```
 
 ## Development Testing with Helmfile (build your own images)
+
 While developing for HA scenarios, the `dev.high-availability.helmfile.yaml` can be useful.
 
 Prerequisites:
+
 - Install helmfile
 - Build your own images (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
 - Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
 
 ### Update `dev.high-availability.helmfile.yaml`
+
 Replace `repository`, `crdRepository`, and `tag` with previously built images:
+
 ```yaml
 - name: image.repository 
   value: <YOUR RATIFY IMAGE REPOSITORY NAME>
@@ -191,6 +211,7 @@ Replace `repository`, `crdRepository`, and `tag` with previously built images:
 ```
 
 Deploy to cluster:
+
 ```bash
 helmfile sync -f dev.high-availability.helmfile.yaml
 ```
