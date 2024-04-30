@@ -227,7 +227,7 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
     Pod ratify-demo-signed created
     ```
 
-1. Deploy an unsigned image to AKS cluster. The deployment has been denied since the image has not been signed and doesn't meet the deployment criteria. 
+1. Deploy an unsigned image to AKS cluster. The deployment has been denied since the image has not been signed and doesn't meet the deployment criteria.
 
     ```bash
     $ kubectl run ratify-demo-unsigned --image=unsigned:v1
