@@ -108,17 +108,23 @@ All existing functionality available in `CertificateStore` is available in `KeyM
 
 ### Inline CertificateStore to Inline KMP
 
-- `CertificateStore`'s `.parameters.value` = `KeyManagementProvider`'s `.parameters.value`
-- `KeyManagementProvider`'s `.parameters.contentType` is required and must be `key` OR `certificate`. This must be added when migrating.
+| CertificateStore          | KeyManagementProvider |
+| ------------------------- | --------------------- |
+| `.parameters.value`       | `.parameters.value`   |
+| `.parameters.contentType` | N/A                   |
+
+`contentType` is required and must be `key` OR `certificate`. This MUST be added when migrating.
 
 ### Azure Key Vault CertificateStore to Azure Key Vault Key Management Provider
 
-- `CertificateStore`'s `.parameters.clientID` = `KeyManagementProvider`'s `.parameters.clientID`
-- `CertificateStore`'s `.parameters.tenantID` = `KeyManagementProvider`'s `.parameters.tenantID`
-- `CertificateStore`'s `.parameters.vaultURI` = `KeyManagementProvider`'s `.parameters.vaultURI`
-- `CertificateStore`'s `.parameters.certificates` is a string equivalent to `KeyManagementProvider`'s `.parameters.certificates[]` array.
-  - In the string formatted `.parameters.certificates` field, `certificateName` = `certificates[*].name`
-  - In the string formatted `.parameters.certificates` field, `certificateVersion` = `certificates[*].version`
+| CertificateStore                                 | KeyManagementProvider                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| `.parameters.clientID`                           | `.parameters.clientId`                                             |
+| `.parameters.tenantID`                           | `.parameters.tenantID`                                             |
+| `.parameters.vaultURI`                           | `.parameters.vaultURI`                                             |
+| `.parameters.certificates`                       | `.parameters.certificates[]` String content is now defined objects |
+| `.parameters.certificates[*].certificateName`    | `.parameters.certificates[*].name`                                 |
+| `.parameters.certificates[*].certificateVersion` | `.parameters.certificates[*].version`                              |
 
 ### Notation Verifier
 
