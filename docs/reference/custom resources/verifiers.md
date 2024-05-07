@@ -2,13 +2,19 @@
 
 Ratify supports many verifiers to validate different artifact types. Please refer to [plugins](../../plugins/Verifier/) documentation for details on supported verifiers.
 
+Verifiers can be defined as cluster-wide resources(using the kind `Verifier`) or namespaced resources(using the kind `NamespacedVerifier`).
+
+Namespaced verifiers will only apply to the namespace in which they are defined. If a verification request targeting a namespace cannot find a verifier in required namespace, it will look up the cluster-wide verifiers.
+
+Cluster-wide verifiers are applied as the default global verifier if no namespaced verifier is specified in required namespace.
+
 Each verifier must specify the `name` of the verifier and the `artifactType` this verifier handles.
 
 Common properties:
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
+kind: Verifier # NamespacedVerifier has the same spec.
 metadata:
   name: test-verifier
 spec:

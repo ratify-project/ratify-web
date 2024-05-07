@@ -54,13 +54,13 @@ A trust policy binds a set of verification configurations against a set of regis
   scopes:
     - "myregistry.io/namespace1/image*"
   keys:
-    - provider: inline-keymanagementprovider-1
+    - provider: cluster-inline-keymanagementprovider-1
 - name: policy-2
   version: 1.0.0  
   scopes:
     - "myregistry.io/namespace2*"
   keys:
-    - provider: inline-keymanagementprovider-2
+    - provider: default/namespaced-inline-keymanagementprovider-2
 ```
 
 ### Scopes
@@ -90,7 +90,7 @@ The single wildcard `*` scope is a special global scope that encompasses ALL ref
 
 A trust policy can be configured with a list of `keys` that are trusted for a particular policy. Each entry in the list of `keys` corresponds to either: all the keys in a particular `KeyManagementProvider` resource OR a specific key when a `name` and optionally a `version` is provided.
 
-The `provider` field is always required except for when the `file` field is defined. The `provider` is the name of the `KeyManagementProvider` resource Ratify should look for configured keys from. If the `name` field is not provided for a specific key, all keys in the `KeyManagementProvider` are trusted.
+The `provider` field is always required except for when the `file` field is defined. The `provider` is the name of the `KeyManagementProvider` resource Ratify should look for configured keys from. If the `name` field is not provided for a specific key, all keys in the `KeyManagementProvider` are trusted. Cosign verifier could either reference a cluster-wide `KeyManagementProvider` by its name directly or a namespaced `NamespacedKeyManagementProvider` by its name prefixed with the namespace. Refer to [this section](../../reference/custom%20resources/key-management-providers.md#utilization-in-verifiers) for more information.
 
 The `name` field specifies a specific key defined in the provider. An optional `version` can be defined if the latest version is not desired.
 
