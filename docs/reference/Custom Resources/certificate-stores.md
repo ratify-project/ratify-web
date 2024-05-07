@@ -1,6 +1,6 @@
 # Certificate Store (Deprecated)
 
-> **WARNING!:** `CertificateStore` is **DEPRECATED** in favor of `KeyManagementProvider`. Please migrate to [`KeyManagementProvider`](./key-management-providers.md). Support will be removed in `v2.0.0`
+> **WARNING!:** `CertificateStore` is **DEPRECATED** in favor of `KeyManagementProvider`. Please migrate to [`KeyManagementProvider`](./key-management-providers.md) by following guide [here](./key-management-providers.md#migrating-from-certificatestore-to-kmp). Support will be removed in `v2.0.0`
 
 A `CertificateStore` resource defines an array of public certificates to fetch from a provider.
 
