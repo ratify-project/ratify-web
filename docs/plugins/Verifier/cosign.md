@@ -12,7 +12,7 @@ Please refer to cosign documentation on how to sign an image using cosign using 
 
 ## Some Caveats
 
-A configuration flag `cosignEnabled` is introduced to the ORAS Store configuration. This flag is required to be set to `true` in order to fetch cosign signatures stored in an OCI Image tagged with Cosign's unique convention (<hash-algorithm>-<hash-of-subject-image>.sig). Regardless of the flag being set, Ratify will fetch OCI 1.1-compliant cosign signatures returned via the referrers API.
+A configuration flag `cosignEnabled` is introduced to the ORAS Store configuration. This flag is required to be set to `true` in order to fetch cosign signatures stored in an OCI Image tagged with Cosign's unique convention (`<hash-algorithm>-<hash-of-subject-image>.sig`). Regardless of the flag being set, Ratify will fetch OCI 1.1-compliant cosign signatures returned via the referrers API.
 
 ## Trust Policy
 
