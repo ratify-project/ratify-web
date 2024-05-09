@@ -65,7 +65,7 @@ The instructions provided in this article are tailored for Linux-based operating
     az keyvault key create --vault-name $AKV_NAME -n $KEY_NAME --protection software
     ```
 
-    Get the key id and retrieve the key version
+    Get the key id and retrieve the key version:
 
     ```bash
     az keyvault key show --name $KEY_NAME --vault-name $AKV_NAME --query "key.kid"
@@ -73,9 +73,11 @@ The instructions provided in this article are tailored for Linux-based operating
 
     An example output:
 
-    "https://<your akv name>.vault.azure.net/keys/<your key name>/<version>"
+    ```text
+    https://<your akv name>.vault.azure.net/keys/<your key name>/<version>
+    ```
 
-    Configure an environment variable for the version
+    Configure an environment variable for the version:
 
     ```bash
     export KEY_VER=<version>
