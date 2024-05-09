@@ -361,7 +361,7 @@ spec:
           - provider: keymanagementprovider-akv2
 ```
 
-For more information, please refer to the document [KeyManagementProvider CRD]().
+For more information, please refer to the document KeyManagementProvider CRD.
 
 ## Rotate the key
 
