@@ -1,10 +1,97 @@
-# ORAS Authentication Provider
+# ORAS
 
-ORAS handles all referrer operations using registry as the referrer store. It uses authentication credentials to authenticate to a registry and access referrer artifacts. Ratify contains many Authentication Providers to support different authentication scenarios. The user specifies which authentication provider to use in the configuration.
+ORAS is a built-in `Store` plugin. It leverages the [ORAS project](https://github.com/oras-project) to authenticate, discover, list, and download artifacts from OCI compliant registries.
+The ORAS store leverages the `oras-go` [library](https://github.com/oras-project/oras-go).
+
+ORAS store is the default and currently ONLY supported `Store` implementation.
+
+Here's an example `oras` referrer store CRD spec for a local development registy (insecure + tls-check disabled) that caches registry content.
+
+```yml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Store
+metadata:
+  name: store-oras
+spec:
+  name: oras
+  parameters: 
+    cacheEnabled: true
+    ttl: 10
+    useHttp: true
+```
+
+## Configuration
+
+### Kubernetes
+
+```yml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Store
+metadata:
+  name: store-oras
+spec:
+  name: oras
+  parameters: 
+    cacheEnabled: # defaults to true
+    ttl: # TTL in seconds for ORAS cache. Default is 10
+    useHttp: # Local testing ONLY. Disables TLS checks uses HTTP. Default is false.
+    cosignEnabled: # enables discovery of cosign artifacts from registry. Default is false.
+    localCachePath: # absolute file path to an existing/new ORAS OCI local store
+    authProvider:
+        name: # name of the auth provider type
+        # auth provider specific fields here
+```
+
+| Name           | Required | Description                                                                                                                                                                                                        | Default Value               |
+| -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| cosignEnabled  | no       | This must be `true` if cosign verifier is enabled. Read more about cosign verifier [here](https://github.com/deislabs/ratify/blob/main/plugins/verifier/cosign/README.md).                                         | `false`                     |
+| authProvider   | no       | This is only required if pulling from a private repository. For all supported auth mode, please review [oras-auth-provider](https://github.com/deislabs/ratify/blob/main/docs/reference/oras-auth-provider.md) doc | dockerAuth                  |
+| cacheEnabled   | no       | Oras cache, cache for all referrers for a subject. Note: global cache must be enabled first                                                                                                                        | `false`                     |
+| ttl            | no       | Time to live for entries in oras cache                                                                                                                                                                             | 10 seconds                  |
+| useHttp        | no       | Local testing ONLY. This needs to be set to `true` for  local insecure registries                                                                                                                                  | `false`                     |
+| localCachePath | no       | Absolute file path to an existing/new ORAS OCI local store                                                                                                                                                         | `/.ratify/local_oras_cache` |
+
+### CLI
+
+```json
+{
+    "store": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "oras",
+            }
+        ]
+    },
+    "policy": {
+        "version": "1.0.0",
+        "plugin": {
+            "name": "configPolicy",
+            "artifactVerificationPolicies": {
+                "application/vnd.dev.cosign.artifact.sig.v1+json": "any"
+            }
+        }
+    },
+    "verifier": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name":"cosign",
+                "artifactTypes": "application/vnd.dev.cosign.artifact.sig.v1+json",
+                "key": "/path/to/cosign.pub"
+            }
+        ]
+    }
+}
+```
+
+## Authentication Providers
+
+ORAS uses authentication credentials to authenticate to a registry and access referrer artifacts. Ratify contains many Authentication Providers to support different authentication scenarios. The user specifies which authentication provider to use in the configuration.
 
 The `authProvider` section of configuration file specifies the authentication provider. The `name` field is REQUIRED for Ratify to bind to the correct provider implementation.
 
-## Example config.json
+### Example config.json
 
 ```json
 {
@@ -47,15 +134,15 @@ The `authProvider` section of configuration file specifies the authentication pr
 
 NOTE: ORAS will attempt to use anonymous access if the authentication provider fails to resolve credentials.
 
-## Supported Providers
+### Supported Providers
 
-1. Docker Config file
-1. Azure Workload Identity
+1. [Docker Config file](#docker-config)
+1. [Azure Workload Identity](#azure-workload-identity)
+1. [Kubernetes Secrets](#kubernetes-secrets)
+1. [AWS IAM Roles for Service Accounts (IRSA)](#aws-iam-roles-for-service-accounts-irsa)
 1. Azure Managed Identity
-1. Kubernetes Secrets
-1. AWS IAM Roles for Service Accounts (IRSA)
 
-### 1. Docker Config
+#### Docker Config
 
 This is the default authentication provider. Ratify attempts to look for credentials at the default docker configuration path ($HOME/.docker/config.json) if the `authProvider` section is not specified.
 
@@ -79,26 +166,27 @@ Specify the `configPath` field for the `dockerConfig` authentication provider to
 
 Both the above modes uses a k8s secret of type ```dockerconfigjson``` that is described in the [document](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
-### 2. Azure Workload Identity
+#### Azure Workload Identity
 
 Ratify pulls artifacts from a private Azure Container Registry using Workload Federated Identity in an Azure Kubernetes Service cluster. For an overview on how workload identity operates in Azure, refer to the [documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/workload-identity-federation). You can use workload identity federation to configure an Azure AD app registration or user-assgined managed identity. 
 
 Please refer to [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-workload-identity-for-acr) to configure workload identity for ACR.
 The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).  
 
-### 3. Kubernetes Secrets
+#### Kubernetes Secrets
 
 Ratify resolves registry credentials from [Docker Config Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets) in the cluster. Ratify considers kubernetes secrets in two ways:
 
 1. The configuration can specify a list of `secrets`. Each entry REQUIRES the `secretName` field. The `namespace` field MUST also be provided if the secret does not exist in the namespace Ratify is deployed in. The Ratify helm chart contains a [ratify-manager-role-clusterrole.yaml](https://github.com/deislabs/ratify/blob/main/charts/ratify/templates/ratify-manager-role-clusterrole.yaml) file with role assignments. If a namespace other than Ratify's namespace is provided in the secret list, the user MUST add a new role binding to the cluster role for that new namespace.
 
-2. Ratify considers the `imagePullSecrets` specified in the service account associated with Ratify. The `serviceAccountName` field specifies the service account associated with Ratify. Ratify MUST be assigned a role to read the service account and secrets in the Ratify namespace.
+1. Ratify considers the `imagePullSecrets` specified in the service account associated with Ratify. The `serviceAccountName` field specifies the service account associated with Ratify. Ratify MUST be assigned a role to read the service account and secrets in the Ratify namespace.
 
 Ratify only supports the kubernetes.io/dockerconfigjson secret type.
 
 > Note: Kubernetes secrets are reloaded and refreshed for Ratify to use every 12 hours. Changes to the Secret may not be reflected immediately.
 
-#### Sample install guide using service account image pull secrets
+##### Sample install guide using service account image pull secrets
+
 - Create a k8s secret by providing credentials on the command line. This secret should be in the same namespace that contains Ratify deployment.
 
 ```bash
@@ -135,7 +223,7 @@ helm install ratify charts/ratify --set-file dockerConfig=<path to the local Doc
 
 Both the above modes uses a k8s secret of type ```dockerconfigjson``` that is described in the [document](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
-#### Sample Store Resource with specified k8s secrets
+##### Sample Store Resource with specified k8s secrets
 
 ```yaml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -157,19 +245,19 @@ spec:
         namespace: test 
 ```
 
-### 5. AWS IAM Roles for Service Accounts (IRSA)
+#### AWS IAM Roles for Service Accounts (IRSA)
 
 Ratify pulls artifacts from a private Amazon Elastic Container Registry (ECR) using an ECR auth token. This token is accessed using the federated workload identity assigned to pods via [IAM Roles for Service Accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). The AWS IAM Roles for Service Accounts Basic Auth provider uses the [AWS SDK for Go v2](https://github.com/aws/aws-sdk-go-v2) to retrieve basic auth credentials based on a role assigned to a Kubernetes Service Account referenced by a pod specification. For a specific example of how IAM Roles for Service Accounts, a.k.a. IRSA, works with pods running the AWS SDK for Go v2, please see this [post](https://blog.jimmyray.io/kubernetes-workload-identity-with-aws-sdk-for-go-v2-927d2f258057).
 
-#### User steps to set up IAM Roles for Service Accounts with Amazon EKS to access Amazon ECR
+##### User steps to set up IAM Roles for Service Accounts with Amazon EKS to access Amazon ECR
 
 The official steps for setting up IAM Roles for Service Accounts with Amazon EKS can be found [here](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts-technical-overview.html).
 
 1. Create an OIDC enabled Amazon EKS cluster by following steps [here](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html).
-2. Connect to cluster using `kubectl` by following steps [here](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
-3. Create an AWS Identity and Access Management (IAM) policy with permissions needed for Ratify to access Amazon ECR. Please see the official [documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) for creating AWS IAM policies. The AWS managed policy `arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly` will work for this purpose.
-4. Create the `ratify` Namespace in your Amazon EKS cluster.
-5. Using [eksctl](https://eksctl.io/usage/iamserviceaccounts/), create a Kubernetes Service Account that uses the policy from above.
+1. Connect to cluster using `kubectl` by following steps [here](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
+1. Create an AWS Identity and Access Management (IAM) policy with permissions needed for Ratify to access Amazon ECR. Please see the official [documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) for creating AWS IAM policies. The AWS managed policy `arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly` will work for this purpose.
+1. Create the `ratify` Namespace in your Amazon EKS cluster.
+1. Using [eksctl](https://eksctl.io/usage/iamserviceaccounts/), create a Kubernetes Service Account that uses the policy from above.
 
 ```shell
 eksctl create iamserviceaccount \
@@ -243,6 +331,7 @@ oras:
 Once ratify is started, if an AWS custom endpoint resolver is successfully enabled, you will see the following log entries in the ratify pod logs, with no following errors:
 
 ```
+
 AWS ECR basic auth using custom endpoint resolver...
 AWS ECR basic auth API override endpoint: <AWS_ENDPOINT>
 AWS ECR basic auth API override partition: <AWS_PARTITION>
@@ -267,7 +356,7 @@ kubectl -n ratify get pod ratify-... -oyaml | grep serviceAccount
       - serviceAccountToken:
 ```
 
-12. Verify that the [Amazon EKS Pod Identity Webhook](https://github.com/aws/amazon-eks-pod-identity-webhook) created the environment variables, projected volumes, and volume mounts for the Ratify pod(s). 
+12. Verify that the [Amazon EKS Pod Identity Webhook](https://github.com/aws/amazon-eks-pod-identity-webhook) created the environment variables, projected volumes, and volume mounts for the Ratify pod(s).
 
 ```shell
 kubectl -n ratify get po ratify-... -oyaml

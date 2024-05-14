@@ -209,7 +209,7 @@ policy:
         }
 ```
 
-2. The following descriptor fetched from the store ```ociregistry``` will be used as the reference for a subject ```registry.wabbit-networks.io:5000/net-monitor:signed@sha256:a0fc570a245b09ed752c42d600ee3bb5b4f77bbd70d8898780b7ab43454530eb``` and will be verified
+1. The following descriptor fetched from the store ```ociregistry``` will be used as the reference for a subject ```registry.wabbit-networks.io:5000/net-monitor:signed@sha256:a0fc570a245b09ed752c42d600ee3bb5b4f77bbd70d8898780b7ab43454530eb``` and will be verified
 
 ```json=
 {
@@ -220,14 +220,14 @@ policy:
 }
 ```
 
-3. The framework uses the ```artifactTypes``` property to match the verifier plugin for the above reference type. In this case, the verifier with the name ```notation``` supports its verification.
-4. The framework calls the plugin ```notation``` with the following environment variables
+1. The framework uses the ```artifactTypes``` property to match the verifier plugin for the above reference type. In this case, the verifier with the name ```notation``` supports its verification.
+1. The framework calls the plugin ```notation``` with the following environment variables
 
 - **RATIFY_VERIFIER_COMMAND** : ```VERIFY```
 - **RATIFY_VERIFIER_SUBJECT**: ```registry.wabbit-networks.io:5000/net-monitor:signed@sha256:a0fc570a245b09ed752c42d600ee3bb5b4f77bbd70d8898780b7ab43454530eb```
 - **RATIFY_VERIFIER_VERSION**: ```1.0.0```
 
-5. It calls the plugin with the following JSON execution configuration
+1. It calls the plugin with the following JSON execution configuration
 
 ```json=
 {
@@ -249,7 +249,7 @@ policy:
 }
 ```
 
-6. The  ```notation``` verifies the artifact using the provided configuration and returns a following JSON result
+1. The  ```notation``` verifies the artifact using the provided configuration and returns a following JSON result
 
 ```json=
 {
@@ -260,25 +260,27 @@ policy:
       ]
     }
 ```
+
 ### Section 6: Built in verifiers
 
 #### Notation
+
 Notation is a built in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
+
 There are two ways to configure verification certificates:
 
-1. verificationCerts:  
-notation verifier will load all certificates from path specified in this array  
+1. `verificationCerts`: Notation verifier will load all certificates from path specified in this array.
 
-2. verificationCertStores:  
+2. `verificationCertStores`: A [certificate store](https://github.com/deislabs/ratify/blob/main/config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
 
-A [certificate store](https://github.com/deislabs/ratify/blob/main/config/samples/config_v1beta1_certstore_akv.yaml) resource defines the list of certificate to fetch from a provider. It is recommended to pin to a specific certificate version, on certificate rotation, customer should update the custom resource to specify the latest version.
+> NOTE: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
 
- `CertificateStore` is only available in K8s runtime, VerificationCertStores supersedes verificationCerts.
+`CertificateStore` is only available in K8s runtime, VerificationCertStores supersedes verificationCerts.
+
 In the following example, the verifier's configuration references 4 `CertificateStore`, certStore-akv, certStore-akv1, certStore-akv2 and certStore-akv3.
 
-verificationCertStores property defines a collection of cert store objects. [Trust policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md) is a policy language that indicates which identities are trusted to produce artifacts. The following example shows a generic and permissive policy. Here, ca:certs is the only trust store specified and the certs suffix corresponds to the certs certification collection listed in the verificationCertStores section.   
+A sample notation verifier with `verificationCertStores` defined:
 
-A sample notation verifier with verificationCertStores defined:
 ```json=
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
@@ -290,11 +292,11 @@ spec:
   parameters:
     verificationCertStores:
       certs:
-          - certStore-akv
-          - certStore-akv1
+          - certstore-akv
+          - certstore-akv1
       certs1:
-          - certStore-akv2
-          - certStore-akv3
+          - certstore-akv2
+          - certstore-akv3
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
@@ -309,6 +311,8 @@ spec:
             - "*"
 
 ```
+
 ##### Breaking changes
+
 In version v1.0.0-rc.7, Ratify updated the name of built-in verifier from `notaryv2` to `notation` in accordance with [`notaryproject spec`](https://notaryproject.dev/docs/faq/#notary-project-terms). As a result, `notaryv2` verifier is only supported in Ratify v1.0.0-rc.6 and earlier versions. If you want to upgrade to v1.0.0-rc.7 or later, please update the verifier name to `notation` in the configuration or CR. Additionally, please update `notaryv2` to `notation` in your constraint templates if verifier name was referenced. e.g. [example constraint template](https://github.com/deislabs/ratify/blob/main/library/notation-issuer-validation/template.yaml).
 Note: If both `notaryv2` and `notation` verifiers exist, Ratify might execute both of them while the `notaryv2` verifier will fail the verification.

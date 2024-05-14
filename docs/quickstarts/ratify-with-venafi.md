@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Ratify with Venafi CodeSign Protect
 
 This guide will explain how to get started with Ratify and the [Venafi CodeSign Protect notation plugin](https://venafi.com/codesign-protect/). This will involve setting up the necessary components, and configuring them properly. Once everything is set up we will walk through a simple scenario of verifying the signature on a container image at deployment time.
