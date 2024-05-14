@@ -24,7 +24,7 @@ A trust policy binds a set of verification configurations against a set of regis
 - name: policy-1
   version: 1.0.0  
   scopes:
-    - "myregistry.io/namespace1/image:tag"
+    - "myregistry.io/namespace1/image*"
   keys:
     - provider: inline-keymanagementprovider-1
 - name: policy-2
@@ -50,11 +50,13 @@ There are restrictions on `scopes` listed within and across trust policies:
 
 - Scopes within or across trust policies CANNOT overlap in any form, regardless of it being an absolute scope or a scope using a wildcard character.
   - INVALID: given scope-A = `myregistry.io/*` & scope-B = `myregistry.io/namespace/*`, these scopes overlap since scope-B is contained in scope-A
-  - INVALID: given scope-A = `myregistry.io/*` & scope-B = `myregistry.io/namespace/image:tag`, these scopes overlap since absolute scope-B is contained in scope-A
+  - INVALID: given scope-A = `myregistry.io/*` & scope-B = `myregistry.io/namespace/image@sha256:abcd1234`, these scopes overlap since absolute scope-B is contained in scope-A
   - VALID: given scope-A = `myregistry.io/namespace1/*` & scope-B = `myregistry.io/namespace2/*`, these scopes do NOT overlap since neither scope can overlap with each other
   - Why do we enforce strict scope overlap checks? To avoid unintended verification behaviors at verification time when scope matching occurs. To set a higher security bar, Ratify makes sure that every single scope is guaranteed to match to a single trust policy. This validation occurs on creation of the verifier and NOT at verification time, thus allowing users to catch misconfigurations ahead of time.
 
 The single wildcard `*` scope is a special global scope that encompasses ALL references. Only a single trust policy can define a `*` global scope. If `*` scope exists in conjunction with other trust policies containing more granular scopes, the trust policy with a more granular matching scope will be selected instead.
+
+>WARNING: Ratify, by default, enables tag-to-digest mutation. All tag based scopes will NOT match to an intended scope. Either scope to a specific digest or provide a wild card scope such as `myregistry.io/namespace/image*`
 
 ### Keys
 

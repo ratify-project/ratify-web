@@ -65,13 +65,17 @@ spec:
 
 ### Limitation
 
+- If a key/certificate is in disabled state, KMP resource creation will FAIL. Users must remove reference to a disabled Key/Certificate or re-enable in Azure Key Vault.
+
+- Ratify does NOT yet support periodic refresh and polling of certificates/keys. If the default latest version changes, object is disabled/expired, or deleted, Ratify will only become aware once the KMP resource is reconciled (edited, deleted, added).
+
 - If `keys` are configured, the managed identity with `clientID` specified MUST be assigned the correct permissions to list, view, and download keys in the configured Key Vault.
 
 - Azure Key Vault Certificates are built on top of keys and secrets. When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain. Please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
 
-- Please also ensure the certificate is in PEM format, PKCS12 format with nonexportable private keys can not be parsed due to limitation of Golang certificate library.
+- Certificate/Key MUST be in PEM format. PKCS12 format with nonexportable private keys can NOT be parsed due to limitation of Golang certificate library.
 
-- Azure Key Vault setup guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
+- Refer to Azure Key Vault setup guide ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
 > Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using an [inline key management provider](#inline) to reduce risk of exposing a private key.
 
