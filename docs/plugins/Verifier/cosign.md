@@ -68,6 +68,12 @@ The `name` field specifies a specific key defined in the provider. An optional `
 
 The `file` field defines an absolute file path to a local public key. This field should NOT be used in conjunction with `provider`, `name`, `version`.
 
+#### Supported Key Types
+
+- RSA: 2048, 3072, 4096
+- EC: P256, P384, P521
+- ED25519
+
 ### Limitations
 
 Currently, Cosign trust policies only support key-based configurations. Keyless support will be added soon.
