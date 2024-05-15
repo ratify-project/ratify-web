@@ -277,7 +277,7 @@ kubectl logs deployment/ratify
 
 ### IAM Roles for Service Accounts
 
-Ratify can be configured to use IAM credentials to authenticate for any requests made to AWS services, such as for running and validating images stored in ECR Private Repositories. This can be done by configuring IAM Roles for Service Accounts (IRSA). For more information, [read here](../reference/oras-auth-provider.md#5-aws-iam-roles-for-service-accounts-irsa).
+Ratify can be configured to use IAM credentials to authenticate for any requests made to AWS services, such as for running and validating images stored in ECR Private Repositories. This can be done by configuring IAM Roles for Service Accounts (IRSA). For more information, [read here](../plugins/store/oras.md#aws-iam-roles-for-service-accounts-irsa).
 
 ### AWS Signer
 
