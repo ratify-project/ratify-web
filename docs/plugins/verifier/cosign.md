@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Cosign
 
-Cosign is a built-in verifier. With the Cosign verifier, Ratify can be used to verify signatures generated using [Cosign](https://github.com/sigstore/cosign/). The verifier implementation uses [Cosign](https://github.com/sigstore/cosign/) packages to perform verifications. Cosign verifier works with container registries where cosign related artifacts are linked as a specially formatted tag to the subject image. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [ORAS](../Store/oras.md) referrer store plugin, which uses the OCI registry API to discover and fetch the artifacts.
+Cosign is a built-in verifier. With the Cosign verifier, Ratify can be used to verify signatures generated using [Cosign](https://github.com/sigstore/cosign/). The verifier implementation uses [Cosign](https://github.com/sigstore/cosign/) packages to perform verifications. Cosign verifier works with container registries where cosign related artifacts are linked as a specially formatted tag to the subject image. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [ORAS](../store/oras.md) referrer store plugin, which uses the OCI registry API to discover and fetch the artifacts.
 
 ## Table of Contents
 

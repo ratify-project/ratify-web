@@ -37,7 +37,7 @@ helm upgrade ratify \
 
 ## Plugin Configuration
 
-The last step is to specify the optional `source` property to tell Ratify where to download the plugin from. Dynamic plugins use the same [auth providers](../plugins/Store/oras.md#authentication-providers) and options as the builtin ORAS store (ex: `azureWorkloadIdentity`, `awsEcrBasic`, `k8Secrets`) for authentication to the registry where your plugins are located.
+The last step is to specify the optional `source` property to tell Ratify where to download the plugin from. Dynamic plugins use the same [auth providers](../plugins/store/oras.md#authentication-providers) and options as the builtin ORAS store (ex: `azureWorkloadIdentity`, `awsEcrBasic`, `k8Secrets`) for authentication to the registry where your plugins are located.
 
 ```yaml
 apiVersion: config.ratify.deislabs.io/v1beta1
