@@ -68,7 +68,7 @@ Please also ensure the certificate is in PEM format, PKCS12 format with nonexpor
 
 Akv set up guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
-> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../../reference/Custom%20Resources/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
+> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../../reference/custom%20resources/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
 
 ## Inline Certificate Provider
 
