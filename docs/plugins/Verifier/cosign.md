@@ -6,6 +6,34 @@ sidebar_position: 2
 
 Cosign is a built-in verifier. With the Cosign verifier, Ratify can be used to verify signatures generated using [Cosign](https://github.com/sigstore/cosign/). The verifier implementation uses [Cosign](https://github.com/sigstore/cosign/) packages to perform verifications. Cosign verifier works with container registries where cosign related artifacts are linked as a specially formatted tag to the subject image. It also is compatible with OCI 1.1 supported Cosign which pushes the signature OCI Image as a referrer to the subject image. (Note: this is currently experimental for cosign) It works only with [ORAS](../Store/oras.md) referrer store plugin, which uses the OCI registry API to discover and fetch the artifacts.
 
+## Table of Contents
+
+- [Cosign](#cosign)
+  - [Table of Contents](#table-of-contents)
+  - [Signing](#signing)
+  - [Some Caveats](#some-caveats)
+  - [Trust Policy](#trust-policy)
+    - [Scopes](#scopes)
+    - [Keys](#keys)
+      - [Supported Key Types](#supported-key-types)
+    - [Limitations](#limitations)
+  - [Demo: Multi-key, Multi-image Verification](#demo-multi-key-multi-image-verification)
+    - [Recording](#recording)
+    - [Walkthrough](#walkthrough)
+  - [Keyless Verification](#keyless-verification)
+    - [Configuration](#configuration)
+      - [Kubernetes](#kubernetes)
+      - [CLI](#cli)
+    - [Usage](#usage)
+  - [Configuration](#configuration-1)
+    - [Kubernetes](#kubernetes-1)
+    - [CLI](#cli-1)
+  - [Legacy: Key-pair based verification](#legacy-key-pair-based-verification)
+    - [Configuration](#configuration-2)
+      - [Kubernetes](#kubernetes-2)
+      - [CLI](#cli-2)
+    - [Usage](#usage-1)
+  
 ## Signing
 
 Please refer to cosign documentation on how to sign an image using cosign using [key-pair based signatures](https://docs.sigstore.dev/key_management/signing_with_self-managed_keys/) and [keyless signatures](https://docs.sigstore.dev/signing/quickstart/#keyless-signing-of-a-container).
