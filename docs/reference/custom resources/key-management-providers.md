@@ -2,7 +2,7 @@
 
 > **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED. See migration [guide](#migrating-from-certificatestore-to-kmp).
 
-A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective Notation and Cosign verifier documentation on how to consume `KMP`.
+A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective [Notation](../../plugins/verifier/notation.md) and [Cosign](../../plugins/verifier/cosign.md) verifier documentation on how to consume `KMP`.
 
 ## Inline
 
