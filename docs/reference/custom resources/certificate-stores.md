@@ -1,5 +1,7 @@
 # Certificate Store (Deprecated)
 
+> **WARNING!:** `CertificateStore` is **DEPRECATED** in favor of `KeyManagementProvider`. Please migrate to [`KeyManagementProvider`](./key-management-providers.md) by following guide [here](./key-management-providers.md#migrating-from-certificatestore-to-kmp). Support will be removed in `v2.0.0`
+
 A `CertificateStore` resource defines an array of public certificates to fetch from a provider.
 
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
