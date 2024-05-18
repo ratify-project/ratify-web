@@ -1,10 +1,11 @@
 ---
-title: Ratify on Azure 
+title: Ratify on Azure
+sidebar_position: 2
 ---
 
 # Ratify on Azure: Allow only signed images to be deployed on AKS with Notation and Ratify
 
-The signed container images enable users to assure deployments are built from a trusted entity and verify images haven't been tampered with since their creation. The signed image ensures integrity and authenticity before the user pulls an image into any environment and avoid attacks. 
+The signed container images enable users to assure deployments are built from a trusted entity and verify images haven't been tampered with since their creation. The signed image ensures integrity and authenticity before the user pulls an image into any environment and avoid attacks.
 
 Azure Key Vault (AKV) stores a signing key, Notation and the Notation AKV plugin (azure-kv) consumes this key to sign and verify container images and other artifacts. Azure Container Registry (ACR) allows you to store and distribute signed images with signatures.
 
@@ -53,12 +54,12 @@ Ratify pulls artifacts from a private Azure Container Registry using Workload Fe
 
 Configure user-assigned managed identity and enable `AcrPull` role to the workload identity.
 
-    ```bash
-    az role assignment create \
+```bash
+az role assignment create \
     --assignee-object-id ${IDENTITY_OBJECT_ID} \
     --role acrpull \
     --scope subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/providers/Microsoft.ContainerRegistry/registries/${ACR_NAME}
-    ```
+```
 
 ## Create an OIDC enabled AKS cluster and configure workload identity
 
@@ -88,9 +89,9 @@ Configure user-assigned managed identity and enable `AcrPull` role to the worklo
     export AKS_OIDC_ISSUER="$(az aks show -n ${AKS_NAME} -g ${GROUP_NAME} --query "oidcIssuerProfile.issuerUrl" -otsv)"
     ```
 
-> Note: The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
+    > Note: The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
 
-2. This step above may take around 10 minutes to complete. The registration status can be checked by running the following command:
+1. This step above may take around 10 minutes to complete. The registration status can be checked by running the following command:
 
     ```bash
     az feature show --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview" -o table
@@ -99,7 +100,7 @@ Configure user-assigned managed identity and enable `AcrPull` role to the worklo
     Microsoft.ContainerService/EnableWorkloadIdentityPreview    Registered
     ```
 
-3. Establish federated identity credential. On AZ CLI `${RATIFY_NAMESPACE}` is where you deploy Ratify:
+1. Establish federated identity credential. On AZ CLI `${RATIFY_NAMESPACE}` is where you deploy Ratify:
 
     ```bash
     az identity federated-credential create \
@@ -110,7 +111,7 @@ Configure user-assigned managed identity and enable `AcrPull` role to the worklo
     --subject system:serviceaccount:"${RATIFY_NAMESPACE}":"ratify-admin"
     ```
 
-## Configure access policy for AKV 
+## Configure access policy for AKV
 
 1. Set the environmental variable for Azure Key Vault URI.
 
@@ -120,19 +121,21 @@ Configure user-assigned managed identity and enable `AcrPull` role to the worklo
 
 2. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain,
  please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
- 
-> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../reference/crds/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
 
-   Configure policy for user-assigned managed identity:
-    
-    ```bash
-    az keyvault set-policy --name ${AKV_NAME} \
-    --secret-permissions get \
-    --object-id ${IDENTITY_OBJECT_ID}
-    ```
+> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../reference/custom%20resources/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
+
+Configure policy for user-assigned managed identity:
+
+```bash
+az keyvault set-policy --name ${AKV_NAME} \
+--secret-permissions get \
+--object-id ${IDENTITY_OBJECT_ID}
+```
 
 ## Deploy Gatekeeper and Ratify on AKS
+
 run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azurepolicy` to verify if the AKS cluster has azure policy addon enabled, learn more at [use azure policy](https://learn.microsoft.com/en-us/azure/aks/use-azure-policy)
+
 ### When Azure Policy Addon is not enabled
 
 1. Deploy Gatekeeper from helm chart:
@@ -174,10 +177,12 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
     kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
     kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
     ```
+
 ### When Azure Policy Addon is enabled on AKS
+
 1. Ensure your AKS cluster is 1.26+
-2. `az feature register -n AKS-AzurePolicyExternalData --namespace Microsoft.ContainerService`
-3. Install Ratify on AKS from helm chart:
+1. `az feature register -n AKS-AzurePolicyExternalData --namespace Microsoft.ContainerService`
+1. Install Ratify on AKS from helm chart:
 
     ```bash
     # Add a Helm repo
@@ -198,7 +203,7 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
         --set azureWorkloadIdentity.clientId=${IDENTITY_CLIENT_ID}
     ```
 
-4. Create and assign azure policy on your cluster:
+1. Create and assign azure policy on your cluster:
 
     ```bash
     custom_policy=$(curl -L https://raw.githubusercontent.com/deislabs/ratify/main/library/default/customazurepolicy.json)
@@ -223,7 +228,7 @@ run `az aks show -g "${GROUP_NAME}" -n "${AKS_NAME}" --query addonProfiles.azure
     Pod ratify-demo-signed created
     ```
 
-2. Deploy an unsigned image to AKS cluster. The deployment has been denied since the image has not been signed and doesn't meet the deployment criteria. 
+1. Deploy an unsigned image to AKS cluster. The deployment has been denied since the image has not been signed and doesn't meet the deployment criteria.
 
     ```bash
     $ kubectl run ratify-demo-unsigned --image=unsigned:v1

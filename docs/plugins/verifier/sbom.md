@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # SBOM Validation
 
 This document outlines how Ratify can be used to verify SBOM (Software bill of material). The `sbom` verifier is added as a plugin to the Ratify verification framework.  Currently the SBOM verifier is in 2.0.0-alpha release, and it supports the following SBOM validation:

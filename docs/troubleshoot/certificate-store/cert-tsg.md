@@ -1,5 +1,7 @@
 # Troubleshoot Certificate Store Errors
 
+> **WARNING!**: `CertificateStore` is now deprecated in favor of [`KeyManagementProvider`](../../reference/custom%20resources/key-management-providers.md). Please migrate to use `KeyManagementProvider`.
+
 Please use ```kubectl get``` or ```kubectl describe``` command to retrieve the error.
 ```bash
 kubectl get certificatestores.config.ratify.deislabs.io

@@ -1,3 +1,5 @@
+# Policy
+
 A `Policy` resource defines a policy evaluating the verification results for a subject.
 
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples/policy). The `metadata.name` MUST be set to `ratify-policy` for Ratify to apply. Ratify will ensure that only one policy is actively under evaluation by limiting the `metadata.name` to `ratify-policy`. Common properties:

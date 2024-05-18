@@ -1,4 +1,8 @@
-A `Certificate Store` resource defines an array of public certificates to fetch from a provider. 
+# Certificate Store (Deprecated)
+
+> **WARNING!:** `CertificateStore` is **DEPRECATED** in favor of `KeyManagementProvider`. Please migrate to [`KeyManagementProvider`](./key-management-providers.md) by following guide [here](./key-management-providers.md#migrating-from-certificatestore-to-kmp). Support will be removed in `v2.0.0`
+
+A `CertificateStore` resource defines an array of public certificates to fetch from a provider.
 
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
 
@@ -17,9 +21,10 @@ status: # supported in version >= config.ratify.deislabs.io/v1beta1
   properties: # provider specific properties of the fetched certificates. If the current certificate fetch operation fails, this property displays the properties of last successfully cached certificate
 ```
 
-# Certificate Store Provider
 ## AzureKeyVault Certificate Provider
+
 See notation integration example [here](../../reference/verifier.md#section-6-built-in-verifiers)
+
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: CertificateStore
@@ -46,27 +51,30 @@ status:
       version:           yourCertVersion 
 ```
 
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| vaultURI      | yes    |      URI of the azure key vault        |   ""            |
-| certificateName      | yes    |    the name of the key vault object   |       ""        |
-| certificateVersion   | no     |   provider will fetch latest version if empty   |     ""    |
-| tenantID   | yes     |   tenantID of the workload identity that have read access to this key vault   |     ""    |
-| clientID   | yes     |   clientID of the workload identity that have read access to this key vault   |     ""    |
+| Name               | Required | Description                                                               | Default Value |
+| ------------------ | -------- | ------------------------------------------------------------------------- | ------------- |
+| vaultURI           | yes      | URI of the azure key vault                                                | ""            |
+| certificateName    | yes      | the name of the key vault object                                          | ""            |
+| certificateVersion | no       | provider will fetch latest version if empty                               | ""            |
+| tenantID           | yes      | tenantID of the workload identity that have read access to this key vault | ""            |
+| clientID           | yes      | clientID of the workload identity that have read access to this key vault | ""            |
 
 Use command `kubectl get certificatestores.config.ratify.deislabs.io` to see a overview of `certificatestores` status.
 Use command `kubectl get certificatestores.config.ratify.deislabs.io/certstore-akv` to see full details on each certificate.
+
 ### Limitation
+
 Azure keyvault Certificates are built on top of keys and secrets. When a certificate is created, an addressable key and secret are also created with the same name. Ratify requires secret permissions to retrieve the public certificates for the entire certificate chain, please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
 
 Please also ensure the certificate is in PEM format, PKCS12 format with nonexportable private keys can not be parsed due to limitation of Golang certificate library.
 
 Akv set up guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
-> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../../reference/crds/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
+> Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../../reference/custom%20resources/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
 
 ## Inline Certificate Provider
-```
+
+```yaml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: CertificateStore
 metadata:
@@ -98,16 +106,18 @@ spec:
 
 ```
 
-| Name        | Required | Description | Default Value |
-| ----------- | -------- | ----------- | ------------- | 
-| value      | yes    |      public certificate content       |   ""            |
+| Name  | Required | Description                | Default Value |
+| ----- | -------- | -------------------------- | ------------- |
+| value | yes      | public certificate content | ""            |
 
-# Certificate Specification
+## Certificate Specification
+
 The main use case of certificate store is for notation verifier in Ratify, so users must follow the [TrustStore specification](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md#trust-store) defined by notation.
 
 In brief, users must provide CA certificates or self-signed signing certificates, which means leaf certificates are not allowed to be used. Whatever certificates are provided, Ratify would keep only CA certificates and self-signed certificates. Therefore, if only leaf certificates are provided, Ratify would fail the verification directly since there are no valid certificates.
 
-# CRD Resource Create/Update 
+## CRD Resource Create/Update
+
 During the CRD creating/updating process, some matters require attention. The CRD operation could be successful even though some invalid values or typos are provided. Examples:
 
 1. Invalid certificate value is provided in inline certificate provider.
