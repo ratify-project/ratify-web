@@ -20,8 +20,9 @@ In this article:
 * [Sign container images in ACR](#sign-container-images-in-acr)
 * [Set up an Azure workload identity](#set-up-an-azure-workload-identity)
 * [Set up your AKS cluster](#set-up-your-aks-cluster)
-* Install Ratify and OPA Gatekeeper
-* Deploy container images in AKS
+* [Install OPA Gatekeeper and Ratify](#install-gatekeeper-and-ratify-in-aks)
+* [Configure Ratify](#configure-ratify)
+* [Deploy container images in AKS](#deploy-container-images-in-aks)
 
 > Please note that the examples and commands provided in this document are specifically designed for the Linux operating system.
 
