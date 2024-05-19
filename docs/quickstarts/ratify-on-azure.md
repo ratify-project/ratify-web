@@ -285,7 +285,7 @@ For self-signed certificates, see [Sign container images with Notation and Azure
 
 For CA-issued certificates, see [Sign container images with Notation and Azure Key Vault using a CA-issued certificate]().
 
-If you are using self-signed certificates, follow the document [Sign container images with Notation and Azure Key Vault using a self-signed certificate](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-sign-trusted-ca).
+If you are using CA issued certificates, follow the document [Sign container images with Notation and Azure Key Vault using a CA issued certificate](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-sign-trusted-ca).
 
 ```shell
 export CERT_NAME=<your certificate name>
