@@ -64,7 +64,7 @@ export RATIFY_NAMESPACE="gatekeeper-system"
 
 ## Prepare container images in ACR
 
-> NOTE: You can skip this section if you already built and pushed images to ACR.
+> You can skip this section if you already built and pushed images to ACR.
 
 1. Sign in with Azure CLI
 
@@ -174,8 +174,6 @@ export CERT_KEY_ID=<key identity for the signing/leaf certificate>
     cosign sign --key azurekms://$AKV_NAME.vault.azure.net/${KEY_NAME}/${KEY_VER} --tlog-upload=false ${IMAGE_SIGNED}
     ```
 
-    > [!NOTE]
-    > 
     > In this article, use flag `--tlog-upload=false` to skip upload the signature to the transparent log (Rekor by default). 
     >
     > Sign using a key in AKV does not necessarily require the role `Key Vault Crypto Officer`, you can use another identity and assign the role `Key Vault Crypto User` for signing action only.
@@ -214,7 +212,6 @@ az role assignment create \
 
 #### Image signed with Notation and certificates in AKV
 
-> [!IMPORTANT]
 > Ratify requires secret permissions to retrieve the root CA certificate from the entire certificate chain,
  please set private keys to Non-exportable at certificate creation time to avoid security risk. Learn more about non-exportable keys [here](https://learn.microsoft.com/en-us/azure/key-vault/certificates/how-to-export-certificate?tabs=azure-cli#exportable-and-non-exportable-keys)
 > 
@@ -264,7 +261,7 @@ az role assignment create --role "Key Vault Crypto User" --assignee $IDENTITY_OB
     export AKS_OIDC_ISSUER="$(az aks show -n ${AKS_NAME} -g ${AKS_RG} --query "oidcIssuerProfile.issuerUrl" -otsv)"
     ```
 
-    > Note: The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
+    > The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
 
     This step above may take around 10 minutes to complete. The registration status can be checked by running the following command:
 
@@ -454,8 +451,6 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     EOF
     ```
 
-> [!NOTE]
->
 > You may combine the configuration into one `KeyManagementProvider` resource for both keys and certificates if they are stored in the same AKV.
 
 1. Apply the configuration
