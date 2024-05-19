@@ -44,11 +44,7 @@ export SUB_ID=<your subscription id>
 export AKV_RG=<your AKV resource group>
 export AKV_NAME=<your AKV name>
 # The key used for Cosign signing
-export KEY_NAME=<your key name for Cosign signing>
-# The certificate used for Notation signing
-export CERT_NAME=<your certificate name for Notation signing>
-export SUBJECT_DN=<subject DN of the signing/leaf certificate>
-export CERT_KEY_ID=<key identity for the signing/leaf certificate>
+export KEY_NAME=<name of the key to be created for Cosign signing>
 # ACR related variables
 export ACR_RG=<your ACR resource group>
 export ACR_NAME=<your ACR name>
@@ -57,7 +53,7 @@ export IMAGE_SIGNED_SOURCE=https://github.com/wabbit-networks/net-monitor.git#ma
 export IMAGE_UNSIGNED="$ACR_NAME.azurecr.io/ratify-demo/net-watcher:v1"
 export IMAGE_UNSIGNED_SOURCE=https://github.com/wabbit-networks/net-watcher.git#main
 # Workload identity used by Ratify to access ACR and AKV
-export IDENTITY_NAME=<your identity name>
+export IDENTITY_NAME=<name of the identity to be created>
 export IDENTITY_RG=<your identity resource group name>
 # AKS related variables
 export AKS_RG=<your AKS resource group>
@@ -115,7 +111,13 @@ For self-signed certificates, see [Sign container images with Notation and Azure
 
 For CA issued certificates, see [Sign container images with Notation and Azure Key Vault using a CA issued certificate](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-sign-trusted-ca).
 
-As a result, the image named `${IMAGE_SIGNED}` should be signed successfully with Notation and AKV using the key id `${CERT_KEY_ID}` associated with the certificate named `${CERT_NAME}`. 
+As a result, the image named `${IMAGE_SIGNED}` should be signed successfully with Notation and AKV. Configure the following environment variables for later usage.
+
+```shell
+export CERT_NAME=<name of signing/leaf certificate>
+export SUBJECT_DN=<subject DN of the signing/leaf certificate>
+export CERT_KEY_ID=<key identity for the signing/leaf certificate>
+```
 
 ### Use Cosign with keys stored in AKV
 
