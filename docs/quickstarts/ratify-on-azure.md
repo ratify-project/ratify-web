@@ -7,7 +7,7 @@ sidebar_position: 2
 
 Signing container images ensure their authenticity and integrity. By deploying only signed images on Azure Kubernetes Service (AKS), you can ensure that the images come from a trusted origin and have not been altered since they were created.
 
-With Azure Container Registry (ACR), you can store and distribute images with signatures together. You can use Azure Key Vault (AKV) to keep your signing keys and certificates safe, and then use tools like Notation or Cosign to sign your container images with them.
+With Azure Container Registry (ACR), you can store and distribute images with signatures together. You can use Azure Key Vault (AKV) to keep your signing keys and certificates safe, and then use tools like [Notation](https://github.com/notaryproject/notation) or [Cosign](https://github.com/sigstore/cosign) to sign your container images with them.
 
 This article walks you through an end-to-end workflow of deploying only signed images on AKS with Ratify.
 
@@ -18,6 +18,8 @@ In this article:
 * [Prerequisites](#prerequisites)
 * [Prepare container images in ACR](#prepare-container-images-in-acr)
 * [Sign container images in ACR](#sign-container-images-in-acr)
+  * [Use Notation with certificates stored in AKV](#use-notation-with-certificates-stored-in-akv)
+  * [Use Cosign with keys stored in AKV](#use-cosign-with-keys-stored-in-akv)
 * [Set up an Azure workload identity](#set-up-an-azure-workload-identity)
 * [Set up your AKS cluster](#set-up-your-aks-cluster)
 * [Install OPA Gatekeeper and Ratify](#install-gatekeeper-and-ratify-in-aks)
@@ -44,8 +46,6 @@ export SUB_ID=<your subscription id>
 # AKV related variables
 export AKV_RG=<your AKV resource group>
 export AKV_NAME=<your AKV name>
-# The key used for Cosign signing
-export KEY_NAME=<name of the key to be created for Cosign signing>
 # ACR related variables
 export ACR_RG=<your ACR resource group>
 export ACR_NAME=<your ACR name>
@@ -104,6 +104,10 @@ export RATIFY_NAMESPACE="gatekeeper-system"
 
 ## Sign container images in ACR
 
+Notation and Cosign are two options for signing container images. They produce different kinds of signatures and store them in the ACR. Depending on the tool you use, you need to configure Ratify accordingly to verify the signatures from each tool.
+
+You can skip this section if you have already used Notation or Cosign to sign your container images in ACR.
+
 ### Use Notation with certificates stored in AKV
 
 Depending on the type of certificates you use, you can refer to different documents to sign container images with Notation and AKV.
@@ -121,6 +125,13 @@ export CERT_KEY_ID=<key identity for the signing/leaf certificate>
 ```
 
 ### Use Cosign with keys stored in AKV
+
+1. Configure environment variables
+
+```shell
+# The key used for Cosign signing
+export KEY_NAME=<name of the key to be created for Cosign signing>
+```
 
 1. Log into Azure
 
