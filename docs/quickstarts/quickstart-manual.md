@@ -58,8 +58,7 @@ helm install ratify \
     ./charts/ratify --atomic \
     --namespace gatekeeper-system \
     --set-file notationCerts={./test/testdata/notation.crt} \
-    --set featureFlags.RATIFY_CERT_ROTATION=true \
-    --set policy.useRego=true
+    --set featureFlags.RATIFY_CERT_ROTATION=true
 ```
 
 ## Step 3: See Ratify in action

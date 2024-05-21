@@ -4,13 +4,14 @@ A `Policy` resource defines a policy evaluating the verification results for a s
 
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples/policy). The `metadata.name` MUST be set to `ratify-policy` for Ratify to apply. Ratify will ensure that only one policy is actively under evaluation by limiting the `metadata.name` to `ratify-policy`. 
 
+## Scope
 Policies can be defined as cluster-wide resources(using the kind `Policy`) or namespaced resources(using the kind `NamespacedPolicy`).
 
 Namespaced policies will only apply to the namespace in which they are defined. If a verification request targeting a namespace cannot find a policy in required namespace, it will look up the cluster-wide policies.
 
 Cluster-wide policies are applied as the default global policy if no namespaced policy is specified in required namespace.
 
-Common properties:
+## Common properties
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Policy # NamespacedPolicy has the same spec.

@@ -54,13 +54,13 @@ A trust policy binds a set of verification configurations against a set of regis
   scopes:
     - "myregistry.io/namespace1/image*"
   keys:
-    - provider: cluster-inline-keymanagementprovider-1
+    - provider: inline-keymanagementprovider-1
 - name: policy-2
   version: 1.0.0  
   scopes:
     - "myregistry.io/namespace2*"
   keys:
-    - provider: default/namespaced-inline-keymanagementprovider-2
+    - provider: inline-keymanagementprovider-2
 ```
 
 ### Scopes
