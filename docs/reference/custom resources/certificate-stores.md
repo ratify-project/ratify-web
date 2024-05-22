@@ -4,6 +4,8 @@
 
 A `CertificateStore` resource defines an array of public certificates to fetch from a provider.
 
+`CertificateStore` is defined as namespaced resources, which is different from other Custom Resources. A verification request targeting a namespace can only access `CertificateStore` within that namespace. However, a cluster-wide verification request, where the namespace is left empty, can access `CertificateStore` across all namespaces. If you aim to isolate access among namespaces, consider employing [Key Management Provider](./key-management-providers.md) by following migration [guide](./key-management-providers.md#migrating-from-certificatestore-to-kmp).
+
 View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
 
 ```yml

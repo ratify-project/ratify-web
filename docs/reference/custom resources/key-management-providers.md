@@ -4,13 +4,55 @@
 
 A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective [Notation](../../plugins/verifier/notation.md) and [Cosign](../../plugins/verifier/cosign.md) verifier documentation on how to consume `KMP`.
 
-## Inline
+## Scope
+Key Management Provider can be defined as cluster-wide resources(using the kind `KeyManagementProvider`) or namespaced resources(using the kind `NamespacedKeyManagementProvider`).
 
+### Utilization in Verifiers
+The KeyManagementProvider serves primarily as a reference to key/certificate stores in Verifier CRs. Given that the Key Management Provider can exist either cluster-wide or within a namespace, users need to include the appropriate namespace prefix when referencing the KMP in Verifier CRs. To reference a namespaced KMP, the format should be `namespace/kmp-name`. Conversely, to reference a cluster-wide KMP, the format should simply be `kmp-name`.
+
+In general, there are 2 valid use cases. One is a namespaced verifier references a namespaced KMP within the same namespace or a cluster-wide KMP. The other is a cluster-wide verifier references a cluster-wide KMP.
+
+### Examples
+***Scenario 1***: A namespaced verifier referencing both namespaced KMP and cluster-wide KMP.
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: NamespacedVerifier
+metadata:
+  name: verifier-notation
+  namespace: default
+spec:
+  name: notation
+  artifactTypes: application/vnd.cncf.notary.signature
+  parameters:
+     verificationCertStores:
+       certs:
+         - default/ratify-notation-inline-cert-0
+         - ratify-notation-inline-cert-0
+  # skip irrelevant fields
+```
+
+***Scenario 2***: A cluster-wide verifier referencing cluster-wide KMP.
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-notation
+spec:
+  name: notation
+  artifactTypes: application/vnd.cncf.notary.signature
+  parameters:
+     verificationCertStores:
+       certs:
+         - ratify-notation-inline-cert-0
+  # skip irrelevant fields
+```
+
+## Inline
 A provider that can specify a **single** certificate or key. The content is expected to be defined inline in the resource configuration.
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
-kind: KeyManagementProvider
+kind: KeyManagementProvider # NamespacedKeyManagementProvider has the same spec.
 metadata:
   name:  # a unique name
 spec:
