@@ -51,12 +51,13 @@ Another example is that a team admin should be able to deploy within their own n
 Ratify enables multi-tenancy support by allowing users to define resources in a namespace scope. This allows users to define policies, verifiers, stores, and key management providers in a namespace and have them apply only to that namespace. Additionally, users can define cluster-wide resources as defaults for namespaces that do not have a specific resource defined.
 
 Below is a list of Custom Resources that support multi-tenancy.
-| | Cluster-wide | Namespaced |
-|---|---|---|
-|[Referrer Store](./custom%20resources/stores.md)| Store | NamespacedStore |
-|[Verifier](./custom%20resources/verifiers.md)| Verifier | NamespacedVerifier |
-|[Policy](./custom%20resources/policies.md)| Policy | NamespacedPolicy |
-|[Key Management Provider](./custom%20resources/key-management-providers.md)| KeyManagementProvider | NamespacedKeyManagementProvider |
+
+| CR Type | Cluster-wide Kind | Namespaced Kind |
+| ------- | ----------------- | --------------- |
+| [Referrer Store](./custom%20resources/stores.md) | Store | NamespacedStore |
+| [Verifier](./custom%20resources/verifiers.md) | Verifier | NamespacedVerifier |
+| [Policy](./custom%20resources/policies.md) | Policy | NamespacedPolicy |
+| [Key Management Provider](./custom%20resources/key-management-providers.md) | KeyManagementProvider | NamespacedKeyManagementProvider |
 
 **Note1**: CertificateStore resource is in **DEPRECATED** stage. If users want to move to multi-tenancy, please migrate to [Key Management Provider](./custom%20resources/key-management-providers.md) by following provided [guides](./custom%20resources/key-management-providers.md#migrating-from-certificatestore-to-kmp).
 
