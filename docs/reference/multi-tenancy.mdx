@@ -1,3 +1,15 @@
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);
+
 # Multi-tenancy
 
 This page provides an overview of the design and configuration of Ratify for multi-tenancy support since v1.2.0.
@@ -406,3 +418,9 @@ Result:
 ```bash
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
+***Recording***:
+
+
+<Highlight color="#25c2a0">Docusaurus green</Highlight> and <Highlight color="#1877F2">Facebook blue</Highlight> are my favorite colors.
+
+I can write **Markdown** alongside my _JSX_!
