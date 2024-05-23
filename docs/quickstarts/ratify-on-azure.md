@@ -11,7 +11,7 @@ With Azure Container Registry (ACR), you can store and distribute images with si
 
 This article walks you through an end-to-end workflow of deploying only signed images on AKS with Ratify.
 
-![e2e workflow diagram](../imgs/e2e-workflow-diagram.png)
+![e2e workflow diagram](../imgs/ratify-azure-e2e.drawio.svg)
 
 In this article:
 
