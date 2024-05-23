@@ -1,14 +1,22 @@
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-    {children}
-  </span>
-);
+import React, { useEffect } from 'react';
+
+const AsciinemaPlayer = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://asciinema.org/a/bJMOlPe5F4mFLY0Rl6fiJSOp3.js';
+    script.id = 'asciicast-bJMOlPe5F4mFLY0Rl6fiJSOp3';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return <div id="asciicast-bJMOlPe5F4mFLY0Rl6fiJSOp3"></div>;
+};
+
+export default AsciinemaPlayer;
 
 # Multi-tenancy
 
@@ -419,8 +427,4 @@ Result:
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
 ***Recording***:
-
-
-<Highlight color="#25c2a0">Docusaurus green</Highlight> and <Highlight color="#1877F2">Facebook blue</Highlight> are my favorite colors.
-
-I can write **Markdown** alongside my _JSX_!
+<AsciinemaPlayer />
