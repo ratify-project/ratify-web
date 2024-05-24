@@ -85,9 +85,7 @@ New constraint template using `[namespace]artifact-url` formats: [multi-tenancy 
 This is the first version we introduced multi-tenancy support in Ratify. There are some limitations that users should be aware of:
 
 1. Ratify requires users to define cluster-wide Store CRs to mutate the image. We already created an [issue](https://github.com/open-policy-agent/gatekeeper/issues/3376) on Gatekeeper to support Ratify's user scenario. But the final plan would depend on GK's decision on this issue.
-2. Logs and metrics isolation is not fully supported yet. Users are responsible for assigning correct permissions to those who need accsss to logging and instrumenting platform. In an upcoming release, Ratify will introduce a namespace field for all logs and metrics, making filtering easier. We have issues tracking this 2 scenarios and will be addressed in next release. 
-https://github.com/deislabs/ratify/issues/1483
-https://github.com/deislabs/ratify/issues/1484
+2. Metrics isolation is not fully supported yet. Users are responsible for assigning correct permissions to those who need accsss to instrumenting platform. In an upcoming release, Ratify will introduce a namespace field for metrics, making filtering easier. We have an [issue](https://github.com/deislabs/ratify/issues/1484) tracking this scenario and will be addressed in next release. 
 
 ## Setup
 To set up multi-tenancy in Ratify, users need to follow the steps below:
@@ -266,6 +264,8 @@ Deploy both the role.yaml and rolebinding.yaml to k8s.
 kubectl apply -f role.yaml
 kubectl apply -f rolebinding.yaml
 ```
+***Recording***:
+[![asciicast](https://asciinema.org/a/FnhmrSEe80t6nvXXaR8jZqnqQ.svg)](https://asciinema.org/a/FnhmrSEe80t6nvXXaR8jZqnqQ)
 
 ### Step 3: Install Gatekeeper and Ratify
 
@@ -350,6 +350,8 @@ Result:
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
 
+***Recording***:
+[![asciicast](https://asciinema.org/a/YmaTzBdQsKA9pQg76lfOzdaZf.svg)](https://asciinema.org/a/YmaTzBdQsKA9pQg76lfOzdaZf)
 ### Step 6: Apply namespaced custom resources and delete cluster-wide resources
 - Switch to cluster admin user.
 ```bash
@@ -373,6 +375,9 @@ kubectl apply -f ./config/samples/namespaced/policy/config_v1beta1_policy_rego.y
 kubectl apply -f ./config/samples/namespaced/verifier/config_v1beta1_verifier_notation.yaml
 sed 's/name: keymanagementprovider-inline/name: ratify-notation-inline-cert-0/' ./config/samples/namespaced/kmp/config_v1beta1_keymanagementprovider_inline.yaml | kubectl apply -f -
 ```
+
+***Recording***:
+[![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
 
 ### Step 7: See Ratify in action with namespaced resources
 - Ensure to switch to team admin user.
@@ -406,3 +411,5 @@ Result:
 ```bash
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
+***Recording***:
+[![asciicast](https://asciinema.org/a/4g5VoqQu2RBOPF8htdVx2BjBl.svg)](https://asciinema.org/a/4g5VoqQu2RBOPF8htdVx2BjBl)
