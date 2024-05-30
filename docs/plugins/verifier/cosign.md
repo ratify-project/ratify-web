@@ -118,7 +118,7 @@ A trust policy can be configued for keyless verification for all images matching
 
 Keyless verification supports:
 
-- certificate transparency log verification: The `ctLogVerify` configuration enables/disables verification of the existence Secure Certificate Timestamp (SCT) entry in the certificate transparency log. By defaault, this is `true`.
+- certificate transparency log verification: The `ctLogVerify` configuration enables/disables verification of the existence Secure Certificate Timestamp (SCT) entry in the certificate transparency log. By default, this is `true`.
 - certificate identity: This is REQUIRED to be defined. The `certificateIdentity` OR the `certificateIdentityRegExp` field MUST be defined. This is the identity Ratify will verify is present in the public certificate used for keyless verification.
 - certificate issuer: This is REQUIRED to be defined. The `certificateOIDCIssuer` OR the `certificateOIDCIssuerRegExp` field MUST be defined. This is the OIDC Issuer that binds the identity to the public certificate used for verification. Ratify will verify that the issuer matches.
 
