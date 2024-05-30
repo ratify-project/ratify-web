@@ -226,6 +226,7 @@ spec:
       version: # OPTIONAL: [string], trust policy schema version  
       scopes: # REQUIRED: [list], string list of scopes
       tLogVerify: # OPTIONAL: [boolean] enables/disables transparency log verification. default is 'true'
+      rekorURL: # OPTIONAL: [string] specifies a rekor URL pointing to a transparency log server. default is https://rekor.sigstore.dev
       keys: # OPTIONAL: [list], keys associated with trust policy. Either 'keys' or 'keyless' must be defined
         - provider: # OPTIONAL: [string], name of key management provider
           file: # OPTIONAL: [string], absolute file path or reference to a public key
