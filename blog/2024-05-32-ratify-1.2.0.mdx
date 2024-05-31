@@ -1,0 +1,74 @@
+---
+slug: ratify-v1.2.0-is-available
+title: Ratify v1.2.0 is available! 
+authors: [ratify]
+tags: [verification]
+---
+
+We are thrilled to announce the release of Ratify v1.2.0! 
+
+Ratify is a comprehensive verification framework designed to ensure that all supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. By integrating Ratify into your workflow, you can safeguard your deployment pipeline from potential threats and vulnerabilities, enhancing the overall security of your operations. To see an end to end example of how Ratify can be used, check out this Microsoft Build 2024 session: [Securing the Containers’ Supply Chain for Azure Kubernetes Service](https://youtu.be/5W-22xU4EP0?si=EMlmTDXRzFHj0zw0). 
+
+Read on to discover the exciting new features and how they can benefit you!
+
+## Key Features, Contributions, and Decprecations
+
+Key features in this release include:
+- Cosign Verifier Enhancements 
+- Kubernetes Multi-Tenancy Support
+- CRD improvements
+
+Contributions from the community:
+- [@duffney](https://github.com/duffney) made their first contribution: [support plugin logging #1254](https://github.com/deislabs/ratify/pull/1254)
+- [@mannbiher](https://github.com/mannbiher) made their first contribution: [fix: Set IdleTimeout for http.Server #1418](https://github.com/deislabs/ratify/pull/1418)
+
+Deprecations:
+- `CertificateStore` is deprecated in favor of KeyManagementProvider. Please migrate to KeyManagementProvider by following guide here. Support will be removed in Ratify v2.0.0
+
+## Cosign Verifier Enhancements
+
+We have made significant enhancements to the Cosign Verifier to improve both security and usability. 
+
+One notable change is that Cosign is now a built-in verifier, making it easier to integrate and use within Ratify. We have also added key support to the key management provider, allowing for more flexible and secure key management. 
+
+Additionally, we have introduced Cosign trust policies, which enhance the ability to manage and enforce security policies. These improvements enhance the reliability and effectiveness of the Cosign Verifier, making it a powerful tool for your security needs.
+
+<!-- TODO: update links -->
+
+Watch this short demo to see the Cosign Verifier in action. Or check out the [documentation](https://ratify.dev/docs/reference/verifiers/cosign) for more information.
+
+[![asciicast](https://asciinema.org/a/658139.svg)](https://asciinema.org/a/658139)
+
+## Kubernetes Multi-Tenancy Support
+
+Ratify now includes multi-tenancy support. This new feature is designed to improve resource efficiency within Kubernetes clusters by enabling both multi-team and multi-customer architectures. 
+
+Multi-tenancy primarily focuses on a multi-team model, allowing organizations to effectively manage namespaces and allocate resources. Key user roles, such as cluster admins, team admins, and team developers, now have defined access and management capabilities.
+
+The addition of multi-tenancy support aims to facilitate seamless deployment, robust security, and efficient resource utilization, ensuring a smoother and more scalable experience for all.
+<!-- TODO: update links -->
+Watch this short demo to see multi-tenancy in action. Or check out the [documentation](https://ratify.dev/docs/reference/multi-tenancy) for more information.
+
+[![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
+
+## CRD Improvements
+
+Ratify v1.2.0 introduces several improvements to Custom Resource Definitions (CRDs) to enhance their functionality and robustness. Here are the key enhancements:
+
+1. Version Control: We have added a version field to the CRD spec, allowing for better version control and management of custom resources.
+
+2. Plugin Name Validation: On Custom Resource creation, we now validate the plugin name to ensure consistency and correctness, reducing potential errors and conflicts.
+
+3. Key Management Provider Resource: We have introduced a key management provider resource, which facilitates more secure and efficient key management.
+
+4. NamespacedKMP and Cluster Level Scope: We have added NamespacedKMP and switched the Key Management Provider scope to the cluster level. This significantly improves multi-tenancy support and resource isolation within Kubernetes.
+
+These enhancements make CRDs more versatile and reliable for diverse deployment scenarios.
+
+## An invitation to contribute!
+
+We are thrilled to share that Ratify is currently under review to be adopted by the Cloud Native Computing Foundation (CNCF). 
+
+This marks an exciting opportunity for Ratify to become an open and inclusive project, welcoming contributions from the entire community. We encourage you to get involved, whether you're a developer, tester, or user. Your input and contributions are invaluable to us. Visit our [GitHub repository](https://github.com/deislabs/ratify/blob/dev/CONTRIBUTING.md) to learn more and see how you can contribute. 
+
+Join us in shaping the future of Ratify!
