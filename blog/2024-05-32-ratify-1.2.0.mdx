@@ -16,7 +16,7 @@ Read on to discover the exciting new features and how they can benefit you!
 Key features in this release include:
 - Cosign Verifier Enhancements 
 - Kubernetes Multi-Tenancy Support
-- CRD improvements
+- Key Management Provider
 
 Contributions from the community:
 - [@duffney](https://github.com/duffney) made their first contribution: [support plugin logging #1254](https://github.com/deislabs/ratify/pull/1254)
@@ -25,13 +25,13 @@ Contributions from the community:
 Deprecations:
 - `CertificateStore` is deprecated in favor of KeyManagementProvider. Please migrate to KeyManagementProvider by following guide here. Support will be removed in Ratify v2.0.0
 
-## Cosign Verifier Enhancements
+## A brand new Cosign experience! 
 
-We have made significant enhancements to the Cosign Verifier to improve both security and usability. 
+Starting in v1.2.0, Ratify now has more comprehensive Cosign verification capabilities. 
 
-One notable change is that Cosign is now a built-in verifier, making it easier to integrate and use within Ratify. We have also added key support to the key management provider, allowing for more flexible and secure key management. 
+Verification of Cosign signatures is a critical validation. As such, the Cosign verifier is now built-in verifier along with the Notation verifier. Beyond first class support, the Cosign verifier introduces a `Trust Policy` which binds a particular set of verification settings to a certain registry scope. Now, it's possible to specify multiple trust policies based on your registry, namespace, and/or image. 
 
-Additionally, we have introduced Cosign trust policies, which enhance the ability to manage and enforce security policies. These improvements enhance the reliability and effectiveness of the Cosign Verifier, making it a powerful tool for your security needs.
+Cosign verification also includes a robust key experience that integrates directly with KMP resources. Expanded capabilities include: multiple key support from KMP or filesystem and RSA + elliptical keys across multiple sizes.
 
 <!-- TODO: update links -->
 
@@ -39,7 +39,7 @@ Watch this short demo to see the Cosign Verifier in action. Or check out the [do
 
 [![asciicast](https://asciinema.org/a/658139.svg)](https://asciinema.org/a/658139)
 
-## Kubernetes Multi-Tenancy Support
+## Support for Multi-Tenancy in Kubernetes
 
 Ratify now includes multi-tenancy support. This new feature is designed to improve resource efficiency within Kubernetes clusters by enabling both multi-team and multi-customer architectures. 
 
@@ -51,19 +51,13 @@ Watch this short demo to see multi-tenancy in action. Or check out the [document
 
 [![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
 
-## CRD Improvements
+## Introduction of the Key Management Provider
 
-Ratify v1.2.0 introduces several improvements to Custom Resource Definitions (CRDs) to enhance their functionality and robustness. Here are the key enhancements:
+In this release, we are introducing the KeyManagementProvider (KMP), a new resource designed to replace the existing CertificateStore. 
 
-1. Version Control: We have added a version field to the CRD spec, allowing for better version control and management of custom resources.
+The KMP resource is a comprehensive solution for managing and retrieving keys and certificates. It includes an inline provider, which allows for the specification of a single key or certificate. Additionally, it features an Azure Key Vault provider, which enables the fetching of any number of keys or certificates. 
 
-2. Plugin Name Validation: On Custom Resource creation, we now validate the plugin name to ensure consistency and correctness, reducing potential errors and conflicts.
-
-3. Key Management Provider Resource: We have introduced a key management provider resource, which facilitates more secure and efficient key management.
-
-4. NamespacedKMP and Cluster Level Scope: We have added NamespacedKMP and switched the Key Management Provider scope to the cluster level. This significantly improves multi-tenancy support and resource isolation within Kubernetes.
-
-These enhancements make CRDs more versatile and reliable for diverse deployment scenarios.
+This new feature aims to streamline key and certificate management, enhancing the efficiency and security of your operations..
 
 ## An invitation to contribute!
 
