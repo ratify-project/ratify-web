@@ -1,0 +1,58 @@
+---
+title: Getting Started 
+sidebar_position: 2
+---
+
+> **Note** You can follow this [interactive tutorial](https://killercoda.com/notaryproject/scenario/notation/ratify) to get started with Ratify within 5 minutes in an online playground.
+
+Try out ratify in Kubernetes through Gatekeeper as the admission controller.
+
+Prerequisites:
+- Kubernetes v1.20 or higher
+- OPA Gatekeeper v3.10 or higher
+- [helmfile](https://helmfile.readthedocs.io/en/latest/#installation) v0.14 or higher. For production use and if you would like to avoid automatic installation of resources using helmfile, please refer to [ratify-quickstart-manual.md](quickstarts/quickstart-manual.md) for manual install steps.
+
+### Step 1: Install Gatekeeper, Ratify, and Constraints
+
+```bash
+helmfile sync -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
+```
+
+> **NOTE** To use the latest development version of Ratify instead, refer to this [document](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile)
+
+### Step 2: See Ratify in action
+
+Once the installation is completed, you can test the deployment of an image that is signed using Notation solution.
+
+- This will successfully create the pod `demo`
+
+```bash
+kubectl run demo --image=ghcr.io/deislabs/ratify/notary-image:signed -n default
+kubectl get pods demo -n default
+```
+
+Optionally you can see the output of the pod logs via: `kubectl logs demo`
+
+- Now deploy an unsigned image
+
+```bash
+kubectl run demo1 --image=ghcr.io/deislabs/ratify/notary-image:unsigned -n default
+```
+
+You will see a deny message from Gatekeeper denying the request to create it as the image doesn't have any signatures.
+
+```bash
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: wabbitnetworks.azurecr.io/test/net-monitor:unsigned
+```
+
+You just validated the container images in your k8s cluster!
+
+### Step 4: Uninstall
+```bash
+helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
+```
+
+### Notes
+
+If the image reference provided resolves to an OCI Index or a Docker Manifest List, validation will occur ONLY at the index or manifest list level. Ratify currently does NOT support image validation based on automatic platform selection. For more information, [see this issue](https://github.com/deislabs/ratify/issues/101).
+
