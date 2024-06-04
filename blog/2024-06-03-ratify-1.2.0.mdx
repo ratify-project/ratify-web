@@ -41,13 +41,16 @@ Watch this short demo to see the Cosign Verifier in action. Or check out the [do
 
 ## Support for Multi-Tenancy in Kubernetes
 
-Ratify now includes multi-tenancy support. This new feature is designed to improve resource efficiency within Kubernetes clusters by enabling both multi-team and multi-customer architectures. 
+Ratify now supports multi-tenancy, enabling organizations to share a single cluster among multiple teams by allowing users to define resources within a namespace scope. 
 
-Multi-tenancy primarily focuses on a multi-team model, allowing organizations to effectively manage namespaces and allocate resources. Key user roles, such as cluster admins, team admins, and team developers, now have defined access and management capabilities.
+This enhancement is seamlessly integrated, as users implicitly opt into multi-tenancy by applying namespace-specific resources such as NamespacedPolicy and NamespacedVerifier, without the need for an explicit feature flag. 
 
-The addition of multi-tenancy support aims to facilitate seamless deployment, robust security, and efficient resource utilization, ensuring a smoother and more scalable experience for all.
+Currenlty multi-tenancy supports the following resources: `Referrer Store`, `Verifier`, and `Key Management Provider`, allowing these to be defined and managed within specific namespaces. 
+
+Additionally, cluster-wide resources can be set as defaults for namespaces that do not have specific resources defined, ensuring flexibility and efficient resource management across the organization.
+
 <!-- TODO: update links -->
-Watch this short demo to see multi-tenancy in action. Or check out the [documentation](https://ratify.dev/docs/reference/multi-tenancy) for more information.
+Watch this step-by-step tutorial to see multi-tenancy in action. Or check out the [documentation](https://ratify.dev/docs/reference/multi-tenancy) for more information.
 
 [![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
 
