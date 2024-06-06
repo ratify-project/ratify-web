@@ -7,7 +7,7 @@ tags: [verification]
 
 We are thrilled to announce the release of Ratify v1.2.0! 
 
-Ratify is a comprehensive verification framework designed to ensure that all supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. By integrating Ratify into your workflow, you can safeguard your deployment pipeline from potential threats and vulnerabilities, enhancing the overall security of your operations. To see an end to end example of how Ratify can be used, check out this Microsoft Build 2024 session: [Securing the Containers’ Supply Chain for Azure Kubernetes Service](https://youtu.be/5W-22xU4EP0?si=EMlmTDXRzFHj0zw0). 
+Ratify is a verification framework that ensures all supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. By [integrating Ratify into your Kubernetes](https://notaryproject.dev/blog/2023/announcing-major-release/#integration-with-admission-controller-for-kubernetes-usage) workflow, you can protect your deployment pipeline from potential threats and vulnerabilities, significantly enhancing the overall security of your applications.
 
 Read on to discover the exciting new features and how they can benefit you!
 
@@ -33,8 +33,6 @@ Verification of Cosign signatures is a critical validation. As such, the Cosign 
 
 Cosign verification also includes a robust key experience that integrates directly with KMP resources. Expanded capabilities include: multiple key support from KMP or filesystem and RSA + elliptical keys across multiple sizes.
 
-<!-- TODO: update links -->
-
 Watch this short demo to see the Cosign Verifier in action. Or check out the [documentation](https://ratify.dev/docs/reference/verifiers/cosign) for more information.
 
 [![asciicast](https://asciinema.org/a/658139.svg)](https://asciinema.org/a/658139)
@@ -49,16 +47,15 @@ Currenlty multi-tenancy supports the following resources: `Referrer Store`, `Ver
 
 Additionally, cluster-wide resources can be set as defaults for namespaces that do not have specific resources defined, ensuring flexibility and efficient resource management across the organization.
 
-<!-- TODO: update links -->
 Watch this step-by-step tutorial to see multi-tenancy in action. Or check out the [documentation](https://ratify.dev/docs/reference/multi-tenancy) for more information.
 
 [![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
 
 ## Introduction of the Key Management Provider
 
-In this release, we are introducing the KeyManagementProvider (KMP), a new resource designed to replace the existing CertificateStore. 
+In this release, we are introducing the `KeyManagementProvider` (KMP), a new resource designed to replace the existing `CertificateStore`. 
 
-The KMP resource is a comprehensive solution for managing and retrieving keys and certificates. It includes an inline provider, which allows for the specification of a single key or certificate. Additionally, it features Key Management Provider as a configuration to retrieve keys and certificates from Key Management Service (KMS) like Azure Key Vault, which enables the fetching of any number of keys or certificates. 
+A KMP represents keys and/or certificate that are consumed by a verifier. KMP contains various providers for different use cases, such as inline or cloud hosted key management solutions. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume KMP resources to use during signature verification. Please refer to respective [Notation](https://ratify.dev/docs/plugins/verifier/notation) and [Cosign](https://ratify.dev/docs/plugins/verifier/cosign) verifier documentation on how to consume KMP.
 
 This new feature aims to streamline key and certificate management, enhancing the efficiency and security of your operations.
 
