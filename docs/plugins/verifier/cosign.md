@@ -23,6 +23,9 @@ Cosign is a built-in verifier. With the Cosign verifier, Ratify can be used to v
   - [Configuration](#configuration)
     - [Kubernetes](#kubernetes)
     - [CLI](#cli)
+  - [Verifier Report Schema](#verifier-report-schema)
+    - [Sample: Cosign Key Verification](#sample-cosign-key-verification)
+    - [Sample: Cosign Keyless Verification](#sample-cosign-keyless-verification)
   - [Legacy Cosign Verification](#legacy-cosign-verification)
     - [Key Verification](#key-verification)
       - [Configuration](#configuration-1)
@@ -245,6 +248,121 @@ spec:
 ### CLI
 
 There is currently no support for CLI using `KeyManagementProvider` and trust policies. Please refer to legacy [configuration](#cli-1).
+
+## Verifier Report Schema
+
+```json
+{
+  "isSuccess": true
+  "verifierReports": [
+    {
+      "subject": "<image reference>",
+      "isSuccess": true,
+      "name": "<verifier-name>",
+      "type": "cosign",
+      "message": "<success/failure message>",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "<base64-encoded signature content>",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": true,
+                "keyInformation": {
+                  "provider": "<insert-KMP-name>",
+                  "name": "<insert-key-name></insert-key-name>",
+                  "version": "<insert-key-version>"
+                }, // applicable only for keyed scenarios
+                "summary": [] // string list of human-readable explanations of verifications performed; only applicable if signature validation succeeded
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "<insert-trust-policy-name>" // name of the trust policy that matches image reference
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+```
+
+### Sample: Cosign Key Verification
+
+```json
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/cosign@sha256:b5e0359fc7231b32b34aecc2de2eba4702237ecaa6948a098e84f02ec22e34f9",
+      "isSuccess": true,
+      "name": "verifier-cosign",
+      "type": "cosign",
+      "message": "cosign verification success. valid signatures found. please refer to extensions field for verifications performed.",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "MIIBCAKBgQCufOhxFa2+ktnq36Eipq8iTGdMfCj0jHbaLYE8wVg8flfNoteZEZwKnNiuqk9AFb8I6nyTHgxaP9xmNMnU3kJXzNkUtKHiQ+LWYrA/+pc0zrc11PkiOgkvKdxBOiM1jV4OCCKZzO/1S4YLo5rQO8ULzSbvilOHLrN1xR7DdGXaOgKBgQDzmRxwYbvw+tYWPZkTo1nJ0EtYrH2H6GIAjzwa3pF0Ci5SVgDxgawdtjUjB2aagC4gx0HRmVSsGPNZy7PHGuKeuiQUEqnw/hQJ8eHZZbHIQhq9ZCiD1oNsfFppgF93g78NVZzxLXZoMs23tc0mTehSx4/YoO84AhlGw7QgV8OC/g==",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": false,
+                "keyInformation": {
+                  "provider": "kmprovider-akv",
+                  "name": "test-key"
+                },
+                "summary": [
+                  "The signatures were verified against the specified public key."
+                ]
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "default"
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+```
+
+### Sample: Cosign Keyless Verification
+
+```json
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/cosign-image@sha256:623621b56649b5e0c2c7cf3ffd987932f8f9a5a01036e00d6f3ae9480087621c",
+      "isSuccess": true,
+      "name": "verifier-cosign",
+      "type": "cosign",
+      "message": "cosign verification success. valid signatures found. please refer to extensions field for verifications performed.",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "MEUCIFBlKbxxg1Ni++g99jeWO8Of3g5L0Xd+qMzdqCZySQ8DAiEA3lcOJPJ1FQOahtWaRU0hG0XxFEsbcVx6SIyzYQMMR0A=",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": true,
+                "keyInformation": {},
+                "summary": [
+                  "Existence of the claims in the transparency log was verified offline.",
+                  "The code-signing certificate was verified using trusted certificate authority certificates."
+                ]
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "default"
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+
+```
 
 ## Legacy Cosign Verification
 
