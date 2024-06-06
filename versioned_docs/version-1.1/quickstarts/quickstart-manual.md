@@ -32,7 +32,7 @@ helm install gatekeeper/gatekeeper  \
 Note: if the crt/key/cabundle are NOT set under `provider.tls` in values.yaml, helm would generate a CA certificate and server key/certificate for you.
 
 ```bash
-helm repo add ratify https://deislabs.github.io/ratify
+helm repo add ratify https://ratify-project.github.io/ratify
 # download the notary verification certificate
 curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
 helm install ratify \
@@ -58,8 +58,8 @@ helm install ratify \
 
 - Deploy a `demo` constraint.
 ```
-kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 ```
 
 Once the installation is completed, you can test the deployment of an image that is signed using Notary V2 solution.
@@ -90,8 +90,8 @@ You just validated the container images in your k8s cluster!
 ### Step 4: Uninstall Ratify
 Notes: Helm does NOT support upgrading CRDs, so uninstalling Ratify will require you to delete the CRDs manually. Otherwise, you might fail to install CRDs of newer versions when installing Ratify.
 ```bash
-kubectl delete -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl delete -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl delete -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl delete -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 helm delete ratify --namespace gatekeeper-system
 kubectl delete crd stores.config.ratify.deislabs.io verifiers.config.ratify.deislabs.io certificatestores.config.ratify.deislabs.io policies.config.ratify.deislabs.io
 ```

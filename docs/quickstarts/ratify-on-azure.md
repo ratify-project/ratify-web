@@ -325,7 +325,7 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 
     ```shell
     # Add a Helm repo
-    helm repo add ratify https://deislabs.github.io/ratify
+    helm repo add ratify https://ratify-project.github.io/ratify
 
     # Install Ratify
     helm install ratify \
@@ -338,8 +338,8 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 1. Enforce Gatekeeper policy to allow only signed images can be deployed on AKS:
 
     ```shell
-    kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
-    kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+    kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
+    kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
     ```
 
 ### When Azure Policy Addon is enabled on AKS
@@ -350,7 +350,7 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 
     ```shell
     # Add a Helm repo
-    helm repo add ratify https://deislabs.github.io/ratify
+    helm repo add ratify https://ratify-project.github.io/ratify
     helm repo update
 
     # Install Ratify
