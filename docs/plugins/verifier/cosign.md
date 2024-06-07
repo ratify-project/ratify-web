@@ -16,23 +16,27 @@ Cosign is a built-in verifier. With the Cosign verifier, Ratify can be used to v
     - [Scopes](#scopes)
     - [Keys](#keys)
       - [Supported Key Types](#supported-key-types)
-    - [Limitations](#limitations)
+    - [Keyless](#keyless)
   - [Demo: Multi-key, Multi-image Verification](#demo-multi-key-multi-image-verification)
     - [Recording](#recording)
     - [Walkthrough](#walkthrough)
-  - [Keyless Verification](#keyless-verification)
-    - [Configuration](#configuration)
-      - [Kubernetes](#kubernetes)
-      - [CLI](#cli)
-    - [Usage](#usage)
-  - [Configuration](#configuration-1)
-    - [Kubernetes](#kubernetes-1)
-    - [CLI](#cli-1)
-  - [Legacy: Key-pair based verification](#legacy-key-pair-based-verification)
-    - [Configuration](#configuration-2)
-      - [Kubernetes](#kubernetes-2)
-      - [CLI](#cli-2)
-    - [Usage](#usage-1)
+  - [Configuration](#configuration)
+    - [Kubernetes](#kubernetes)
+    - [CLI](#cli)
+  - [Verifier Report Schema](#verifier-report-schema)
+    - [Sample: Cosign Key Verification](#sample-cosign-key-verification)
+    - [Sample: Cosign Keyless Verification](#sample-cosign-keyless-verification)
+  - [Legacy Cosign Verification](#legacy-cosign-verification)
+    - [Key Verification](#key-verification)
+      - [Configuration](#configuration-1)
+        - [Kubernetes](#kubernetes-1)
+        - [CLI](#cli-1)
+      - [Usage](#usage)
+    - [Keyless Verification](#keyless-verification)
+      - [Configuration](#configuration-2)
+        - [Kubernetes](#kubernetes-2)
+        - [CLI](#cli-2)
+      - [Usage](#usage-1)
   
 ## Signing
 
@@ -44,7 +48,7 @@ A configuration flag `cosignEnabled` is introduced to the ORAS Store configurati
 
 ## Trust Policy
 
-A trust policy binds a set of verification configurations against a set of registry-reference scopes. In particular, a trust policy allows a user to define the trusted keys to use for a given set of scopes.
+A trust policy binds a set of verification configurations against a set of registry-reference scopes. A trust policy allows a user to define the trusted keys to use for a given set of scopes. It also allows a user to define keyless verification configurations for a given set of scopes.
 
 **Sample trust policies:**
 
@@ -61,6 +65,15 @@ A trust policy binds a set of verification configurations against a set of regis
     - "myregistry.io/namespace2*"
   keys:
     - provider: inline-keymanagementprovider-2
+- name: policy-3
+  version: 1.0.0
+  scopes:
+    - "myregistry.io/namespace3*"
+  keyless:
+    ctLogVerify: true
+    certificateOIDCIssuer: "https://mytrustedissuer.com/login/oauth"
+    certificateIdentity: "myidentity@company.com"
+  tLogVerify: true
 ```
 
 ### Scopes
@@ -102,9 +115,15 @@ The `file` field defines an absolute file path to a local public key. This field
 - EC: P256, P384, P521
 - ED25519
 
-### Limitations
+### Keyless
 
-Currently, Cosign trust policies only support key-based configurations. Keyless support will be added soon.
+A trust policy can be configued for keyless verification for all images matching the specified `scopes`. Keyless verification can NOT be configured if `keys` are already defined.
+
+Keyless verification supports:
+
+- certificate transparency log verification: The `ctLogVerify` configuration enables/disables verification of the existence Secure Certificate Timestamp (SCT) entry in the certificate transparency log. By default, this is `true`.
+- certificate identity: This is REQUIRED to be defined. The `certificateIdentity` OR the `certificateIdentityRegExp` field MUST be defined. This is the identity Ratify will verify is present in the public certificate used for keyless verification.
+- certificate issuer: This is REQUIRED to be defined. The `certificateOIDCIssuer` OR the `certificateOIDCIssuerRegExp` field MUST be defined. This is the OIDC Issuer that binds the identity to the public certificate used for verification. Ratify will verify that the issuer matches.
 
 ## Demo: Multi-key, Multi-image Verification
 
@@ -192,16 +211,265 @@ kubectl run demo2 -n default --image=<insert test namespace image reference>
 kubectl logs deploy/ratify -n gatekeeper-system
 ```
 
-## Keyless Verification
+## Configuration
+
+### Kubernetes
+
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-cosign
+spec:
+  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+  name: cosign
+  parameters:
+    trustPolicies: # OPTIONAL: [list], trust policies matching keys to scopes
+    - name: # REQUIRED: [string], trust policy name. MUST be unique across policies
+      version: # OPTIONAL: [string], trust policy schema version  
+      scopes: # REQUIRED: [list], string list of scopes
+      tLogVerify: # OPTIONAL: [boolean] enables/disables transparency log verification. default is 'true'
+      rekorURL: # OPTIONAL: [string] specifies a rekor URL pointing to a transparency log server. default is https://rekor.sigstore.dev
+      keys: # OPTIONAL: [list], keys associated with trust policy. Either 'keys' or 'keyless' must be defined
+        - provider: # OPTIONAL: [string], name of key management provider
+          file: # OPTIONAL: [string], absolute file path or reference to a public key
+          name: # OPTIONAL: [string], name of key stored in referenced provider
+          version: # OPTIONAL: [string], version of named key
+      keyless: # OPTIONAL: keyless verification configuration. Either 'keys' or 'keyless' must be defined
+        ctLogVerify: # OPTIONAL: [boolean] enables/disables certificate transparency log verification. default is 'true'
+        certificateIdentity: # OPTIONAL: [string] exact string identity associated with public certificate
+        certificateIdentityRegExp: # OPTIONAL: [string] string regular expression of matching identity associated with public certificate.
+        certificateOIDCIssuer: # OPTIONAL: [string] exact string OIDC issuer associated with public certificate
+        certificateOIDCIssuerRegExp: # OPTIONAL: [string] string regular expression of matching OIDC issuer associated with public certificate.
+    key: # DEPRECATED,OPTIONAL: [string], absolute file path to public key
+    rekorURL: # DEPRECATED,OPTIONAL: [string], rekor server URL
+```
+
+### CLI
+
+There is currently no support for CLI using `KeyManagementProvider` and trust policies. Please refer to legacy [configuration](#cli-1).
+
+## Verifier Report Schema
+
+```json
+{
+  "isSuccess": true
+  "verifierReports": [
+    {
+      "subject": "<image reference>",
+      "isSuccess": true,
+      "name": "<verifier-name>",
+      "type": "cosign",
+      "message": "<success/failure message>",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "<base64-encoded signature content>",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": true,
+                "keyInformation": {
+                  "provider": "<insert-KMP-name>",
+                  "name": "<insert-key-name></insert-key-name>",
+                  "version": "<insert-key-version>"
+                }, // applicable only for keyed scenarios
+                "summary": [] // string list of human-readable explanations of verifications performed; only applicable if signature validation succeeded
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "<insert-trust-policy-name>" // name of the trust policy that matches image reference
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+```
+
+### Sample: Cosign Key Verification
+
+```json
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/cosign@sha256:b5e0359fc7231b32b34aecc2de2eba4702237ecaa6948a098e84f02ec22e34f9",
+      "isSuccess": true,
+      "name": "verifier-cosign",
+      "type": "cosign",
+      "message": "cosign verification success. valid signatures found. please refer to extensions field for verifications performed.",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "MIIBCAKBgQCufOhxFa2+ktnq36Eipq8iTGdMfCj0jHbaLYE8wVg8flfNoteZEZwKnNiuqk9AFb8I6nyTHgxaP9xmNMnU3kJXzNkUtKHiQ+LWYrA/+pc0zrc11PkiOgkvKdxBOiM1jV4OCCKZzO/1S4YLo5rQO8ULzSbvilOHLrN1xR7DdGXaOgKBgQDzmRxwYbvw+tYWPZkTo1nJ0EtYrH2H6GIAjzwa3pF0Ci5SVgDxgawdtjUjB2aagC4gx0HRmVSsGPNZy7PHGuKeuiQUEqnw/hQJ8eHZZbHIQhq9ZCiD1oNsfFppgF93g78NVZzxLXZoMs23tc0mTehSx4/YoO84AhlGw7QgV8OC/g==",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": false,
+                "keyInformation": {
+                  "provider": "kmprovider-akv",
+                  "name": "test-key"
+                },
+                "summary": [
+                  "The signatures were verified against the specified public key."
+                ]
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "default"
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+```
+
+### Sample: Cosign Keyless Verification
+
+```json
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/cosign-image@sha256:623621b56649b5e0c2c7cf3ffd987932f8f9a5a01036e00d6f3ae9480087621c",
+      "isSuccess": true,
+      "name": "verifier-cosign",
+      "type": "cosign",
+      "message": "cosign verification success. valid signatures found. please refer to extensions field for verifications performed.",
+      "extensions": {
+        "signatures": [
+          {
+            "signature": "MEUCIFBlKbxxg1Ni++g99jeWO8Of3g5L0Xd+qMzdqCZySQ8DAiEA3lcOJPJ1FQOahtWaRU0hG0XxFEsbcVx6SIyzYQMMR0A=",
+            "verifications": [
+              {
+                "isSuccess": true,
+                "bundleVerified": true,
+                "keyInformation": {},
+                "summary": [
+                  "Existence of the claims in the transparency log was verified offline.",
+                  "The code-signing certificate was verified using trusted certificate authority certificates."
+                ]
+              }
+            ]
+          }
+        ],
+        "trustPolicy": "default"
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+
+```
+
+## Legacy Cosign Verification
+
+### Key Verification
+
+Following is an example `ratify` config with cosign verifier. Please note the `key` refers to the public key generated by `cosign generate-key-pair` command or managed in a key vault, such as Azure Key vault, Hashicorp vault. It is used to verify the signature signed by cosign.
+
+#### Configuration
+
+##### Kubernetes
+
+```yaml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-cosign
+spec:
+  name: cosign
+  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+  parameters:
+    key: /path/to/cosign.pub
+---
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Store
+metadata:
+  name: store-oras
+spec:
+  name: oras
+  parameters:
+    cacheEnabled: true
+    cosignEnabled: true
+    ttl: 10
+```
+
+##### CLI
+
+```json
+{
+    "store": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "oras",
+                "cosignEnabled": true
+            }
+        ]
+    },
+    "policy": {
+        "version": "1.0.0",
+        "plugin": {
+            "name": "configPolicy",
+            "artifactVerificationPolicies": {
+                "application/vnd.dev.cosign.artifact.sig.v1+json": "any"
+            }
+        }
+    },
+    "verifier": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name":"cosign",
+                "artifactTypes": "application/vnd.dev.cosign.artifact.sig.v1+json",
+                "key": "/path/to/cosign.pub"
+            }
+        ]
+    }
+}
+```
+
+#### Usage
+
+```bash
+$ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/hello-world@sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4
+{
+  "isSuccess": true,
+  "verifierReports": [
+    {
+      "subject": "myregistry.io/example/hello-world@sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4",
+      "isSuccess": true,
+      "name": "cosign",
+      "message": "cosign verification success. valid signatures found",
+      "extensions": 
+      {
+        "signatures": [
+          {
+            "bundleVerified": false,
+            "isSuccess": true,
+            "signatureDigest": "sha256:abc123"
+          }
+        ]
+      },
+      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
+    }
+  ]
+}
+```
+
+### Keyless Verification
 
 This section outlines how to use `ratify` to verify the signatures signed using keyless signatures.
 
 > [!WARNING]
 > Cosign keyless verification may result in verification timeout due to Fulcio and Rekor server latencies
 
-### Configuration
+#### Configuration
 
-#### Kubernetes
+##### Kubernetes
 
 ```yaml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -226,7 +494,7 @@ spec:
     ttl: 10
 ```
 
-#### CLI
+##### CLI
 
 ```json
 {
@@ -266,7 +534,7 @@ Please note that the `key` is not specified in the config. This is because the k
 The `rekorURL` MUST be provided for keyless verification. Otherwise, signature validation will fail.
 If using a custom Rekor transparency log instance, you can customize the Rekor URL using the `rekorURL` field.
 
-### Usage
+#### Usage
 
 ```bash
 $ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/hello-world@sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4
@@ -283,132 +551,6 @@ $ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/h
         "signatures": [
           {
             "bundleVerified": true,
-            "isSuccess": true,
-            "signatureDigest": "sha256:abc123"
-          }
-        ]
-      },
-      "artifactType": "application/vnd.dev.cosign.artifact.sig.v1+json"
-    }
-  ]
-}
-```
-
-## Configuration
-
-### Kubernetes
-
-```yaml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: verifier-cosign
-spec:
-  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
-  name: cosign
-  parameters:
-    trustPolicies: # OPTIONAL: [list], trust policies matching keys to scopes
-    - name: # REQUIRED: [string], trust policy name. MUST be unique across policies
-      version: # OPTIONAL: [string], trust policy schema version  
-      scopes: # REQUIRED: [list], string list of scopes
-      keys: # OPTIONAL: [list], keys associated with trust policy
-        - provider: # OPTIONAL: [string], name of key management provider
-          file: # OPTIONAL: [string], absolute file path or reference to a public key
-          name: # OPTIONAL: [string], name of key stored in referenced provider
-          version: # OPTIONAL: [string], version of named key
-    key: # DEPRECATED,OPTIONAL: [string], absolute file path to public key
-    rekorURL: # DEPRECATED,OPTIONAL: [string], rekor server URL
-```
-
-### CLI
-
-There is currently no support for CLI using `KeyManagementProvider` and trust policies. Please refer to legacy [configuration](#cli-1).
-
-## Legacy: Key-pair based verification
-
-This section outlines how to use `ratify` to verify the signatures signed using key pairs.
-
-Following is an example `ratify` config with cosign verifier. Please note the `key` refers to the public key generated by `cosign generate-key-pair` command. It is used to verify the signature signed by cosign.
-
-### Configuration
-
-#### Kubernetes
-
-```yaml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: verifier-cosign
-spec:
-  name: cosign
-  artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
-  parameters:
-    key: /path/to/cosign.pub
----
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Store
-metadata:
-  name: store-oras
-spec:
-  name: oras
-  parameters:
-    cacheEnabled: true
-    cosignEnabled: true
-    ttl: 10
-```
-
-#### CLI
-
-```json
-{
-    "store": {
-        "version": "1.0.0",
-        "plugins": [
-            {
-                "name": "oras",
-                "cosignEnabled": true
-            }
-        ]
-    },
-    "policy": {
-        "version": "1.0.0",
-        "plugin": {
-            "name": "configPolicy",
-            "artifactVerificationPolicies": {
-                "application/vnd.dev.cosign.artifact.sig.v1+json": "any"
-            }
-        }
-    },
-    "verifier": {
-        "version": "1.0.0",
-        "plugins": [
-            {
-                "name":"cosign",
-                "artifactTypes": "application/vnd.dev.cosign.artifact.sig.v1+json",
-                "key": "/path/to/cosign.pub"
-            }
-        ]
-    }
-}
-```
-
-### Usage
-
-```bash
-$ ratify verify --config ~/.ratify/config.json --subject myregistry.io/example/hello-world@sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4
-{
-  "isSuccess": true,
-  "verifierReports": [
-    {
-      "subject": "myregistry.io/example/hello-world@sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4",
-      "isSuccess": true,
-      "name": "cosign",
-      "message": "cosign verification success. valid signatures found",
-      "extensions": 
-      {
-        "signatures": [
-          {
-            "bundleVerified": false,
             "isSuccess": true,
             "signatureDigest": "sha256:abc123"
           }
