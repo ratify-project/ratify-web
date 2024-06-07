@@ -56,7 +56,7 @@ First, follow the first step of the [manual quickstart](../../quickstarts/quicks
 Second, install Ratify and configure the SBOM verifier with disallowed license and package information. In the configuration below, Alice specifies `busybox` as a disallowed package as it leads arbitrary code execution. [Copy left ](https://www.gnu.org/licenses/copyleft.en.html) license such as `MPL` is also disallowed due to license restrictions.
 
 ```bash
-helm repo add ratify https://deislabs.github.io/ratify
+helm repo add ratify https://ratify-project.github.io/ratify
 helm install ratify \
     ratify/ratify --atomic \
     --namespace gatekeeper-system \
@@ -69,8 +69,8 @@ helm install ratify \
 ```
 Third, deploy a `demo` constraint.
 ```
-kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 ```
 #### 3. Deploying test image
 Finally we will attempt to deploy our test image `myregistry.io/sbom/alpine:3.18.2`. We expect this to FAIL since the SBOM contains disallowed packages busybox:
@@ -133,12 +133,12 @@ Second, install Ratify with the SBOM verifier enabled and configured. The SBOM v
 
 Third, deploy a `demo` constraint.
 ```
-kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 ```
 
 ```bash
-helm repo add ratify https://deislabs.github.io/ratify
+helm repo add ratify https://ratify-project.github.io/ratify
 # download the notary verification certificate
 curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
 helm install ratify \
