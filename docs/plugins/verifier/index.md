@@ -1,6 +1,6 @@
 # Verifiers
 
-Ratify support built-in plugin verifiers and [external](https://github.com/deislabs/ratify/tree/main/plugins/verifier) plugin verifiers. See below for supported versions.
+Ratify support built-in plugin verifiers and [external](https://github.com/ratify-project/ratify/tree/main/plugins/verifier) plugin verifiers. See below for supported versions.
 
 ## Built-in Verifier Builds
 

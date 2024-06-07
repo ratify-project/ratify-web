@@ -15,7 +15,7 @@ Prerequisites:
 ### Step 1: Install Gatekeeper, Ratify, and Constraints
 
 ```bash
-helmfile sync -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
+helmfile sync -f git::https://github.com/ratify-project/ratify.git@helmfile.yaml
 ```
 
 ### Step 2: See Ratify in action
@@ -47,10 +47,10 @@ You just validated the container images in your k8s cluster!
 
 ### Step 4: Uninstall
 ```bash
-helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@helmfile.yaml
+helmfile destroy --skip-charts -f git::https://github.com/ratify-project/ratify.git@helmfile.yaml
 ```
 
 ### Notes
 
-If the image reference provided resolves to an OCI Index or a Docker Manifest List, validation will occur ONLY at the index or manifest list level. Ratify currently does NOT support image validation based on automatic platform selection. For more information, [see this issue](https://github.com/deislabs/ratify/issues/101).
+If the image reference provided resolves to an OCI Index or a Docker Manifest List, validation will occur ONLY at the index or manifest list level. Ratify currently does NOT support image validation based on automatic platform selection. For more information, [see this issue](https://github.com/ratify-project/ratify/issues/101).
 

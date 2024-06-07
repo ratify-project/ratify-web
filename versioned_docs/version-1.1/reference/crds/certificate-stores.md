@@ -1,6 +1,6 @@
 A `Certificate Store` resource defines an array of public certificates to fetch from a provider. 
 
-View more CRD samples [here](https://github.com/deislabs/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
+View more CRD samples [here](https://github.com/ratify-project/ratify/tree/main/config/samples). Each provider must specify the `name` of the certificate store.
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -61,7 +61,7 @@ Azure keyvault Certificates are built on top of keys and secrets. When a certifi
 
 Please also ensure the certificate is in PEM format, PKCS12 format with nonexportable private keys can not be parsed due to limitation of Golang certificate library.
 
-Akv set up guide in ratify-on-azure [quick start](https://github.com/deislabs/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
+Akv set up guide in ratify-on-azure [quick start](https://github.com/ratify-project/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
 > Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using the [inline certificate provider](../../reference/crds/certificate-stores.md#inline-certificate-provider) to reduce risk of exposing private key.
 

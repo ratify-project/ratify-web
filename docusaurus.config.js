@@ -51,14 +51,14 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/deislabs/ratify-web/blob/main'
+            'https://github.com/ratify-project/ratify-web/blob/main'
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/deislabs/ratify-web/',
+            'https://github.com/ratify-project/ratify-web/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -106,7 +106,7 @@ const config = {
             className: 'fab fa-lg fa-slack',
           },
           {
-            to: 'https://github.com/deislabs/ratify',
+            to: 'https://github.com/ratify-project/ratify',
             label: ' ',
             position: 'right',
             target: '_blank',
@@ -138,7 +138,7 @@ const config = {
             items: [
               {
                 label: 'Github',
-                href: 'https://github.com/deislabs/ratify',
+                href: 'https://github.com/ratify-project/ratify',
               },
               {
                 label: 'Slack',
