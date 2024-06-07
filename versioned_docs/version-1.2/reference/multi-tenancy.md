@@ -2,7 +2,7 @@
 
 This page provides an overview of the design and configuration of Ratify for multi-tenancy support since v1.2.0.
 
-Ratify supports multi-tenancy by sharing a cluster between multiple teams within an organization. See previous [discussion](https://github.com/deislabs/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md) on the multi-tenancy support for more details. Cluster admin MUST deploy a single Ratify within a specific namespace and use namespaces to isolate resources for different teams.
+Ratify supports multi-tenancy by sharing a cluster between multiple teams within an organization. See previous [discussion](https://github.com/ratify-project/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md) on the multi-tenancy support for more details. Cluster admin MUST deploy a single Ratify within a specific namespace and use namespaces to isolate resources for different teams.
 
 ## Table of Contents
 - [Access Control](#access-control)
@@ -25,10 +25,10 @@ Ratify supports multi-tenancy by sharing a cluster between multiple teams within
 
 
 ## Access Control
-As we [discussed](https://github.com/deislabs/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md#access-control) during multi-tenancy designing, Ratify will offload access control on namespaced level to Kubernetes cluster. Admins can use ABAC or RBAC authorization to control access to resources in a namespace. The restricted resources include Custom Resources in Ratify and general resources in the cluster.
+As we [discussed](https://github.com/ratify-project/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md#access-control) during multi-tenancy designing, Ratify will offload access control on namespaced level to Kubernetes cluster. Admins can use ABAC or RBAC authorization to control access to resources in a namespace. The restricted resources include Custom Resources in Ratify and general resources in the cluster.
 
 ### User Group
-We defined 3 user groups in the multi-tenancy [design](https://github.com/deislabs/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md#user-group): cluster admin, team admin, and team developer. 
+We defined 3 user groups in the multi-tenancy [design](https://github.com/ratify-project/ratify/blob/dev/docs/discussion/Multi-Tenancy%20Support.md#user-group): cluster admin, team admin, and team developer. 
 1. Cluster admin has full control over the cluster and can manage all resources in the cluster. 
 2. Team admin can manage resources in a namespace and assign permissions to team developers. 
 3. Team developer can only access resources in a namespace and have limited permissions.
@@ -77,17 +77,17 @@ Prior to version 1.2.0, Ratify only supported external data request keys in `art
 
 Examples:
 
-Old constraint template using `artifact-url` formats: [default template](https://github.com/deislabs/ratify/blob/dev/library/default/template.yaml#L17-L19)
+Old constraint template using `artifact-url` formats: [default template](https://github.com/ratify-project/ratify/blob/dev/library/default/template.yaml#L17-L19)
 
-New constraint template using `[namespace]artifact-url` formats: [multi-tenancy template](https://github.com/deislabs/ratify/blob/dev/library/multi-tenancy-validation/template.yaml#L17-L19)
+New constraint template using `[namespace]artifact-url` formats: [multi-tenancy template](https://github.com/ratify-project/ratify/blob/dev/library/multi-tenancy-validation/template.yaml#L17-L19)
 
 ## Limitation
 This is the first version we introduced multi-tenancy support in Ratify. There are some limitations that users should be aware of:
 
 1. Ratify requires users to define cluster-wide Store CRs to mutate the image. We already created an [issue](https://github.com/open-policy-agent/gatekeeper/issues/3376) on Gatekeeper to support Ratify's user scenario. But the final plan would depend on GK's decision on this issue.
 2. Logs and metrics isolation is not fully supported yet. Users are responsible for assigning correct permissions to those who need accsss to logging and instrumenting platform. In an upcoming release, Ratify will introduce a namespace field for all logs and metrics, making filtering easier. We have issues tracking this 2 scenarios and will be addressed in next release. 
-https://github.com/deislabs/ratify/issues/1483
-https://github.com/deislabs/ratify/issues/1484
+https://github.com/ratify-project/ratify/issues/1483
+https://github.com/ratify-project/ratify/issues/1484
 
 ## Setup
 To set up multi-tenancy in Ratify, users need to follow the steps below:
@@ -275,7 +275,7 @@ The above installation will install Ratify in the `gatekeeper-system` namespace.
 
 Clone the Ratify repository so that we can use the sample resources directly.
 ```bash
-git clone https://github.com/deislabs/ratify.git
+git clone https://github.com/ratify-project/ratify.git
 cd ratify
 ```
 

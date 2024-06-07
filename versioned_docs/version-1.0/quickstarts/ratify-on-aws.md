@@ -29,7 +29,7 @@ There are a couple tools you will need locally to complete this guide:
 - [docker](https://www.docker.com/get-started): This is used to build the container image we will deploy in this guide
 - [cosign](https://github.com/sigstore/cosign): This is used to sign the container image we will deploy in this guide
 - [notation](https://github.com/notaryproject/notation): This is used to sign the container image we will deploy in this guide
-- [ratify](https://github.com/deislabs/ratify/releases): This is used to check images from ECR locally
+- [ratify](https://github.com/ratify-project/ratify/releases): This is used to check images from ECR locally
 - [jq](https://stedolan.github.io/jq/): This is used to capture variables from json returned by commands
 
 If you have not done so already, configure awscli to interact with your AWS account by following these [instructions](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html).

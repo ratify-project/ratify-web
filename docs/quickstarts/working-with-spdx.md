@@ -18,7 +18,7 @@ In order to complete this guide you will need some tools.
 - [docker](https://www.docker.com/get-started): This tool will be used to build the container image
 - [syft](https://github.com/anchore/syft): This tool will be used to generate an SBoM in SPDX tag-value format
 - [oras](https://github.com/oras-project/oras): This tool will be used to push the generated SBoM to the registry
-- [ratify](https://github.com/deislabs/ratify): This tool will be used to validate the SBoM
+- [ratify](https://github.com/ratify-project/ratify): This tool will be used to validate the SBoM
 
 You will also need a registry to push your container image and SBoM to. For this guide deploy a local registry with
 oras artifacts support:
