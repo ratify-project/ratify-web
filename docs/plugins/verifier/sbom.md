@@ -299,8 +299,8 @@ Sample JSON
 ```
 ### Future Improvements
 Please vote on these issues to help us prioritize:
-- [SBOM Verifier to support other formats](https://github.com/deislabs/ratify/issues/1206)
-- [SBOM verifier to support license expressions](https://github.com/deislabs/ratify/issues/1207)
+- [SBOM Verifier to support other formats](https://github.com/ratify-project/ratify/issues/1206)
+- [SBOM verifier to support license expressions](https://github.com/ratify-project/ratify/issues/1207)
 
 ### FAQ
 

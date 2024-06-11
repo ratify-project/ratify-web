@@ -14,18 +14,18 @@ Metrics Types:
 |:-----------------------------:| --------- |:------------:| ---------------------------------------------------------------------------------------------------------------------------------------------------- |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |  ratify_verification_request  | Histogram | milliseconds | N/A                                                                                                                                                  | Duration of a single request to the `/verify` endpoint. Histogram bins:   `[0, 10, 30, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1400, 1600, 1800, 2000, 2300, 2600, 4000, 4400, 4900]` |
 |    ratify_mutation_request    | Histogram | milliseconds | N/A                                                                                                                                                  |                    Duration of a single request to the `/mutate` endpoint. Histogram bins: `[0, 10, 30, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1400, 1600, 1800]`                    |
-|   ratify_verifier_duration    | Histogram | milliseconds | `verifier`: name of the verifier <br/> `subject`: full subject reference <br/> `success`: verifier result <br/> `error`: if operation returned error |                             Duration of a single verifier's execution for a single referrer artifact. Histogram bins: `[0, 10, 50, 100, 200, 300, 400, 600, 800, 1100, 1500, 2000]`                              |
-|   ratify_system_error_count   | Counter   |     N/A      | `error`: error message                                                                                                                               |                                                                                    Count of errors emitted   by http handlers                                                                                    |
-| ratify_registry_request_count | Counter   |     N/A      | `status_code`: registry request status code <br/> `registry_host`: registry host name                                                                |                                                                                        Count of requests made to registry                                                                                        |
-|    ratify_blob_cache_count    | Counter   |     N/A      | `hit`: boolean cache hit                                                                                                                             |                                                                                        Count of ORAS blob cache hit/miss                                                                                         |                                                                                                                                                                   |
+|   ratify_verifier_duration    | Histogram | milliseconds | `verifier`: name of the verifier <br/> `subject`: full subject reference <br/> `success`: verifier result <br/> `error`: if operation returned error <br/> `workload_namespace`: namespace where workload deployed |                             Duration of a single verifier's execution for a single referrer artifact. Histogram bins: `[0, 10, 50, 100, 200, 300, 400, 600, 800, 1100, 1500, 2000]`                              |
+|   ratify_system_error_count   | Counter   |     N/A      | `error`: error <br/> `workload_namespace`: namespace where workload deployedmessage                                                                                                                               |                                                                                    Count of errors emitted   by http handlers                                                                                    |
+| ratify_registry_request_count | Counter   |     N/A      | `status_code`: registry request status code <br/> `registry_host`: registry host name <br/> `workload_namespace`: namespace where workload deployed                                                               |                                                                                        Count of requests made to registry                                                                                        |
+|    ratify_blob_cache_count    | Counter   |     N/A      | `hit`: boolean cache hit  <br/> `workload_namespace`: namespace where workload deployed                                                                                                                          |                                                                                        Count of ORAS blob cache hit/miss                                                                                         |                                                                                                                                                                   |
 
 ### Azure Metrics
 
 | Name                            | Type      | Unit         | Attributes                                                      | Description                                                     |
 | ------------------------------- | --------- | ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| ratify_aad_exchange_duration    | Histogram | milliseconds | `resource_type`: resource scope (ACR vs AKV)                    | Duration of federated JWT exchange for AAD resource scope token |
-| ratify_acr_exchange_duration    | Histogram | milliseconds | `repository`: full ACR repository name for token exchange scope | Duration of  exchange of AAD token for ACR refresh token        |
-| ratify_akv_certificate_duration | Histogram | milliseconds | `certificate_name`: name of AKV certificate object              | Duration of AKV certificate fetch operation                     |
+| ratify_aad_exchange_duration    | Histogram | milliseconds | `resource_type`: resource scope (ACR vs AKV) <br/> `workload_namespace`: namespace where workload                   | Duration of federated JWT exchange for AAD resource scope token |
+| ratify_acr_exchange_duration    | Histogram | milliseconds | `repository`: full ACR repository name for token exchange scope <br/> `workload_namespace`: namespace where workload | Duration of  exchange of AAD token for ACR refresh token        |
+| ratify_akv_certificate_duration | Histogram | milliseconds | `certificate_name`: name of AKV certificate object <br/> `workload_namespace`: namespace where workload             | Duration of AKV certificate fetch operation                     |
 
 ## Metrics Providers Supported
 
@@ -59,7 +59,7 @@ Prior to installing Ratify on the cluster:
     ```
     kubectl apply -f instrumentation/additional-scrape-configs.yaml -n monitoring
     ```
-    - Note: if the [scrape config](https://github.com/deislabs/ratify/blob/main/instrumentation/prometheus-additional.yaml) stored is updated and the secret needs to be regenerated. Run this command prior:
+    - Note: if the [scrape config](https://github.com/ratify-project/ratify/blob/main/instrumentation/prometheus-additional.yaml) stored is updated and the secret needs to be regenerated. Run this command prior:
         ```
         kubectl create secret generic additional-scrape-configs --from-file=instrumentation/prometheus-additional.yaml --dry-run=client -oyaml > instrumentation/additional-scrape-configs.yaml
         ```
@@ -78,6 +78,7 @@ Prior to installing Ratify on the cluster:
         --set grafana.service.type=LoadBalancer \
         --set grafana.sidecar.dashboards.enabled=true
     ```
+    Note: if you are running Minikube cluster for this setup, you may need to run `minikube tunnel` to expose the LoadBalancer service to an external IP before installing prometheus.
 1. Apply ConfigMap with Ratify Dashboard to monitoring namespace
     ```
     kubectl apply -f instrumentation/grafana_configMap.yaml -n monitoring

@@ -30,13 +30,13 @@ Ratify installation/upgrade for HA scenarios can be done via a `helmfile` or man
 
 ```bash
 # Sync helm chart resources defined with cluster
-helmfile sync -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
+helmfile sync -f git::https://github.com/ratify-project/ratify.git@high-availability.helmfile.yaml
 ```
 
 ### Uninstall Steps
 
 ```bash
-helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
+helmfile destroy --skip-charts -f git::https://github.com/ratify-project/ratify.git@high-availability.helmfile.yaml
 ```
 
 ## Manual Installation Steps
@@ -194,8 +194,8 @@ While developing for HA scenarios, the `dev.high-availability.helmfile.yaml` can
 Prerequisites:
 
 - Install helmfile
-- Build your own images (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
-- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
+- Build your own images (follow instructions [here](https://github.com/ratify-project/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
+- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/ratify-project/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
 
 ### Update `dev.high-availability.helmfile.yaml`
 

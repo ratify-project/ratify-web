@@ -23,7 +23,7 @@ helm install gatekeeper/gatekeeper  \
     --set externaldataProviderResponseCacheTTL=10s
 ```
 
-> NOTE: `validatingWebhookTimeoutSeconds` and `mutationWebhookTimeoutSeconds` increased from 3 to 5 and 1 to 2 respectively, so all Ratify operations complete in complex scenarios. See [discussion here](https://github.com/deislabs/ratify/issues/269) to remove this requirement. Kubernetes v1.20 or higher is REQUIRED to increase timeout. Timeout is configurable in helm chart under `provider.timeout` section.   
+> NOTE: `validatingWebhookTimeoutSeconds` and `mutationWebhookTimeoutSeconds` increased from 3 to 5 and 1 to 2 respectively, so all Ratify operations complete in complex scenarios. See [discussion here](https://github.com/ratify-project/ratify/issues/269) to remove this requirement. Kubernetes v1.20 or higher is REQUIRED to increase timeout. Timeout is configurable in helm chart under `provider.timeout` section.   
 
 ### Step 2: Deploy ratify on gatekeeper in the gatekeeper-system namespace.
 
@@ -43,9 +43,9 @@ helm install ratify \
 ```
 
 - Option 2: Install ratify with charts from your local branch.  
-Note: Latest chart in main may not be compatible with the last released version of ratify image, learn more about weekly dev builds [here](https://github.com/deislabs/ratify/blob/main/RELEASES.md#weekly-dev-release) 
+Note: Latest chart in main may not be compatible with the last released version of ratify image, learn more about weekly dev builds [here](https://github.com/ratify-project/ratify/blob/main/RELEASES.md#weekly-dev-release) 
 ```bash
-git clone https://github.com/deislabs/ratify.git
+git clone https://github.com/ratify-project/ratify.git
 cd ratify
 helm install ratify \
     ./charts/ratify --atomic \
