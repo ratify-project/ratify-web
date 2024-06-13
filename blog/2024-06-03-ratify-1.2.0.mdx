@@ -11,16 +11,13 @@ Ratify is a verification framework that ensures all supply chain artifacts store
 
 Read on to discover the exciting new features and how they can benefit you!
 
-## Key Features, Contributions, and Decprecations
+## Key Features and Decprecations
 
 Key features in this release include:
 - Cosign Verifier Enhancements 
 - Kubernetes Multi-Tenancy Support
 - Key Management Provider
-
-Contributions from the community:
-- [@duffney](https://github.com/duffney) made their first contribution: [support plugin logging #1254](https://github.com/deislabs/ratify/pull/1254)
-- [@mannbiher](https://github.com/mannbiher) made their first contribution: [fix: Set IdleTimeout for http.Server #1418](https://github.com/deislabs/ratify/pull/1418)
+- OCI 1.1 support
 
 Deprecations:
 - `CertificateStore` is deprecated in favor of `KeyManagementProvider` (KMP). Please migrate to `KeyManagementProvider` by following guide [here](https://ratify.dev/docs/reference/custom%20resources/key-management-providers#migrating-from-certificatestore-to-kmp). Support will be removed in Ratify v2.0.0
