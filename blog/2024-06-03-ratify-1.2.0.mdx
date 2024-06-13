@@ -1,0 +1,65 @@
+---
+slug: ratify-v1.2.0-is-available
+title: Ratify v1.2.0 is available! 
+authors: [ratify]
+tags: [verification]
+---
+
+We are thrilled to announce the release of Ratify v1.2.0! 
+
+Ratify is a verification framework that ensures all supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. By [integrating Ratify into your Kubernetes](https://notaryproject.dev/blog/2023/announcing-major-release/#integration-with-admission-controller-for-kubernetes-usage) workflow, you can protect your deployment pipeline from potential threats and vulnerabilities, significantly enhancing the overall security of your applications.
+
+Read on to discover the exciting new features and how they can benefit you!
+
+## Key Features and Decprecations
+
+Key features in this release include:
+- Cosign Verifier Enhancements 
+- Kubernetes Multi-Tenancy Support
+- Key Management Provider
+- OCI 1.1 support
+
+Deprecations:
+- `CertificateStore` is deprecated in favor of `KeyManagementProvider` (KMP). Please migrate to `KeyManagementProvider` by following guide [here](https://ratify.dev/docs/reference/custom%20resources/key-management-providers#migrating-from-certificatestore-to-kmp). Support will be removed in Ratify v2.0.0
+
+## A brand new Cosign experience! 
+
+Starting in v1.2.0, Ratify now has more comprehensive Cosign verification capabilities. 
+
+Verification of Cosign signatures is a critical validation. As such, the Cosign verifier is now a built-in verifier along with the Notation verifier. Beyond first class support, the Cosign verifier introduces a `Trust Policy` which binds a particular set of verification settings to a certain registry scope. Now, it's possible to specify multiple trust policies based on your registry, namespace, and/or image. 
+
+Cosign verification also includes a robust key experience that integrates directly with KMP resources. Expanded capabilities include: multiple key support from KMP or filesystem and RSA + elliptical keys across multiple sizes.
+
+Watch this short demo to see the Cosign Verifier in action. Or check out the [documentation](https://ratify.dev/docs/reference/verifiers/cosign) for more information.
+
+[![asciicast](https://asciinema.org/a/658139.svg)](https://asciinema.org/a/658139)
+
+## Support for Multi-Tenancy in Kubernetes
+
+Ratify now supports multi-tenancy, enabling organizations to share a single cluster among multiple teams by allowing users to define resources within a namespace scope. 
+
+This enhancement is seamlessly integrated, as users implicitly opt into multi-tenancy by applying namespace-specific resources such as NamespacedPolicy and NamespacedVerifier, without the need for an explicit feature flag.
+
+Currenlty multi-tenancy supports the following resources: `Referrer Store`, `Verifier`, `Policy` and `Key Management Provider`, allowing these to be defined and managed within specific namespaces.
+
+Additionally, cluster-wide resources can be set as defaults for namespaces that do not have specific resources defined, ensuring flexibility and efficient resource management across the organization.
+
+Watch this step-by-step tutorial to see multi-tenancy in action. Or check out the [documentation](https://ratify.dev/docs/reference/multi-tenancy) for more information.
+
+[![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
+
+## Introduction of the Key Management Provider
+
+In this release, we are introducing the `KeyManagementProvider` (KMP), a new resource designed to replace the existing `CertificateStore`. 
+
+A KMP represents keys and/or certificate that are consumed by a verifier. KMP contains various providers for different use cases, such as inline or cloud hosted key management solutions. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume KMP resources to use during signature verification. Please refer to respective [Notation](https://ratify.dev/docs/plugins/verifier/notation) and [Cosign](https://ratify.dev/docs/plugins/verifier/cosign) verifier documentation on how to consume KMP.
+
+This new feature aims to streamline key and certificate management, enhancing the efficiency and security of your operations.
+
+## An invitation to contribute!
+
+We are thrilled to share that Ratify is currently [under review](https://github.com/cncf/sandbox/issues/96) to be adopted by the Cloud Native Computing Foundation (CNCF). 
+
+This marks an exciting opportunity for Ratify to become an open and inclusive project, welcoming contributions from the entire community. We encourage you to get involved, whether you're a developer, tester, or user. Your input and contributions are invaluable to us.
+
+Join us in shaping the future of Ratify by contributing to the [project](https://github.com/deislabs/ratify/blob/dev/CONTRIBUTING.md)!
