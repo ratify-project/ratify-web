@@ -85,9 +85,7 @@ New constraint template using `[namespace]artifact-url` formats: [multi-tenancy 
 This is the first version we introduced multi-tenancy support in Ratify. There are some limitations that users should be aware of:
 
 1. Ratify requires users to define cluster-wide Store CRs to mutate the image. We already created an [issue](https://github.com/open-policy-agent/gatekeeper/issues/3376) on Gatekeeper to support Ratify's user scenario. But the final plan would depend on GK's decision on this issue.
-2. Logs and metrics isolation is not fully supported yet. Users are responsible for assigning correct permissions to those who need accsss to logging and instrumenting platform. In an upcoming release, Ratify will introduce a namespace field for all logs and metrics, making filtering easier. We have issues tracking this 2 scenarios and will be addressed in next release. 
-https://github.com/ratify-project/ratify/issues/1483
-https://github.com/ratify-project/ratify/issues/1484
+2. Metrics isolation is not fully supported yet. Users are responsible for assigning correct permissions to those who need accsss to instrumenting platform. In an upcoming release, Ratify will introduce a namespace field for metrics, making filtering easier. We have an [issue](https://github.com/ratify-project/ratify/issues/1484) tracking this scenario and will be addressed in next release. 
 
 ## Setup
 To set up multi-tenancy in Ratify, users need to follow the steps below:
@@ -266,6 +264,8 @@ Deploy both the role.yaml and rolebinding.yaml to k8s.
 kubectl apply -f role.yaml
 kubectl apply -f rolebinding.yaml
 ```
+***Recording***:
+[![asciicast](https://asciinema.org/a/FnhmrSEe80t6nvXXaR8jZqnqQ.svg)](https://asciinema.org/a/FnhmrSEe80t6nvXXaR8jZqnqQ)
 
 ### Step 3: Install Gatekeeper and Ratify
 
@@ -303,16 +303,16 @@ kubectl config use-context minikube
 
 - Deploy an unsigned image, which should be denied by Ratify.
 ```bash
-kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-image:unsigned
+kubectl run demo --namespace default --image=ghcr.io/ratify-project/ratify/notary-image:unsigned
 ```
 Result:
 ```bash
-Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: [default]ghcr.io/deislabs/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: [default]ghcr.io/ratify-project/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4
 ```
 
 - Deploy a signed image in default namespace, which should be allowed by Ratify.
 ```bash
-kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace default --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
@@ -321,7 +321,7 @@ pod/demo created
 
 - Deploy a signed image in `new-namespace` namespace, which should be allowed by Ratify as well.
 ```bash
-kubectl run demo --namespace new-namespace --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace new-namespace --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
@@ -335,7 +335,7 @@ kubectl config use-context team-admin-context
 
 - Deploy a signed image in default namespace, which should be allowed by Ratify.
 ```bash
-kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace default --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
@@ -343,13 +343,15 @@ pod/demo created
 ```
 - Deploy a signed image in `new-namespace` namespace, which should be denied.
 ```bash
-kubectl run demo --namespace new-namespace --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace new-namespace --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
 
+***Recording***:
+[![asciicast](https://asciinema.org/a/YmaTzBdQsKA9pQg76lfOzdaZf.svg)](https://asciinema.org/a/YmaTzBdQsKA9pQg76lfOzdaZf)
 ### Step 6: Apply namespaced custom resources and delete cluster-wide resources
 - Switch to cluster admin user.
 ```bash
@@ -374,6 +376,9 @@ kubectl apply -f ./config/samples/namespaced/verifier/config_v1beta1_verifier_no
 sed 's/name: keymanagementprovider-inline/name: ratify-notation-inline-cert-0/' ./config/samples/namespaced/kmp/config_v1beta1_keymanagementprovider_inline.yaml | kubectl apply -f -
 ```
 
+***Recording***:
+[![asciicast](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj.svg)](https://asciinema.org/a/PO8RPcuZ2qyShif80c55WQipj)
+
 ### Step 7: See Ratify in action with namespaced resources
 - Ensure to switch to team admin user.
 ```bash
@@ -382,16 +387,16 @@ kubectl config use-context team-admin-context
 
 - Deploy an unsigned image, which should be denied by Ratify.
 ```bash
-kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-image:unsigned
+kubectl run demo --namespace default --image=ghcr.io/ratify-project/ratify/notary-image:unsigned
 ```
 Result:
 ```bash
-Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: [default]ghcr.io/deislabs/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: [default]ghcr.io/ratify-project/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4
 ```
 
 - Deploy a signed image in default namespace, which should be allowed by Ratify.
 ```bash
-kubectl run demo --namespace default --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace default --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
@@ -400,9 +405,11 @@ pod/demo created
 
 - Deploy a signed image in `new-namespace` namespace, which should be denied.
 ```bash
-kubectl run demo --namespace new-namespace --image=ghcr.io/deislabs/ratify/notary-image:signed
+kubectl run demo --namespace new-namespace --image=ghcr.io/ratify-project/ratify/notary-image:signed
 ```
 Result:
 ```bash
 Error from server (Forbidden): pods is forbidden: User "team-admin" cannot create resource "pods" in API group "" in the namespace "new-namespace"
 ```
+***Recording***:
+[![asciicast](https://asciinema.org/a/4g5VoqQu2RBOPF8htdVx2BjBl.svg)](https://asciinema.org/a/4g5VoqQu2RBOPF8htdVx2BjBl)
