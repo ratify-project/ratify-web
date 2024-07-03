@@ -23,7 +23,7 @@ This framework will use a provider model for extensibility to support different 
 
 **Built-In/Internal providers** are available in the source of the framework and are registered during startup using the ```init``` function. Referrer store using [ORAS](https://github.com/oras-project/oras) and signature verification using [notation](https://github.com/notaryproject/notation) will  be available as the built-in providers that are managed by the framework.
 
-**External/Plugin** providers are external to the source and process of the framework. These providers will be registered as binaries that the framework will locate in the configured paths and execute as per the corresponding plugin specification. The following section outlines the plugin architecture used for supporting external providers into the framework.
+**External/Plugin providers** are external to the source and process of the framework. These providers will be registered as binaries that the framework will locate in the configured paths and execute as per the corresponding plugin specification. The following section outlines the plugin architecture used for supporting external providers into the framework.
 
 ### Plugin architecture
 
@@ -114,7 +114,7 @@ The framework can be configured with multiple referrer stores. A referrers provi
 ### Requirements
 
 - Multiple stores MAY be registered through configuration as plugins or internal providers.
-- Provider SHOULD ensure that there is atleast ONE store registered in the configuration.
+- Provider SHOULD ensure that there is at least ONE store registered in the configuration.
 - The order of query for references by the  provider MAY be governed by order of registrations of stores in the configuration.
 - Selection of a particular referrers store  is defined below. The same can be used for an artifact to restrict the query to a particular store.
 

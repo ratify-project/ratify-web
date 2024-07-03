@@ -22,12 +22,12 @@ Ratify installation/upgrade for HA scenarios can be done via a `helmfile` or man
 
 ```bash
 # Sync helm chart resources defined with cluster
-helmfile sync -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
+helmfile sync -f git::https://github.com/ratify-project/ratify.git@high-availability.helmfile.yaml
 ```
 
 ### Uninstall Steps
 ```bash
-helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@high-availability.helmfile.yaml
+helmfile destroy --skip-charts -f git::https://github.com/ratify-project/ratify.git@high-availability.helmfile.yaml
 ```
 ## Manual Installation Steps
 
@@ -36,7 +36,7 @@ helmfile destroy --skip-charts -f git::https://github.com/deislabs/ratify.git@hi
 helm repo add dapr https://dapr.github.io/helm-charts/
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
-helm repo add ratify https://deislabs.github.io/ratify
+helm repo add ratify https://ratify-project.github.io/ratify
 helm repo update
 ```
 
@@ -124,8 +124,8 @@ helm install ratify \
 
 - Deploy a `demo` constraint.
 ```
-kubectl apply -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 ```
 
 Once the installation is completed, you can test the deployment of an image that is signed using notation.
@@ -156,8 +156,8 @@ You just validated the container images in your k8s cluster!
 ### Uninstall Ratify
 Notes: Helm does NOT support upgrading CRDs, so uninstalling Ratify will require you to delete the CRDs manually. Otherwise, you might fail to install CRDs of newer versions when installing Ratify.
 ```bash
-kubectl delete -f https://deislabs.github.io/ratify/library/default/template.yaml
-kubectl delete -f https://deislabs.github.io/ratify/library/default/samples/constraint.yaml
+kubectl delete -f https://ratify-project.github.io/ratify/library/default/template.yaml
+kubectl delete -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
 helm delete ratify --namespace gatekeeper-system
 kubectl delete crd stores.config.ratify.deislabs.io verifiers.config.ratify.deislabs.io certificatestores.config.ratify.deislabs.io policies.config.ratify.deislabs.io
 helm delete redis --namespace gatekeeper-system
@@ -172,8 +172,8 @@ While developing for HA scenarios, the `dev.high-availability.helmfile.yaml` can
 
 Prerequisites:
 - Install helmfile
-- Build your own images (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
-- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/deislabs/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
+- Build your own images (follow instructions [here](https://github.com/ratify-project/ratify/blob/main/CONTRIBUTING.md#build-an-image-with-your-local-changes))
+- Install Ratify + Gatekeeper on cluster with `dev.helmfile.yaml` (follow instructions [here](https://github.com/ratify-project/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile))
 
 ### Update `dev.high-availability.helmfile.yaml`
 Replace `repository`, `crdRepository`, and `tag` with previously built images:
