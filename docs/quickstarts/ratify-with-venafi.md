@@ -177,8 +177,9 @@ spec:
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
     verificationCertStores:
-      certs:
-        - ratify-notation-inline-cert
+      signingAuthority:
+        certs:
+          - ratify-notation-inline-cert
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
