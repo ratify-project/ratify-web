@@ -1,13 +1,33 @@
-# Key Management Provider
+Key Management Provider
+---
 
 > **NOTE:** `KeyManagementProvider` replaces `CertificateStore` which is now DEPRECATED. See migration [guide](#migrating-from-certificatestore-to-kmp).
 
 A `KeyManagementProvider` (`KMP`) represents key(s) and/or certificate(s) that are consumed by a verifier. `KMP` contains various providers for different use cases. Each provider is responsible for defining custom configuration and providing a set of public keys and/or x.509 certificates. Notation and Cosign verifiers can consume `KMP` resources to use during signature verification. Please refer to respective [Notation](../../plugins/verifier/notation.md) and [Cosign](../../plugins/verifier/cosign.md) verifier documentation on how to consume `KMP`.
 
+## Table of Contents
+- [Key Management Provider](#key-management-provider)
+- [Table of Contents](#table-of-contents)
+- [Scope](#scope)
+- [Utilization in Verifiers](#utilization-in-verifiers)
+  - [Examples](#examples)
+- [Configuration guidelines](#configuration-guidelines)
+  - [Inline](#inline)
+    - [Template](#template)
+  - [Azure Key Vault](#azure-key-vault)
+    - [Template](#template-1)
+- [Limitation](#limitation)
+- [Status](#status)
+- [Resource Create/Update](#resource-createupdate)
+- [Migrating from `CertificateStore` to KMP](#migrating-from-certificatestore-to-kmp)
+  - [Inline CertificateStore to Inline KMP](#inline-certificatestore-to-inline-kmp)
+  - [Azure Key Vault CertificateStore to Azure Key Vault Key Management Provider](#azure-key-vault-certificatestore-to-azure-key-vault-key-management-provider)
+  - [Notation Verifier](#notation-verifier)
+
 ## Scope
 Key Management Provider can be defined as cluster-wide resources(using the kind `KeyManagementProvider`) or namespaced resources(using the kind `NamespacedKeyManagementProvider`).
 
-### Utilization in Verifiers
+## Utilization in Verifiers
 The KeyManagementProvider serves primarily as a reference to key/certificate stores in Verifier CRs. Given that the Key Management Provider can exist either cluster-wide or within a namespace, users need to include the appropriate namespace prefix when referencing the KMP in Verifier CRs. To reference a namespaced KMP, the format should be `namespace/kmp-name`. Conversely, to reference a cluster-wide KMP, the format should simply be `kmp-name`.
 
 In general, there are 2 valid use cases. One is a namespaced verifier references a namespaced KMP within the same namespace or a cluster-wide KMP. The other is a cluster-wide verifier references a cluster-wide KMP.
@@ -46,8 +66,9 @@ spec:
          - ratify-notation-inline-cert-0
   # skip irrelevant fields
 ```
-
-## Inline
+## Configuration guidelines
+### Inline
+#### Template
 A provider that can specify a **single** certificate or key. The content is expected to be defined inline in the resource configuration.
 
 ```yml
@@ -72,8 +93,8 @@ status:
 | contentType | yes      | 'key' or 'certificate'. Describes content type | ""            |
 | value       | yes      | string content                                 | ""            |
 
-## Azure Key Vault
-
+### Azure Key Vault
+#### Template
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: KeyManagementProvider
@@ -105,7 +126,7 @@ spec:
 | keys[*].name            | yes      | key name (as shown in key vault)                                                          | ""            |
 | keys[*].version         | no       | version identifier (as shown in key vault). If not provided, latest version will be used  | ""            |
 
-### Limitation
+## Limitation
 
 - If a key/certificate is in disabled state, KMP resource creation will FAIL. Users must remove reference to a disabled Key/Certificate or re-enable in Azure Key Vault.
 
