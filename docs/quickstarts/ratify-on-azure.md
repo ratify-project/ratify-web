@@ -497,8 +497,9 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     artifactTypes: application/vnd.cncf.notary.signature
     parameters:
         verificationCertStores:
-        certs:
-            - keymanagementprovider-akv
+            ca:
+                certs:
+                    - keymanagementprovider-akv
         trustPolicyDoc:
         version: "1.0"
         trustPolicies:
