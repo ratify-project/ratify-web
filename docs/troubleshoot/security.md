@@ -2,6 +2,78 @@
 
 Refer to vulerability management and release documentation [here](https://github.com/ratify-project/ratify/blob/dev/SECURITY.md).
 
+## Signature Validation
+
+Ratify signs all dev images and dev helm OCI artifacts with Notary Project and Sigstore Cosign signatures.
+
+### Verifying Notary Project Signature
+
+Please install `notation` from [here](https://notaryproject.dev/docs/user-guides/installation/cli/)
+
+The public certificate for verification can be found at `ratify.dev/.well-known/ratify-verification.crt`
+
+> The latest certificate for verification can always be found at `ratify.dev/.well-known/ratify-verification.crt`. Refer to [Certificate Versioning](#certificate-versioning) guidance for details on verifying older artifacts.
+
+```shell
+curl -LO ratify.dev/.well-known/ratify-verification.crt
+notation cert add --type ca --store ratify-verify ./ratify-verification.crt
+cat <<EOF > ./trustpolicy.json
+{
+    "version": "1.0",
+    "trustPolicies": [
+        {
+            "name": "ratify-images",
+            "registryScopes": [
+              "ghcr.io/ratify-project/ratify-dev",
+              "ghcr.io/ratify-project/ratify-base-dev",
+              "ghcr.io/ratify-project/ratify-crds-dev",
+            ],
+            "signatureVerification": {
+                "level" : "strict" 
+            },
+            "trustStores": [ "ca:ratify-verify" ],
+            "trustedIdentities": [
+                "x509.subject: CN=ratify.dev,O=ratify-project,L=Seattle,ST=WA,C=US"
+            ]
+        }
+    ]
+}
+EOF
+notation policy import ./trustpolicy.json
+notation verify ghcr.io/ratify-project/ratify-dev:latest
+notation verify ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
+```
+
+### Verifying Sigstore Cosign Signature
+
+Please install cosign from [here](https://github.com/sigstore/cosign?tab=readme-ov-file#installation)
+
+A keyless signature is published per image. The signature is uploaded to the Rekor public-good transparency server.
+
+```shell
+cosign verify \
+  --certificate-identity "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-github-workflow-repository ratify-project/ratify \
+  ghcr.io/ratify-project/ratify-dev:latest
+```
+
+```shell
+cosign verify \
+  --certificate-identity "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-github-workflow-repository ratify-project/ratify \
+  ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
+```
+
+### Certificate Versioning
+
+Published images may be signed by a version of a certificate that is now expired/no longer the latest. Ratify will publish all versions of certificates used for verification and specify the end date of use in the certificate file name. This end date can be cross referenced with the publish date of the artifact you are verifying to determine which certificate to use for verification.
+
+Certificates are versioned accordingly: `ratify.dev/.well-known/pki-validation/ratify-verification_<YYYYMMDD>.crt`.
+
+For example, a user wants to verify the `ghcr.io/ratify-project/ratify-dev:dev.20240521.7e6f99f`. Let's say Ratify has 2 certificate versions. The latest is published at `ratify.dev/.well-known/pki-validation/ratify-verification.crt` and the previous version, which was last used on `20240620` (June 20, 2024), is stored at `ratify.dev/well-known/pki-validation/ratify-verification_20240620.crt`. Since the image to verify has timestamp `20240521` which is before the last date used of the previous certificate version `20240620`, the user should use `ratify.dev/well-known/pki-validation/ratify-verification_20240620.crt` for validation.
+
 ## Build Attestations
 
 Ratify provides build attestations for each release starting with v1.3.0. The CRD, base image, and plugin-enabled images all have build attestations. These attestations describe the image contents and how they were built. They are generated using [Docker BuildKit](https://docs.docker.com/build/buildkit/) v0.11 or later. To get more information about build attestations, please refer to the [Docker build attestations documentation](https://docs.docker.com/build/attestations/).
@@ -53,7 +125,9 @@ Manifests:
 
 ## SBOM
 
-Ratify provides SBOM attestations for each release starting with v1.3.0. The CRD, base image
+Ratify provides SBOM attestations for each release (starting with v1.3.0) and dev image. SBOM JSON files are also published for each release binary starting with v1.3.0.
+
+### SBOM Build Attestations
 
 To retrieve [SBOM](https://docs.docker.com/build/attestations/sbom/) for all architectures, please run:
 
@@ -66,6 +140,10 @@ For specific architecutes (like `linux/amd64`), please run:
 ```shell
 docker buildx imagetools inspect ghcr.io/ratify-project/ratify:v1.3.0 --format '{{ json .SBOM }}' | jq -r '.["linux/amd64"]'
 ```
+
+### SBOM for release binaries
+
+Each release binary (.tar.gz) has an accompanying `.sbom.json` file that contains the SPDX SBOM contents generated using Syft.
 
 ## Credits
 
