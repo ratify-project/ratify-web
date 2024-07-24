@@ -116,4 +116,4 @@ Sample verification result:
 
 ## Limitation
 
-Ratify CLI currently does not have feature parity with k8s in cluster external data provider support. There are feature [gaps](https://github.com/ratify-project/ratify/issues/1300) in areas like inline and Azure Key Vault Key Management Provider. To help us prioritze, please create [new](https://github.com/ratify-project/ratify/issues/new?assignees=&labels=enhancement%2Ctriage&projects=&template=feature-request.yaml) tracking issues or vote on [existing](https://github.com/ratify-project/ratify/issues?q=is%3Aissue+is%3Aopen+cli) issues.
+Ratify CLI currently does not have feature parity with k8s in cluster external data provider support. There are feature [gaps](https://github.com/ratify-project/ratify/issues/1300) in areas like inline and Azure Key Vault Key Management Provider. To help us prioritize, please create [new](https://github.com/ratify-project/ratify/issues/new?assignees=&labels=enhancement%2Ctriage&projects=&template=feature-request.yaml) tracking issues or vote on [existing](https://github.com/ratify-project/ratify/issues?q=is%3Aissue+is%3Aopen+cli) issues.
