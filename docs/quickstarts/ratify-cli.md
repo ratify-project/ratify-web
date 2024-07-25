@@ -1,17 +1,17 @@
-# Ratify Cli
+# Ratify CLI
 
 This document provides a walkthrough on how to use the ratify command line to verify a sample image.
 
 ## Verify notation signature with Ratify cli
 
-1. Download the latest Ratify cli
+1. Download the latest Ratify CLI on a Linux AMD64 machine. Go to [release page](https://github.com/ratify-project/ratify/releases/) if you are on other platforms.
 ```bash
 curl -L https://github.com/ratify-project/ratify/releases/download/v1.2.1/ratify_1.2.1_Linux_amd64.tar.gz | tar xvzC ~/bin/ ratify
 ```
 
 2. Download a local verification certificate for sample image
 ```bash
-curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
+curl -sSLO https://github.com/ratify-project/ratify/blob/v1.2.1/test/testdata/notation.crt
 ```
 3. Prepare configuration file
 
@@ -77,7 +77,7 @@ cat > config.json <<EOF
 EOF
 ```
 
-Sample cli configuration files for other verifiers can be found in the [plugins](../plugins/verifier/cosign.md#cli) doc. 
+Sample CLI configuration files for other verifiers can be found in the [plugins](../plugins/verifier/cosign.md#cli) doc. 
 
 4. Run ratify verify
 
