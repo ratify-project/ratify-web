@@ -4,7 +4,7 @@ Refer to vulerability management and release documentation [here](https://github
 
 ## Signature Validation
 
-Ratify signs all dev images and dev helm OCI artifacts with Notary Project and Sigstore Cosign signatures.
+Ratify signs all dev images and dev helm OCI artifacts with Notary Project and Sigstore Cosign signatures. Ratify will support signing release images in the near future.
 
 ### Verifying Notary Project Signature
 
@@ -27,6 +27,7 @@ cat <<EOF > ./trustpolicy.json
               "ghcr.io/ratify-project/ratify-dev",
               "ghcr.io/ratify-project/ratify-base-dev",
               "ghcr.io/ratify-project/ratify-crds-dev",
+              "ghcr.io/ratify-project/ratify-chart-dev/ratify"
             ],
             "signatureVerification": {
                 "level" : "strict" 
@@ -42,6 +43,13 @@ EOF
 notation policy import ./trustpolicy.json
 notation verify ghcr.io/ratify-project/ratify-dev:latest
 notation verify ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
+```
+
+Sample output of `verify`:
+
+```shell
+Warning: Always verify the artifact using digest(@sha256:...) rather than a tag(:latest) because resolved digest may not point to the same signed artifact, as tags are mutable.
+Successfully verified signature for ghcr.io/ratify-project/ratify-dev@sha256:9f25b5cdfecac47ab36a4fef7ce9fca2ef9a2665ef5c2b8c3c1410348f40b3bf
 ```
 
 ### Verifying Sigstore Cosign Signature
@@ -64,6 +72,53 @@ cosign verify \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-github-workflow-repository ratify-project/ratify \
   ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
+```
+
+Sample output:
+
+```shell
+Verification for ghcr.io/ratify-project/ratify-dev:latest --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+[
+  {
+    "critical": {
+      "identity": {
+        "docker-reference": "ghcr.io/ratify-project/ratify-dev"
+      },
+      "image": {
+        "docker-manifest-digest": "sha256:9f25b5cdfecac47ab36a4fef7ce9fca2ef9a2665ef5c2b8c3c1410348f40b3bf"
+      },
+      "type": "cosign container image signature"
+    },
+    "optional": {
+      "1.3.6.1.4.1.57264.1.1": "https://token.actions.githubusercontent.com",
+      "1.3.6.1.4.1.57264.1.2": "workflow_dispatch",
+      "1.3.6.1.4.1.57264.1.3": "17f829aec8611ac0c6da3f096e21a519b27dd977",
+      "1.3.6.1.4.1.57264.1.4": "publish-dev-assets",
+      "1.3.6.1.4.1.57264.1.5": "ratify-project/ratify",
+      "1.3.6.1.4.1.57264.1.6": "refs/heads/dev",
+      "Bundle": {
+        "SignedEntryTimestamp": "MEQCIEwZrlxWQApfNhpN3dZzPnXgZFhuC6UCL1crS839hZTrAiBxz8PBZ6PbORBOcssNPIU6TILM2t4BZIA82UQ6t23Y9w==",
+        "Payload": {
+          "body": "eyJhcGlWZXJzaW9uIjoiMC4wLjEiLCJraW5kIjoiaGFzaGVkcmVrb3JkIiwic3BlYyI6eyJkYXRhIjp7Imhhc2giOnsiYWxnb3JpdGhtIjoic2hhMjU2IiwidmFsdWUiOiIxYzcxY2ZkOWVmYmYzZWE3MTllZDE0MjFhZWM5MDg3M2I4Zjk3NzhlOTM5ZjEyZTA5ZDhjNzY0MDlmNjdmMWRmIn19LCJzaWduYXR1cmUiOnsiY29udGVudCI6Ik1FUUNJQjhMU05FM2dVZFBNVkxEejVESFNSS0lLeTJtWHJWWGRDd1p2MjBsQ04rWEFpQXA0RHNxUXltYXloenVTMWlXZ3NmZVBwemJId2Z4MWtmdG5JTlBiaC9QblE9PSIsInB1YmxpY0tleSI6eyJjb250ZW50IjoiTFMwdExTMUNSVWRKVGlCRFJWSlVTVVpKUTBGVVJTMHRMUzB0Q2sxSlNVaENha05EUW05MVowRjNTVUpCWjBsVldscEpUVU5wVjJZNVdUTmFhelVyUVVFek1VUTBTblpHUXpOcmQwTm5XVWxMYjFwSmVtb3dSVUYzVFhjS1RucEZWazFDVFVkQk1WVkZRMmhOVFdNeWJHNWpNMUoyWTIxVmRWcEhWakpOVWpSM1NFRlpSRlpSVVVSRmVGWjZZVmRrZW1SSE9YbGFVekZ3WW01U2JBcGpiVEZzV2tkc2FHUkhWWGRJYUdOT1RXcFJkMDU2VFhoTmFrVjVUVlJKTlZkb1kwNU5hbEYzVG5wTmVFMXFSWHBOVkVrMVYycEJRVTFHYTNkRmQxbElDa3R2V2tsNmFqQkRRVkZaU1V0dldrbDZhakJFUVZGalJGRm5RVVUyYkRRd1JHZFpSR1F4YlVkRlJXMHJlV2N2ZFc1M04xZFpSMjAxTlZOTlNUazJaMEVLS3l0M2FtUnFNalYxYVdsRGVUZEpZVkJ4WldwaWNtdDFMM2g0TVhNeFJsUnpjRlZCUWt0YUwxZHZlVFJSVWsxNGJYRlBRMEpoYjNkbloxZHRUVUUwUndwQk1WVmtSSGRGUWk5M1VVVkJkMGxJWjBSQlZFSm5UbFpJVTFWRlJFUkJTMEpuWjNKQ1owVkdRbEZqUkVGNlFXUkNaMDVXU0ZFMFJVWm5VVlZLV2xjckNuQjRSbXR6Y2xKMVVIbDNabWRMY2tNd2IwWmlaRXRKZDBoM1dVUldVakJxUWtKbmQwWnZRVlV6T1ZCd2VqRlphMFZhWWpWeFRtcHdTMFpYYVhocE5Ga0tXa1E0ZDJKbldVUldVakJTUVZGSUwwSkhVWGRaYjFwbllVaFNNR05JVFRaTWVUbHVZVmhTYjJSWFNYVlpNamwwVEROS2FHUkhiRzFsVXpGM1kyMDVjUXBhVjA0d1RETkthR1JIYkcxbFV6aDFXakpzTUdGSVZtbE1NMlIyWTIxMGJXSkhPVE5qZVRsM1pGZEtjMkZZVG05TVYxSnNaR2t4YUdNelRteGtTRTExQ21WWE1YTlJTRXBzV201TmRtRkhWbWhhU0UxMldrZFdNazFFYTBkRGFYTkhRVkZSUW1jM09IZEJVVVZGU3pKb01HUklRbnBQYVRoMlpFYzVjbHBYTkhVS1dWZE9NR0ZYT1hWamVUVnVZVmhTYjJSWFNqRmpNbFo1V1RJNWRXUkhWblZrUXpWcVlqSXdkMGgzV1V0TGQxbENRa0ZIUkhaNlFVSkJaMUZTWkRJNWVRcGhNbHB6WWpOa1pscEhiSHBqUjBZd1dUSm5kMDVuV1V0TGQxbENRa0ZIUkhaNlFVSkJkMUZ2VFZSa2JVOUVTVFZaVjFacVQwUlplRTFYUm1wTlIwMHlDbHBIUlhwYWFrRTFUbTFWZVUxWFJURk5WR3hwVFdwa2ExcEVhek5PZWtGblFtZHZja0puUlVWQldVOHZUVUZGUlVKQ1NuZGtWMHB6WVZoT2IweFhVbXdLWkdreGFHTXpUbXhrU0UxM1NYZFpTMHQzV1VKQ1FVZEVkbnBCUWtKUlVWWmpiVVl3WVZkYU5VeFlRbmxpTW5Cc1dUTlJkbU50UmpCaFYxbzFUVUozUndwRGFYTkhRVkZSUW1jM09IZEJVVmxGUkc1S2JGcHVUWFpoUjFab1draE5kbHBIVmpKTlJITkhRMmx6UjBGUlVVSm5OemgzUVZGblJVeFJkM0poU0ZJd0NtTklUVFpNZVRrd1lqSjBiR0pwTldoWk0xSndZakkxZWt4dFpIQmtSMmd4V1c1V2VscFlTbXBpTWpVd1dsYzFNRXh0VG5aaVZFSjNRbWR2Y2tKblJVVUtRVmxQTDAxQlJVcENSMGxOV1Vkb01HUklRbnBQYVRoMldqSnNNR0ZJVm1sTWJVNTJZbE01ZVZsWVVuQmFibXQwWTBoS2RtRnRWbXBrUXpsNVdWaFNjQXBhYm10MlRHMWtjR1JIYURGWmFUa3pZak5LY2xwdGVIWmtNMDEyWTBoV2FXSkhiSHBoUXpGcldsaFpkRmxZVG5wYVdGSjZURzVzZEdKRlFubGFWMXA2Q2t3eWFHeFpWMUo2VERKU2JHUnFRVFJDWjI5eVFtZEZSVUZaVHk5TlFVVkxRa052VFV0RVJUTmFhbWQ1VDFkR2JGbDZaekpOVkVab1dYcENhazV0VW1nS1RUSlpkMDlVV214TmFrWm9UbFJGTlZscVNUTmFSMUUxVG5wamQwaFJXVXRMZDFsQ1FrRkhSSFo2UVVKRGQxRlFSRUV4Ym1GWVVtOWtWMGwwWVVjNWVncGtSMVpyVFVSblIwTnBjMGRCVVZGQ1p6YzRkMEZSZDBWTFozZHZZVWhTTUdOSVRUWk1lVGx1WVZoU2IyUlhTWFZaTWpsMFRETkthR1JIYkcxbFV6RjNDbU50T1hGYVYwNHdURE5LYUdSSGJHMWxWRUUwUW1kdmNrSm5SVVZCV1U4dlRVRkZUa0pEYjAxTFJFVXpXbXBuZVU5WFJteFplbWN5VFZSR2FGbDZRbW9LVG0xU2FFMHlXWGRQVkZwc1RXcEdhRTVVUlRWWmFra3pXa2RSTlU1NlkzZElaMWxMUzNkWlFrSkJSMFIyZWtGQ1JHZFJVVVJCTlhsYVYxcDZUREpvYkFwWlYxSjZUREpTYkdScVFWcENaMjl5UW1kRlJVRlpUeTlOUVVWUVFrRnpUVU5VVFRWT1ZHTjRUbnByZWsxRVFYaENaMjl5UW1kRlJVRlpUeTlOUVVWUkNrSkRUVTFKVjJnd1pFaENlazlwT0haYU1td3dZVWhXYVV4dFRuWmlVemw1V1ZoU2NGcHVhM1JqU0VwMllXMVdhbVJFUVZwQ1oyOXlRbWRGUlVGWlR5OEtUVUZGVWtKQmMwMURWRVV5VGxSbmVrNVVaekJPYWtKM1FtZHZja0puUlVWQldVOHZUVUZGVTBKSFNVMVpSMmd3WkVoQ2VrOXBPSFphTW13d1lVaFdhUXBNYlU1MllsTTVlVmxZVW5CYWJtdDBZMGhLZG1GdFZtcGtRemw1V1ZoU2NGcHVhM1pNYldSd1pFZG9NVmxwT1ROaU0wcHlXbTE0ZG1RelRYWmpTRlpwQ21KSGJIcGhRekZyV2xoWmRGbFlUbnBhV0ZKNlRHNXNkR0pGUW5sYVYxcDZUREpvYkZsWFVucE1NbEpzWkdwQk5FSm5iM0pDWjBWRlFWbFBMMDFCUlZRS1FrTnZUVXRFUlROYWFtZDVUMWRHYkZsNlp6Sk5WRVpvV1hwQ2FrNXRVbWhOTWxsM1QxUmFiRTFxUm1oT1ZFVTFXV3BKTTFwSFVUVk9lbU4zU1ZGWlN3cExkMWxDUWtGSFJIWjZRVUpHUVZGVVJFSkdNMkl6U25KYWJYaDJaREU1YTJGWVRuZFpXRkpxWVVSQ1kwSm5iM0pDWjBWRlFWbFBMMDFCUlZaQ1JUUk5DbFJIYURCa1NFSjZUMms0ZGxveWJEQmhTRlpwVEcxT2RtSlRPWGxaV0ZKd1dtNXJkR05JU25aaGJWWnFaRU01ZVZsWVVuQmFibXQyV1ZkT01HRlhPWFVLWTNrNWVXUlhOWHBNZWtWM1RWUm5NMDVxYXpKT1JHY3pUREpHTUdSSFZuUmpTRko2VEhwRmQwWm5XVXRMZDFsQ1FrRkhSSFo2UVVKR1oxRkpSRUZhZHdwa1YwcHpZVmROZDJkWmMwZERhWE5IUVZGUlFqRnVhME5DUVVsRlpsRlNOMEZJYTBGa2QwUmtVRlJDY1hoelkxSk5iVTFhU0doNVdscDZZME52YTNCbENuVk9ORGh5Wml0SWFXNUxRVXg1Ym5WcVowRkJRVnBGUzNFeVJDOUJRVUZGUVhkQ1NVMUZXVU5KVVVOelUzaHJXRVZoY0U1R1FVeHpVamd4WkRSRlYwc0tPRTl4Vm1ONWNIQnJOekZ1VFhreWRXcEtXa3htUVVsb1FVcGFlVlZ2VlZNd0wyTXJSa0phVEdWaE4weEpja1ZEY0M4MWJHVlRRa0pPTm14RU5FWkdWUXBMZFRSV1RVRnZSME5EY1VkVFRUUTVRa0ZOUkVFeWEwRk5SMWxEVFZGRGNFY3paMjQwYVdSc1JIVllTVVZPVlhaUk0zVkZUMDgxU3pRd2FHZFRiVWhYQ2tkQ1dFTkpPVkZpTnk5S05rSlJRWEZyYm1wWWEzTmhiRTVtV2xsWFdqUkRUVkZFZHpOb1REbFBibEpMVkZob04xYzJSWFozZW1oWU5XYzNjalk1WkhNS2QxcExZbUpuTVZkUVJYaGtNMU1yV1VzeFZtaFlPWEJyYW1OMGNrUkZlRFl6U3pROUNpMHRMUzB0UlU1RUlFTkZVbFJKUmtsRFFWUkZMUzB0TFMwSyJ9fX19",
+          "integratedTime": 1722460889,
+          "logIndex": 117211424,
+          "logID": "c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d"
+        }
+      },
+      "Issuer": "https://token.actions.githubusercontent.com",
+      "Subject": "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev",
+      "githubWorkflowName": "publish-dev-assets",
+      "githubWorkflowRef": "refs/heads/dev",
+      "githubWorkflowRepository": "ratify-project/ratify",
+      "githubWorkflowSha": "17f829aec8611ac0c6da3f096e21a519b27dd977",
+      "githubWorkflowTrigger": "workflow_dispatch"
+    }
+  }
+]
 ```
 
 ### Certificate Versioning
