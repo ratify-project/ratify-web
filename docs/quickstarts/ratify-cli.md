@@ -11,14 +11,16 @@ curl -L https://github.com/ratify-project/ratify/releases/download/v1.2.1/ratify
 
 2. Download a local verification certificate for sample image
 ```bash
-curl -sSLO https://github.com/ratify-project/ratify/blob/v1.2.1/test/testdata/notation.crt
+curl -sSLO https://raw.githubusercontent.com/ratify-project/ratify/dev/test/testdata/notation.crt
 ```
 3. Prepare configuration file
 
 Store/Verifier/Policy configuration:
 - Setup oras store to define how artifacts should be fetched
 - Define rego policy to validate the result of verification report
-- Setup Notation verifier with path to the local verification cert downloaded from previous step
+- Setup Notation verifier with path to the local verification cert downloaded from previous step.
+- `verificationCerts` configuration may contain both CA and TSA certification, see tracking issue [1673](https://github.com/ratify-project/ratify/issues/1673).
+- Local files in the default notation ```trustStores``` path will also be added to the verification certs.
 
 ```bash
 cat > config.json <<EOF
