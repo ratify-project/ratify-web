@@ -10,12 +10,12 @@ Ratify signs all dev images and dev helm OCI artifacts with Notary Project and S
 
 Please install `notation` from [here](https://notaryproject.dev/docs/user-guides/installation/cli/)
 
-The public certificate for verification can be found at `ratify.dev/.well-known/ratify-verification.crt`
+The public certificate for verification can be found at `ratify.dev/.well-known/pki-validation/ratify-verification.crt`
 
-> The latest certificate for verification can always be found at `ratify.dev/.well-known/ratify-verification.crt`. Refer to [Certificate Versioning](#certificate-versioning) guidance for details on verifying older artifacts.
+> The latest certificate for verification can always be found at `ratify.dev/.well-known/pki-validation/ratify-verification.crt`. Refer to [Certificate Versioning](#certificate-versioning) guidance for details on verifying older artifacts.
 
 ```shell
-curl -LO ratify.dev/.well-known/ratify-verification.crt
+curl -LO ratify.dev/.well-known/pki-validation/ratify-verification.crt
 notation cert add --type ca --store ratify-verify ./ratify-verification.crt
 cat <<EOF > ./trustpolicy.json
 {
