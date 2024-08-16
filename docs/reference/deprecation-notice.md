@@ -1,13 +1,13 @@
-# Deprecation Notice
+# Feature Deprecation Notice
 ---
 
-This document outlines the features that will be deprecated in the next major release v2.0.0. Deprecation means that these features will no longer be supported or recommended for use. Users should transition to alternative features or solutions as specified below.
+This document outlines the features that are deprecated in the past releases. Deprecation means that these features will no longer be supported or recommended for use, and will be completely removed in the next major release. Users should transition to alternative features or solutions as specified below.
 
 ## Table of contents
-- [Deprecation Notice](#deprecation-notice)
+- [Feature Deprecation Notice](#feature-deprecation-notice)
   - [Table of contents](#table-of-contents)
   - [Deprecation Summary](#deprecation-summary)
-  - [Detailed Deprecation List](#detailed-deprecation-list)
+  - [Deprecation Details](#deprecation-details)
     - [`Name` and `Type` fields in verifierReport](#name-and-type-fields-in-verifierreport)
     - [`CertificateStore` CRD](#certificatestore-crd)
     - [Legacy Cosign Veification](#legacy-cosign-veification)
@@ -15,13 +15,13 @@ This document outlines the features that will be deprecated in the next major re
 
 ## Deprecation Summary
 
-| Feature Name                               | Deprecation Date | Replacement/Alternative                       |
-| ------------------------------------------ | ---------------- | --------------------------------------------- |
-| `Name` and `Type` fields in verifierReport | v2.0.0           | Use `VerifierName` and `VerifierName` instead |
-| `CertificateStore` CRD                     | v2.0.0           | Use `KeyManagementProvider` CRD instead       |
-| Legacy Cosign Veification                  | v2.0.0           | Use new Cosign verifier instead               |
-| licensechecker verifier plugin             | v2.0.0           | Use `SBOM` verifier plugin instead            |
-## Detailed Deprecation List
+| Deprecated Feature                         | Deprecation Version | Removal Version | Replacement/Alternative                       |
+| ------------------------------------------ | ------------------- | --------------- | --------------------------------------------- |
+| `Name` and `Type` fields in verifierReport | v1.3.0              | v2.0.0          | Use `VerifierName` and `VerifierName` instead |
+| `CertificateStore` CRD                     | v1.2.0              | v2.0.0          | Use `KeyManagementProvider` CRD instead       |
+| Legacy Cosign Veification                  | v1.2.0              | v2.0.0          | Use new Cosign verifier instead               |
+| licensechecker verifier plugin             | v1.1.0              | v2.0.0          | Use `SBOM` verifier plugin instead            |
+## Deprecation Details
 
 ### `Name` and `Type` fields in verifierReport
 - **Description**: 
@@ -31,7 +31,7 @@ This document outlines the features that will be deprecated in the next major re
 - **Impact**:
   If users have custom constraint template that uses these fields, they will need to update their templates to use the new fields.
 - **Replacement/Alternative**:
-  Switch to `VerifierName` and `VerifierType` fields instead.
+  Switch to `VerifierName` and `VerifierType` fields instead, which is supported since v1.3.0.
 - **Action Required**:
   Update any custom constraint templates that use the `Name` and `Type` fields to use the new `VerifierName` and `VerifierType` fields instead.
 
@@ -45,7 +45,7 @@ This document outlines the features that will be deprecated in the next major re
 - **Impact**:
   Users will need to migrate to the new [KeyManagementProvider](./custom%20resources/key-management-providers.md) CRD for existing Certificatestore resources.
 - **Replacement/Alternative**:
-  Use the new `KeyManagementProvider` CRD instead.
+  Use the new `KeyManagementProvider` CRD instead, which is supported since v1.2.0.
 - **Action Required**:
 - Follow the [migration guide](./custom%20resources/key-management-providers.md#migrating-from-certificatestore-to-kmp) to migrate existing CertificateStore resources to KeyManagementProvider resources.
 
@@ -59,7 +59,7 @@ This document outlines the features that will be deprecated in the next major re
 - **Impact**:
   Users will need to migrate to the new Cosign verifier instead but get more features and better security.
 - **Replacement/Alternative**:
-  The cosign verifier configuration is backward compatible with the legacy cosign verifier. Users can update the verifier configuration to use the new cosign verifier.
+  The cosign verifier configuration is backward compatible with the legacy cosign verifier. Users can update the verifier configuration to use the new cosign verifier. The new Cosign verifier with trust policy support is available since v1.2.0.
 - **Action Required**:
   Configure `trustPolicies` instead of `key` and `rekorURL` to set up Cosign verifier. [Learn more](../plugins/verifier/cosign.md#kubernetes)
 
@@ -71,6 +71,6 @@ This document outlines the features that will be deprecated in the next major re
 - **Impact**:
   The current licensechecker verifier plugin will be removed in the next major release and stopped working with the new version.
 - **Replacement/Alternative**:
-  Use [SBOM verifier plugin](../plugins/verifier/sbom.md) instead.
+  Use [SBOM verifier plugin](../plugins/verifier/sbom.md) instead, which is supported since v1.1.0.
 - **Action Required**:
 - Switch to use SBOM verifier plugin.
