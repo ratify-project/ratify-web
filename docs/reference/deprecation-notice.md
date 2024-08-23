@@ -10,8 +10,8 @@ This document outlines the features that are deprecated in the past releases. De
   - [Deprecation Details](#deprecation-details)
     - [`Name` and `Type` fields in verifierReport](#name-and-type-fields-in-verifierreport)
     - [`CertificateStore` CRD](#certificatestore-crd)
-    - [Legacy Cosign Veification](#legacy-cosign-veification)
-    - [licensechecker verifier plugin](#licensechecker-verifier-plugin)
+    - [Legacy Cosign Verification](#legacy-cosign-verification)
+    - [LicenseChecker verifier plugin](#licensechecker-verifier-plugin)
 
 ## Deprecation Summary
 
@@ -19,8 +19,8 @@ This document outlines the features that are deprecated in the past releases. De
 | ------------------------------------------ | ------------------- | --------------- | --------------------------------------------- |
 | `Name` and `Type` fields in verifierReport | v1.3.0              | v2.0.0          | Use `VerifierName` and `VerifierName` instead |
 | `CertificateStore` CRD                     | v1.2.0              | v2.0.0          | Use `KeyManagementProvider` CRD instead       |
-| Legacy Cosign Veification                  | v1.2.0              | v2.0.0          | Use new Cosign verifier instead               |
-| licensechecker verifier plugin             | v1.1.0              | v2.0.0          | Use `SBOM` verifier plugin instead            |
+| Legacy Cosign Verification                  | v1.2.0              | v2.0.0          | Use new Cosign verifier instead               |
+| LicenseChecker verifier plugin             | v1.1.0              | v2.0.0          | Use `SBOM` verifier plugin instead            |
 ## Deprecation Details
 
 ### `Name` and `Type` fields in verifierReport
@@ -49,7 +49,7 @@ This document outlines the features that are deprecated in the past releases. De
 - **Action Required**:
 - Follow the [migration guide](./custom%20resources/key-management-providers.md#migrating-from-certificatestore-to-kmp) to migrate existing CertificateStore resources to KeyManagementProvider resources.
 
-### Legacy Cosign Veification
+### Legacy Cosign Verification
 - **Description**:
   The primitive implementation of the Cosign verifier to support basic verification of Cosign signatures.
 - **Reason for Deprecation**:
@@ -63,7 +63,7 @@ This document outlines the features that are deprecated in the past releases. De
 - **Action Required**:
   Configure `trustPolicies` instead of `key` and `rekorURL` to set up Cosign verifier. [Learn more](../plugins/verifier/cosign.md#kubernetes)
 
-### licensechecker verifier plugin
+### LicenseChecker verifier plugin
 - **Description**:
   The primitive implementation of the licensechecker verifier to support basic verification of license compliance.
 - **Reason for Deprecation**:
