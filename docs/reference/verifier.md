@@ -267,16 +267,7 @@ policy:
 
 Notation is a built in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
 
-There are two ways to configure verification certificates:
-
-1. `verificationCerts`: Notation verifier will load all certificates from path specified in this array.
-
-2. `verificationCertStores`: Defines a collection of Notary Project [Trust Stores](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store). Notary Project specification defines a [Trust Policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md), which is a policy construct to specify which identities and Trust Stores are trusted to produce artifacts in a verification. The name of KMP resource(s) must be accurately provided. When a KMP name is specifed, the notation verifier will be configured to trust all certificates fetched from that particular KMP resource.
-
-> NOTE: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
-> **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `KMP` resources when a matching `CertificateStore` with same name is found.
-
-In the following example, the verifier's configuration references 4 `KeyManagementProvider`s, kmp-akv, kmp-akv1, kmp-akv2 and kmp-akv3. It shows a generic and permissive policy. Here, `ca:certs` is the only trust store specified and the `certs` suffix corresponds to the `certs` certification collection listed in the `verificationCertStores` section.
+In the following example, the verifier's configuration references 4 `KeyManagementProvider`s, kmp-akv, kmp-akv1, kmp-akv2 and kmp-akv3. It shows a generic and permissive policy. Here, `ca:certs` is the only trust store specifing and the `certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section.
 
 A sample notation verifier with `verificationCertStores` defined:
 
@@ -290,12 +281,13 @@ spec:
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
     verificationCertStores:
-      certs:
-          - gatekeeper-system/kmp-akv
-          - gatekeeper-system/kmp-akv1
-      certs1:
-          - gatekeeper-system/kmp-akv2
-          - gatekeeper-system/kmp-akv3
+      ca:
+        certs:
+            - gatekeeper-system/kmp-akv
+            - gatekeeper-system/kmp-akv1
+        certs1:
+            - gatekeeper-system/kmp-akv2
+            - gatekeeper-system/kmp-akv3
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
@@ -306,10 +298,13 @@ spec:
             level: strict
           trustStores:
             - ca:certs
+            - ca:certs1
           trustedIdentities:
             - "*"
 
 ```
+
+Please refer to [Notation Verifier](../plugins/verifier/notation.md) for more details.
 
 ##### Breaking changes
 
