@@ -249,12 +249,6 @@ az role assignment create --role "Key Vault Crypto User" --assignee $IDENTITY_OB
 1. Create an OIDC enabled AKS cluster. You can skip this step if you have an AKS cluster with both OIDC and workload identity enabled.
 
     ```shell
-    # Install the aks-preview extension
-    az extension add --name aks-preview
-
-    # Register the 'EnableWorkloadIdentityPreview' feature flag
-    az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
-    az provider register --namespace Microsoft.ContainerService
 
     az aks create \
         --resource-group "${AKS_RG}" \
@@ -275,13 +269,6 @@ az role assignment create --role "Key Vault Crypto User" --assignee $IDENTITY_OB
     > The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
 
     This step above may take around 10 minutes to complete. The registration status can be checked by running the following command:
-
-    ```shell
-    az feature show --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview" -o table
-    Name                                                      RegistrationState
-    --------------------------------------------------------    -------------------
-    Microsoft.ContainerService/EnableWorkloadIdentityPreview    Registered
-    ```
 
 1. Update an existing AKS cluster with OIDC and workload identity enabled. You can skip this step if you have an AKS cluster with both OIDC and workload identity enabled.
 
@@ -389,13 +376,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Store
     metadata:
-    name: store-oras
+      name: store-oras
     spec:
-    name: oras
-    parameters:
+      name: oras
+      parameters:
         authProvider:
-        name: azureWorkloadIdentity
-        clientID: $IDENTITY_CLIENT_ID
+          name: azureWorkloadIdentity
+          clientID: $IDENTITY_CLIENT_ID
         cosignEnabled: true
     EOF
     ```
@@ -429,13 +416,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://${AKV_NAME}.vault.azure.net/
         certificates:
-        - name: ${CERT_NAME}
+          - name: ${CERT_NAME}
             version: ${CERT_KEY_ID}
         tenantID: ${TENANT_ID}
         clientID: ${IDENTITY_CLIENT_ID}
@@ -449,13 +436,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://${AKV_NAME}.vault.azure.net/
         keys:
-        - name: ${KEY_NAME}
+          - name: ${KEY_NAME}
             version: ${KEY_VER}
         tenantID: ${TENANT_ID}
         clientID: ${IDENTITY_CLIENT_ID}
@@ -473,13 +460,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 1. Confirm the configuration is applied successful.
 
     ```shell
-    kubectl get KeyManagementProvider KeyManagementProvider-akv
+    kubectl get KeyManagementProvider keymanagementprovider-akv
     ```
 
     Make sure the `ISSUCCESS` value is true in the results of above three commands. If it is not, you need to check the detailed error logs by using `kubectl describe` commands. For example,
 
     ```shell
-    kubectl describe KeyManagementProvider KeyManagementProvider-akv
+    kubectl describe KeyManagementProvider keymanagementprovider-akv
     ```
 
 ### Configure the Notation verifier resource for verifying images signed with Notation
@@ -491,26 +478,25 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Verifier
     metadata:
-    name: verifier-notation
+      name: verifier-notation
     spec:
-    name: notation
-    artifactTypes: application/vnd.cncf.notary.signature
-    parameters:
+      name: notation
+      artifactTypes: application/vnd.cncf.notary.signature
+      parameters:
         verificationCertStores:
-            ca:
-                certs:
-                    - keymanagementprovider-akv
+          certs:
+            - keymanagementprovider-akv
         trustPolicyDoc:
-        version: "1.0"
-        trustPolicies:
+          version: "1.0"
+          trustPolicies:
             - name: default
-            registryScopes:
+              registryScopes: 
                 - "*"
-            signatureVerification:
+              signatureVerification:
                 level: strict
-            trustStores:
+              trustStores:
                 - ca:certs
-            trustedIdentities:
+              trustedIdentities:
                 - "x509.subject: ${SUBJECT_DN}"
     EOF
     ```
@@ -542,17 +528,17 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Verifier
     metadata:
-    name: verifier-cosign
+      name: verifier-cosign
     spec:
-    name: cosign
-    artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
-    parameters:
+      name: cosign
+      artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+      parameters:
         trustPolicies:
-        - name: default
+          - name: default
             scopes:
-            - "*"
+              - "*"
             keys:
-            - provider: keymanagementprovider-akv
+              - provider: keymanagementprovider-akv
     EOF
     ```
 
