@@ -268,7 +268,7 @@ az role assignment create --role "Key Vault Crypto User" --assignee $IDENTITY_OB
 
     > The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).
 
-    This step above may take around 10 minutes to complete. The registration status can be checked by running the following command:
+    This step above may take around 10 minutes to complete.
 
 1. Update an existing AKS cluster with OIDC and workload identity enabled. You can skip this step if you have an AKS cluster with both OIDC and workload identity enabled.
 
