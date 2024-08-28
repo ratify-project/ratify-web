@@ -40,7 +40,7 @@ spec:
   parameters: # OPTIONAL: [object] Parameters specific to this verifier
 ```
 ## Configuration guidelines
-### Notation-verifier
+### Notation Verifier
 #### Template
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -99,7 +99,7 @@ spec:
             - "*"
 ```
 
-### Cosign verifier
+### Cosign Verifier
 #### Template
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1

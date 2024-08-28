@@ -6,41 +6,6 @@ sidebar_position: 1
 
 Notation is a built-in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
 
-In the following example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
-
-Sample Notation yaml spec:
-
-```yml
-apiVersion: config.ratify.deislabs.io/v1beta1
-kind: Verifier
-metadata:
-  name: notation-wabbit
-spec:
-  name: notation
-  artifactTypes: application/vnd.cncf.notary.signature
-  parameters:
-    verificationCertStores:
-      ca:
-        ca-certs: 
-          - gatekeeper-system/kmp-akv-ca
-      tsa:
-        tsa-certs: 
-          - gatekeeper-system/kmp-akv-tsa
-    trustPolicyDoc:
-      version: "1.0"
-      trustPolicies:
-        - name: default
-          registryScopes:
-            - "*"
-          signatureVerification:
-            level: strict
-          trustStores:
-            - ca:ca-certs
-            - tsa:tsa-certs
-          trustedIdentities:
-            - "*"
-```
-
 ## Configuration
 
 ### Kubernetes
@@ -87,17 +52,52 @@ There are two ways to configure verification certificates:
 1. `verificationCerts`: Notation verifier will load all certificates from path specified in this array.
 
 2. `verificationCertStores`: Defines a collection of Notary Project [Trust Stores](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store). Notary Project specification defines a [Trust Policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md), which is a policy construct to specify which identities and Trust Stores are trusted to produce artifacts in a verification. The name of KeyManagementProvider (KMP) resource(s) must be accurately provided. When a KMP name is specifed, the notation verifier will be configured to trust all certificates fetched from that particular KMP resource. 
-Note: CLI is NOT SUPPORTED.
 
+> NOTE 0: CLI is NOT SUPPORTED.
 
 > NOTE 1: `verificationCertStore` is able to reference a [KeyManagementProvider](../../reference/custom%20resources/key-management-providers.md) to construct trust stores. When referencing a namespaced KMP resource, ensure to include the corresponding namespace prefix, while cluster-wide KMP should be referenced by its name directly. Refer to [this section](../../reference/custom%20resources/key-management-providers.md#utilization-in-verifiers) for more information.
 
-
 > NOTE 2: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
 
-> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`(coming soon).  For backward compatibility, users can either specify the truststore type or omit it, in which case it will default to the ca type. To use the Time-stamping feature(coming soon) users need to config trust store type accordingly. In the sample above, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section. 
+> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`(coming soon).  For backward compatibility, users can either specify the truststore type or omit it, in which case it will default to the ca type.
 
 > **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `KMP` resources when a matching `CertificateStore` with same name is found.
+
+Sample Notation yaml spec:
+
+```yml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: notation-wabbit
+spec:
+  name: notation
+  artifactTypes: application/vnd.cncf.notary.signature
+  parameters:
+    verificationCertStores:
+      ca:
+        ca-certs: 
+          - gatekeeper-system/kmp-akv-ca
+      tsa:
+        tsa-certs: 
+          - gatekeeper-system/kmp-akv-tsa
+    trustPolicyDoc:
+      version: "1.0"
+      trustPolicies:
+        - name: default
+          registryScopes:
+            - "*"
+          signatureVerification:
+            level: strict
+          trustStores:
+            - ca:ca-certs
+            - tsa:tsa-certs
+          trustedIdentities:
+            - "*"
+```
+
+In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
+To use the Time-stamping feature(coming soon) users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for Time-stamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
 
 ### CLI
 
