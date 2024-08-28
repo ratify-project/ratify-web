@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Notation is a built-in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
 
-In the following example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv, kmp-akv1. Here, `ca:certs` is the only trust store specifing and the `certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section.
+In the following example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
 
 Sample Notation yaml spec:
 
@@ -21,9 +21,11 @@ spec:
   parameters:
     verificationCertStores:
       ca:
-        certs: 
-          - gatekeeper-system/kmp-akv
-          - gatekeeper-system/kmp-akv1 
+        ca-certs: 
+          - gatekeeper-system/kmp-akv-ca
+      tsa:
+        tsa-certs: 
+          - gatekeeper-system/kmp-akv-tsa
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
@@ -33,7 +35,8 @@ spec:
           signatureVerification:
             level: strict
           trustStores:
-            - ca:certs
+            - ca:ca-certs
+            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
@@ -53,7 +56,10 @@ spec:
   parameters:
     verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
       ca: # trust-store-type
-        certs: # name of the trustStore
+        ca-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      tsa: # trust-store-type
+        tsa-certs: # name of the trustStore
           - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
@@ -64,7 +70,8 @@ spec:
           signatureVerification:
             level: strict
           trustStores:
-            - ca:certs
+            - ca:ca-certs
+            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
@@ -88,7 +95,7 @@ Note: CLI is NOT SUPPORTED.
 
 > NOTE 2: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
 
-> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`(coming soon).  This change is backward compatible, the implementation supports both original CRs, which contain no trust store type, and CRs specifing `trust-store-type` for each certificate collection. Time-stamping does not support original CRs, which contain no trust store type. In the sample above, `ca:certs` is the trust store specifing and the `certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section. 
+> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`(coming soon).  For backward compatibility, users can either specify the truststore type or omit it, in which case it will default to the ca type. To use the Time-stamping feature(coming soon) users need to config trust store type accordingly. In the sample above, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section. 
 
 > **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `KMP` resources when a matching `CertificateStore` with same name is found.
 
@@ -134,7 +141,8 @@ Note: CLI is NOT SUPPORTED.
                                 "level": "strict"
                             },
                             "trustStores": [
-                                "ca:certs"
+                                "ca:ca-certs",
+                                "tsa:tsa-certs"
                             ],
                             "trustedIdentities": [
                                 "*"

@@ -52,8 +52,9 @@ spec:
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
     verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
-      certs: # name of the trustStore
-        - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      ca: # type of the trustStore
+        ca-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -81,8 +82,9 @@ spec:
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
     verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
-      certs: # name of the trustStore
-        - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      ca: # type of the trustStore
+        ca-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -92,7 +94,7 @@ spec:
           signatureVerification:
             level: strict
           trustStores:
-            - ca:certs
+            - ca:ca-certs
           trustedIdentities:
             - "*"
 ```
