@@ -76,16 +76,19 @@ spec:
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
 metadata:
-  name: verifier-notation
+  name: notation-wabbit
 spec:
   name: notation
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
-    verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
-      ca: # type of the trustStore
-        ca-certs: # name of the trustStore
-          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
-    trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
+    verificationCertStores:
+      ca:
+        ca-certs: 
+          - gatekeeper-system/kmp-akv-ca
+      tsa:
+        tsa-certs: 
+          - gatekeeper-system/kmp-akv-tsa
+    trustPolicyDoc:
       version: "1.0"
       trustPolicies:
         - name: default
@@ -95,6 +98,7 @@ spec:
             level: strict
           trustStores:
             - ca:ca-certs
+            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
