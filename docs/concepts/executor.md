@@ -2,7 +2,6 @@
 
 The executor is the 'glue' that links all Ratify plugin-based components such as the verifiers, referrer stores, and policy providers. The executor handles all components of the verification process once a subject verification request is received either via CLI or server.
 
-
 ## Execution Steps
 
 - Executor's `VerifySubject` function is invoked with a string reference to a subject to be verified.
