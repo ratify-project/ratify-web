@@ -1,9 +1,9 @@
 # Troubleshoot Notation Verifier Errors
 
-There are generally two types of errors that can occur when using the Notation verifier: configuration errors and verification errors. Configuration errors occur when the Notation verifier is not configured correctly. Verification errors occur when the Notation verifier fails to verify an artifact. This TSG provides guidance on how to troubleshoot Notation verifier errors.
+There are generally two types of errors that can occur when using the Notation verifier: configuration errors and verification errors. Configuration errors occur when the Notation verifier is not configured correctly. Verification errors occur when the Notation verifier fails to verify an artifact. This TSG provides guidance on how to troubleshoot both types of Notation verifier errors.
 
 ## Configuration Errors
-It's important to ensure that the Notation verifier is configured correctly. If the Notation verifier is not configured correctly, it will not be able to verify artifacts.
+It's important to ensure that the Notation verifier is configured correctly. If the Notation verifier is not configured correctly, it will not be able to verify artifacts. For more information on how to configure the Notation verifier, please refer to [this guide](https://ratify.dev/docs/plugins/verifier/notation/).
 
 ### Debugging Commands
 To inspect the Notation verifier configuration, please use ```kubectl describe``` or ```kubectl get``` command to retrieve it.
@@ -50,7 +50,7 @@ Below is an example of a verification result log in Ratify pod.
   ]
 ```
 
-Users can investigate the root cause of the Notation verifier by checking the `message` and `errorReason` fields of each failed `verifierReport`. `message` is generated within the Ratify while `errorReason` could result from Ratify itself, dependency library or upstream services. And we have `remediation` field to provide a solution to some common errors.
+Users can investigate the root cause of the Notation verifier by checking the `message` and `errorReason` fields of each failed `verifierReport`. `message` is generated within Ratify while `errorReason` could result from Ratify itself, dependency library or upstream services. And we have `remediation` field to provide a solution to some common errors.
 
 We have listed some common errors and their solutions below.
 
