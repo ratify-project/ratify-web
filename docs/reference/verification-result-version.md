@@ -5,7 +5,8 @@ Verification Response is the data returned for external data request calls. As w
 # Table of Contents
 - [Verification Response](#verification-response)
 - [Table of Contents](#table-of-contents)
-- [Versions](#versions)
+- [Verification Response Versions and Policy Providers](#verification-response-versions-and-policy-providers)
+- [Supported Versions](#supported-versions)
   - [0.1.0](#010)
     - [Definition](#definition)
     - [Example](#example)
@@ -19,7 +20,10 @@ Verification Response is the data returned for external data request calls. As w
     - [Definition](#definition-3)
     - [Example](#example-3)
 
-# Versions
+# Verification Response Versions and Policy Providers
+As outlined in [policy providers documentation](./custom%20resources/policies.md), Ratify supports both config and rego policies. However, due to historical reasons, these two policy providers generate different Verification Response formats. The config policy provider generates Verification Response in version 0.x, while the rego policy provider uses version 1.x. The primary difference between these versions is that 0.x was not well designed to handle nested verification and multiple verifiers for the same artifact. We already have a tracking [issue](https://github.com/ratify-project/ratify/issues/1690) to unify the Verification Response format in the future.
+
+# Supported Versions
 
 ## 0.1.0
 ### Definition
