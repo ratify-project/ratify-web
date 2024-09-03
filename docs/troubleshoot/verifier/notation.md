@@ -7,10 +7,12 @@ It's important to ensure that the Notation verifier is configured correctly. If 
 
 ### Debugging Commands
 To inspect the Notation verifier configuration, please use ```kubectl describe``` or ```kubectl get``` command to retrieve it.
+
 ```bash
 kubectl describe verifiers.config.ratify.deislabs.io
 kubectl describe namespacedverifiers.config.ratify.deislabs.io -n <namespace>
 ```
+
 or
 
 ```bash
