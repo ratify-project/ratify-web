@@ -59,7 +59,7 @@ There are two ways to configure verification certificates:
 
 > NOTE 2: `verificationCertStores` supersedes `verificationCerts` if both fields are specified.
 
-> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`(coming soon).  For backward compatibility, users can either specify the truststore type or omit it, in which case it will default to the ca type.
+> NOTE 3: `verificationCertStores` currently supported values for `trust-store-type` are `ca`, `signingAuthority` and `tsa`.  For backward compatibility, users can either specify the truststore type or omit it, in which case it will default to the ca type.
 
 > **WARNING!**: Starting in Ratify v1.2.0, the `KeyManagementProvider` resource replaces `CertificateStore`. It is NOT recommended to use both `CertificateStore` and `KeyManagementProvider` resources together. If using helm to upgrade Ratify, please make sure to delete any existing `CertificateStore` resources. For self-managed `CertificateStore` resources, users should migrate to the equivalent `KeyManagementProvider`. If migration is not possible and both resources must exist together, please make sure to use DIFFERENT names for each resource type. Ratify is configured to prefer `KMP` resources when a matching `CertificateStore` with same name is found.
 
@@ -97,7 +97,7 @@ spec:
 ```
 
 In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
-To use the Time-stamping feature(coming soon) users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for Time-stamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
+To use the Time-stamping feature users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for Time-stamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
 
 ### CLI
 
