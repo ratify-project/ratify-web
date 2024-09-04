@@ -3,7 +3,13 @@
 Please use ```kubectl get``` or ```kubectl describe``` command to retrieve the error.
 
 ```bash
-kubectl get keymanagementproviders.config.ratify.deislabs.io -n <INSERT NAMESPACE>
+kubectl get keymanagementproviders.config.ratify.deislabs.io -o yaml
+kubectl describe keymanagementproviders.config.ratify.deislabs.io
+```
+or
+```bash
+kubectl get namespacedkeymanagementproviders.config.ratify.deislabs.io -n <namespace> -o yaml
+kubectl describe namespacedkeymanagementproviders.config.ratify.deislabs.io -n <namespace>
 ```
 
 ###  CERT_INVALID
