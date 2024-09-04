@@ -1,4 +1,4 @@
-# Store Plugin
+# Store
 
 ## Overview
 

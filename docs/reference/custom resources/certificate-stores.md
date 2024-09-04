@@ -25,7 +25,7 @@ status: # supported in version >= config.ratify.deislabs.io/v1beta1
 
 ## AzureKeyVault Certificate Provider
 
-See notation integration example [here](../../reference/verifier.md#section-6-built-in-verifiers)
+See notation integration example [here](../../concepts/verifier.md#section-6-built-in-verifiers)
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
