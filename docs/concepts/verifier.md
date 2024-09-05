@@ -286,6 +286,7 @@ spec:
             - gatekeeper-system/kmp-akv0
             - gatekeeper-system/kmp-akv1
         ca-certs1:
+
             - gatekeeper-system/kmp-akv2
             - gatekeeper-system/kmp-akv3
     trustPolicyDoc:
