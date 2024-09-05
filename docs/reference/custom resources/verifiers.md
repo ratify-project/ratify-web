@@ -99,7 +99,7 @@ spec:
             - "*"
           signatureVerification:
             level: strict
-          trustStores:
+          trustStores: # trustStore must be trust-store-type:trust name specified in verificationCertStores
             - ca:ca-certs
             - tsa:tsa-certs
           trustedIdentities:
