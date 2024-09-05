@@ -1,4 +1,4 @@
-# Verifier Specification
+# Verifier
 
 ## Overview
 
