@@ -69,7 +69,7 @@ Sample Notation yaml spec:
 apiVersion: config.ratify.deislabs.io/v1beta1
 kind: Verifier
 metadata:
-  name: notation-wabbit
+  name: verifier-notation
 spec:
   name: notation
   artifactTypes: application/vnd.cncf.notary.signature
