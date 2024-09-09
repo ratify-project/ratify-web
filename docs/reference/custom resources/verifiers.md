@@ -40,7 +40,7 @@ spec:
   parameters: # OPTIONAL: [object] Parameters specific to this verifier
 ```
 ## Configuration guidelines
-### Notation-verifier
+### Notation Verifier
 #### Template
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -52,8 +52,12 @@ spec:
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
     verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
-      certs: # name of the trustStore
-        - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      ca: # CA type of the trustStore
+        ca-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      tsa: # TSA type of the trustStore
+        tsa-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -80,10 +84,14 @@ spec:
   name: notation
   artifactTypes: application/vnd.cncf.notary.signature
   parameters:
-    verificationCertStores:  # maps a Trust Store to KeyManagementProvider resources with certificates 
-      certs: # name of the trustStore
-        - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
-    trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
+    verificationCertStores:
+      ca:
+        ca-certs: 
+          - gatekeeper-system/kmp-akv-ca
+      tsa:
+        tsa-certs: 
+          - gatekeeper-system/kmp-akv-tsa
+    trustPolicyDoc:
       version: "1.0"
       trustPolicies:
         - name: default
@@ -91,13 +99,14 @@ spec:
             - "*"
           signatureVerification:
             level: strict
-          trustStores:
-            - ca:certs
+          trustStores: # trustStore must be trust-store-type:trust-store-name specified in verificationCertStores
+            - ca:ca-certs
+            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
 
-### Cosign verifier
+### Cosign Verifier
 #### Template
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1

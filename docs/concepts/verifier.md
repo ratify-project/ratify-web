@@ -267,7 +267,7 @@ policy:
 
 Notation is a built in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
 
-In the following example, the verifier's configuration references 4 `KeyManagementProvider`s, kmp-akv, kmp-akv1, kmp-akv2 and kmp-akv3. It shows a generic and permissive policy. Here, `ca:certs` is the only trust store specifing and the `certs` suffix corresponds to the `certs` certificate collection listed in the `verificationCertStores` section.
+In the following example, the verifier's configuration references 4 `KeyManagementProvider`s, kmp-akv0, kmp-akv1, kmp-akv2 and kmp-akv3. It shows a generic and permissive policy. Here, `ca:ca-certs0` is one of the trust stores specifing and the `ca-certs0` suffix corresponds to the `ca-certs0` certificate collection listed in the `verificationCertStores` section.
 
 A sample notation verifier with `verificationCertStores` defined:
 
@@ -282,10 +282,10 @@ spec:
   parameters:
     verificationCertStores:
       ca:
-        certs:
-            - gatekeeper-system/kmp-akv
+        ca-certs0:
+            - gatekeeper-system/kmp-akv0
             - gatekeeper-system/kmp-akv1
-        certs1:
+        ca-certs1:
             - gatekeeper-system/kmp-akv2
             - gatekeeper-system/kmp-akv3
     trustPolicyDoc:
@@ -297,8 +297,8 @@ spec:
           signatureVerification:
             level: strict
           trustStores:
-            - ca:certs
-            - ca:certs1
+            - ca:ca-certs0
+            - ca:ca-certs1
           trustedIdentities:
             - "*"
 

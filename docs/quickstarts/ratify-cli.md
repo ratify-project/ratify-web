@@ -64,7 +64,7 @@ cat > config.json <<EOF
                                 "level": "strict"
                             },
                             "trustStores": [
-                                "ca:certs"
+                                "ca:ca-certs"
                             ],
                             "trustedIdentities": [
                                 "*"

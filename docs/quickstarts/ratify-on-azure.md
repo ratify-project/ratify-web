@@ -485,7 +485,7 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
       parameters:
         verificationCertStores:
           ca:
-            certs:
+            ca-certs:
               - keymanagementprovider-akv
         trustPolicyDoc:
           version: "1.0"
@@ -496,7 +496,7 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
               signatureVerification:
                 level: strict
               trustStores:
-                - ca:certs
+                - ca:ca-certs
               trustedIdentities:
                 - "x509.subject: ${SUBJECT_DN}"
     EOF
