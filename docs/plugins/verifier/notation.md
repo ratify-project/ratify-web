@@ -53,6 +53,12 @@ There are two ways to configure verification certificates:
 
 2. `verificationCertStores`: Defines a collection of Notary Project [Trust Stores](https://github.com/notaryproject/specifications/blob/main/specs/trust-store-trust-policy.md#trust-store). Notary Project specification defines a [Trust Policy](https://github.com/notaryproject/notaryproject/blob/main/specs/trust-store-trust-policy.md), which is a policy construct to specify which identities and Trust Stores are trusted to produce artifacts in a verification. The name of KeyManagementProvider (KMP) resource(s) must be accurately provided. When a KMP name is specifed, the notation verifier will be configured to trust all certificates fetched from that particular KMP resource. 
 
+- The Trust Stores currently supports three kinds of identities, additional identities may be supported in future:
+
+  - Certificates: The x509/ca trust store contains named stores that contain Certificate Authority (CA) root certificates.
+  - SigningAuthority Certificate: The x509/signingAuthority trust store contains named stores that contain Signing Authority's root certificates.
+  - Timestamping Certificates: The x509/tsa trust store contains named stores that contain Timestamping Authority (TSA) root certificates.
+
 > NOTE 0: CLI is NOT SUPPORTED.
 
 > NOTE 1: `verificationCertStore` is able to reference a [KeyManagementProvider](../../reference/custom%20resources/key-management-providers.md) to construct trust stores. When referencing a namespaced KMP resource, ensure to include the corresponding namespace prefix, while cluster-wide KMP should be referenced by its name directly. Refer to [this section](../../reference/custom%20resources/key-management-providers.md#utilization-in-verifiers) for more information.
@@ -97,7 +103,7 @@ spec:
 ```
 
 In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
-To use the Time-stamping feature users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for Time-stamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
+To use timestamping feature users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for timestamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
 
 ### CLI
 
