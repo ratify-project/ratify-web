@@ -103,7 +103,7 @@ spec:
 ```
 
 In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
-To use timestamping feature users need to config trust store type accordingly. In the sample, `tsa:tsa-certs` is the trust stores specifing for timestamping and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` section.
+To use the timestamping feature, you need to configure the trust store type accordingly. In the example, `tsa:tsa-certs` is the trust store specified for timestamp verification, and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` field.
 
 ### CLI
 
