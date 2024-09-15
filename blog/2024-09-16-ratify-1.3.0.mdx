@@ -19,8 +19,8 @@ Read further to learn about the exciting new features and how they can be benefi
 Key features in this release include:
 - Support of validating Notary Project signatures with timestamping
 - Support of periodic retrieval of keys and certificates stored in a KMS (Key Management System)
-- Introducing new keyless verification configuration for verifying Cosign signatures
 - Improving error messages for artifact verification
+- Introducing new configuration for Cosign keyless verification
 
 ### Support of validating Notary Project signatures with timestamping
 
@@ -29,7 +29,7 @@ Since [Notation v1.2.0 release](https://notaryproject.dev/blog/2024/announcing-n
 This enhancement extends the trust of signatures created within the certificate's validity period by trusting on a Timestamping Authority (TSA), 
 enabling successful signature verification even after the certificates have expired. 
 Timestamping reduces costs by eliminating the need to periodically re-sign images due to certificate expiry, which is critical when using short-lived certificates. 
-To validate Notary Project signatures that include timestamps from a TSA, it's essential for a verifier to determine trusted entities both as the image signer and as the TSA. In Ratify, configure trust stores and trust policies in the Notation verifier to establish this trust. For more information, see the [configuration of Notation verifier] (https://ratify.dev/docs/next/plugins/verifier/notation/#configuration).
+To validate Notary Project signatures that include timestamps from a TSA, it's essential for a verifier to determine trusted entities both as the image signer and as the TSA. In Ratify, configure trust stores and trust policies in the Notation verifier to establish this trust. For more information, see the [configuration of Notation verifier](https://ratify.dev/docs/next/plugins/verifier/notation/#configuration).
 
 ### Support of periodic retrieval of keys and certificates stored in a KMS
 
@@ -37,12 +37,13 @@ Users configure keys and certificates through Key Management Providers (KMP) res
 
 Please note that currently, only the KMP of Azure Key Vault has this support. Let us know if you need support for other KMPs. For more information, see the [Azure Key Vault KMP configuration](https://ratify.dev/docs/next/reference/custom%20resources/key-management-providers#azure-key-vault).
 
-### Introducing new keyless verification configuration for verifying Cosign signatures
-
-Trust policies for the Cosign verifier were introduced . Now, keyless verification can be configured with an updated setup process. For more details, visit Cosign verifier keyless configuration.
 ### Improving error messages for artifact verification
 
-To improve the troubleshooting experience, since Ratify v1.3.0, we started improving error messages. It is an ongoing effort. We will keep improving for several releases.
+Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
+
+### Introducing new configuration for Cosign keyless verification
+
+Starting with version 1.2.0, trust policies have been introduced for Cosign signature verification, allowing users to fine tune verification policies. This release enhances the feature by adding support for Cosign keyless verification. For more information, see the [Cosign verifier keyless configuration](https://ratify.dev/docs/next/plugins/verifier/cosign#keyless).
 
 ## Other enhancements
 
