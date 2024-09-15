@@ -39,7 +39,7 @@ Please note that currently, only the KMP of Azure Key Vault has this support. Le
 
 ### Improving error messages for artifact verification
 
-Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
+Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative at Ratify project. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
 
 ### Introducing new configuration for Cosign keyless verification
 
@@ -47,8 +47,20 @@ Starting with version 1.2.0, trust policies have been introduced for Cosign sign
 
 ## Other enhancements
 
-There are other important enhancements on Ratify project. Since Ratify v1.3.0, we generate supply chain metadata for dev assets, setup  scanners for ratify releases, and add open ssf best practices badge, which will  keep improve the quality of Ratify project and make Ratify more secure.
+Since this release, we have strengthened the security posture of the Ratify project through several key implementations:
+
+**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify images. This improves transparency in the build process, ensuring better traceability and accountability of image contents.
+
+**Image Signing**: Ratify images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments.
+
+**Vulnerability Scanning Workflow**: We've implemented an automated workflow to scan Go projects, their dependencies, and Ratify images for known vulnerabilities. This proactive measure ensures that any potential security issues are identified and addressed early.
+
+**OpenSSF Best Practices Badge**: By adopting the Open Source Security Foundation (OpenSSF) best practices, we've earned the best practices badge. This reflects our commitment to industry-standard security practices, enhancing the project's trustworthiness and overall security posture.
 
 ## Acknowledgements
 
 The Ratify release team wants to thank the entire Ratify community for all the activities and engagements that has been vital for helping the project grow and reach this milestone.
+
+## Try it now
+
+Follow this [quick start guide](https://ratify.dev/docs/next/quick-start) to try out Ratify v1.3.0.
