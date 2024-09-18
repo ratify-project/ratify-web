@@ -5,7 +5,7 @@ authors: [ratify]
 tags: [verification]
 ---
 
-We are excited to announce the release of Ratify v1.3.0!
+We are excited to announce the release of [Ratify v1.3.0](https://github.com/ratify-project/ratify/releases/tag/v1.3.0)!
 
 Ratify is now a CNCF sandbox project! We sincerely thank the exceptional community for invaluable contributions and unwavering support in reaching this significant milestone.
 Ratify is a verification framework that ensures container images and supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. 
@@ -14,7 +14,7 @@ you can safeguard your application deployment against potential threats and vuln
 
 Read further to learn about the exciting new features and how they can be beneficial to you!
 
-## Features and Deprecations
+## Features and deprecations
 
 Key features in this release include:
 - Support of validating Notary Project signatures with timestamping
@@ -49,9 +49,9 @@ Starting with version 1.2.0, trust policies have been introduced for Cosign sign
 
 Since this release, we have strengthened the security posture of the Ratify project through several key implementations:
 
-**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify images. This improves transparency in the build process, ensuring better traceability and accountability of image contents.
+**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify images. This improves transparency in the build process, ensuring better traceability and accountability of image contents. For more information, see the [Build attestations document](https://ratify.dev/docs/next/troubleshoot/security/#build-attestations).
 
-**Image Signing**: Ratify images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments.
+**Image Signing**: Ratify images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/next/troubleshoot/security/#signature-validation).
 
 **Vulnerability Scanning Workflow**: We've implemented an automated workflow to scan Go projects, their dependencies, and Ratify images for known vulnerabilities. This proactive measure ensures that any potential security issues are identified and addressed early.
 
