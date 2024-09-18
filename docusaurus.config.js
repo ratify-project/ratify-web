@@ -72,11 +72,11 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
-      algolia:{
-        apiKey:'22f800332771c65f3bd7110dc87689c3',
-        contexualSearch:true,
-        indexName:'ratify',
-        appId:'1E1M1B8RZA',
+      algolia: {
+        apiKey: '22f800332771c65f3bd7110dc87689c3',
+        contexualSearch: true,
+        indexName: 'ratify',
+        appId: '1E1M1B8RZA',
       },
       navbar: {
         title: 'Ratify',
@@ -91,8 +91,8 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {to: 'https://killercoda.com/notaryproject/scenario/ratify', label: 'Playground', position: 'left'},
+          { to: '/blog', label: 'Blog', position: 'left' },
+          { to: 'https://killercoda.com/notaryproject/scenario/ratify', label: 'Playground', position: 'left' },
           {
             type: 'docsVersionDropdown',
             position: 'right',
@@ -164,7 +164,9 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Ratify Project`,
+        copyright: `Copyright © ${new Date().getFullYear()} Ratify Project. <br/>
+                    The Linux Foundation® (TLF) has registered trademarks and uses trademarks. 
+                    For a list of TLF trademarks, see <a href="https://www.linuxfoundation.org/trademark-usage/" target="_blank">Trademark Usage</a>.`
       },
       prism: {
         theme: lightCodeTheme,
