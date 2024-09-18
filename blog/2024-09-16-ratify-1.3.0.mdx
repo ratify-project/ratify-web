@@ -19,7 +19,6 @@ Read further to learn about the exciting new features and how they can be benefi
 Key features in this release include:
 - Support of validating Notary Project signatures with timestamping
 - Support of periodic retrieval of keys and certificates stored in a KMS (Key Management System)
-- Improving error messages for artifact verification
 - Introducing new configuration for Cosign keyless verification
 
 ### Support of validating Notary Project signatures with timestamping
@@ -37,21 +36,23 @@ Users configure keys and certificates through Key Management Providers (KMP) res
 
 Please note that currently, only the KMP of Azure Key Vault has this support. Let us know if you need support for other KMPs. For more information, see the [Azure Key Vault KMP configuration](https://ratify.dev/docs/next/reference/custom%20resources/key-management-providers#azure-key-vault).
 
-### Improving error messages for artifact verification
-
-Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative at Ratify project. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
-
 ### Introducing new configuration for Cosign keyless verification
 
 Starting with version 1.2.0, trust policies have been introduced for Cosign signature verification, allowing users to fine tune verification policies. This release enhances the feature by adding support for Cosign keyless verification. For more information, see the [Cosign verifier keyless configuration](https://ratify.dev/docs/next/plugins/verifier/cosign#keyless).
 
 ## Other enhancements
 
+### Improving error messages for artifact verification
+
+Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative at Ratify project. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
+
+### Enhancing security
+
 Since this release, we have strengthened the security posture of the Ratify project through several key implementations:
 
-**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify images. This improves transparency in the build process, ensuring better traceability and accountability of image contents. For more information, see the [Build attestations document](https://ratify.dev/docs/next/troubleshoot/security/#build-attestations).
+**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify dev images. This improves transparency in the build process, ensuring better traceability and accountability of image contents. For more information, see the [Build attestations document](https://ratify.dev/docs/next/troubleshoot/security/#build-attestations).
 
-**Image Signing**: Ratify images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/next/troubleshoot/security/#signature-validation).
+**Image Signing**: Ratify dev images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/next/troubleshoot/security/#signature-validation).
 
 **Vulnerability Scanning Workflow**: We've implemented an automated workflow to scan Go projects, their dependencies, and Ratify images for known vulnerabilities. This proactive measure ensures that any potential security issues are identified and addressed early.
 
