@@ -1,0 +1,67 @@
+---
+slug: ratify-v1.3.0-is-available
+title: Ratify v1.3.0 is available! 
+authors: [ratify]
+tags: [verification]
+---
+
+We are excited to announce the release of [Ratify v1.3.0](https://github.com/ratify-project/ratify/releases/tag/v1.3.0)!
+
+Ratify is now a CNCF sandbox project! We sincerely thank the exceptional community for invaluable contributions and unwavering support in reaching this significant milestone.
+Ratify is a verification framework that ensures container images and supply chain artifacts stored in a registry are thoroughly vetted and trustworthy. 
+By [integrating Ratify into your Kubernetes](https://notaryproject.dev/blog/2023/announcing-major-release/#integration-with-admission-controller-for-kubernetes-usage) workflow, 
+you can safeguard your application deployment against potential threats and vulnerabilities, thereby greatly enhancing the security of your applications.
+
+Read further to learn about the exciting new features and how they can be beneficial to you!
+
+## Features and deprecations
+
+Key features in this release include:
+- Support of validating Notary Project signatures with timestamping
+- Support of periodic retrieval of keys and certificates stored in a KMS (Key Management System)
+- Introducing new configuration for Cosign keyless verification
+
+### Support of validating Notary Project signatures with timestamping
+
+Ratify now supports verifying Notary Project signatures with timestamping. 
+Since [Notation v1.2.0 release](https://notaryproject.dev/blog/2024/announcing-notation-v1-2/), Notary Project supports [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161)-compliant timestamping. 
+This enhancement extends the trust of signatures created within the certificate's validity period by trusting on a Timestamping Authority (TSA), 
+enabling successful signature verification even after the certificates have expired. 
+Timestamping reduces costs by eliminating the need to periodically re-sign images due to certificate expiry, which is critical when using short-lived certificates. 
+To validate Notary Project signatures that include timestamps from a TSA, it's essential for a verifier to determine trusted entities both as the image signer and as the TSA. In Ratify, trust stores and trust policies can be configured in the Notation verifier to establish this trust. For more information, see the [configuration of Notation verifier](https://ratify.dev/docs/next/plugins/verifier/notation/#configuration).
+
+### Support of periodic retrieval of keys and certificates stored in a KMS
+
+Users configure keys and certificates through Key Management Providers (KMP) resources for signature verification. Without specifying versions in KMP resources, Ratify fetches the latest versions. Keys or certificates may rotate for security reasons, and automatic rotation is a common practice. When rotated, new versions are created, making the current versions outdated. Before Ratify v1.3.0, users had to manually update KMP resources when versions were rotated or disabled. This could result in verification failures for new versions if updates were not performed promptly. From v1.3.0 onwards, the `refreshInterval` parameter is introduced for KMP resources allowing periodic checks for the latest versions and status validation. Future updates will also support keeping a specified number of previous versions to validate older signatures that may still be in use.
+
+Please note that currently, only the KMP of Azure Key Vault has this support. Let us know if you need support for other KMPs. For more information, see the [Azure Key Vault KMP configuration](https://ratify.dev/docs/next/reference/custom%20resources/key-management-providers#azure-key-vault).
+
+### Introducing new configuration for Cosign keyless verification
+
+Starting with version 1.2.0, trust policies have been introduced for Cosign signature verification, allowing users to fine tune verification policies. This release enhances the feature by adding support for Cosign keyless verification. For more information, see the [Cosign verifier keyless configuration](https://ratify.dev/docs/next/plugins/verifier/cosign#keyless).
+
+## Other enhancements
+
+### Improving error messages for artifact verification
+
+Clear and concise error messages help users understand what went wrong and how to fix it, reducing support requests and downtime. For developers, well-written error messages provide specific details that can assist in diagnosing and resolving bugs or system issues. Improving error messages is an ongoing initiative at Ratify project. In this release, we've refined the error messages related to artifact verification as per the [proposal](https://github.com/ratify-project/ratify/blob/v1.3.0/docs/proposals/Error-Messages-Improvements.md).
+
+### Enhancing security
+
+Since this release, we have strengthened the security posture of the Ratify project through several key implementations:
+
+**Docker Build Attestations**: We now generate attestations, including provenance and a Software Bill of Materials (SBOM), for Ratify dev images. This improves transparency in the build process, ensuring better traceability and accountability of image contents. For more information, see the [Build attestations document](https://ratify.dev/docs/next/troubleshoot/security/#build-attestations).
+
+**Image Signing**: Ratify dev images are now signed to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/next/troubleshoot/security/#signature-validation).
+
+**Vulnerability Scanning Workflow**: We've implemented an automated workflow to scan Go projects, their dependencies, and Ratify images for known vulnerabilities. This proactive measure ensures that any potential security issues are identified and addressed early.
+
+**OpenSSF Best Practices Badge**: By adopting the Open Source Security Foundation (OpenSSF) best practices, we've earned the best practices badge. This reflects our commitment to industry-standard security practices, enhancing the project's trustworthiness and overall security posture.
+
+## Acknowledgements
+
+The Ratify release team wants to thank the entire Ratify community for all the activities and engagements that has been vital for helping the project grow and reach this milestone.
+
+## Try it now
+
+Follow this [quick start guide](https://ratify.dev/docs/next/quick-start) to try out Ratify v1.3.0.
