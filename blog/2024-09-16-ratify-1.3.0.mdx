@@ -29,7 +29,7 @@ Since [Notation v1.2.0 release](https://notaryproject.dev/blog/2024/announcing-n
 This enhancement extends the trust of signatures created within the certificate's validity period by trusting on a Timestamping Authority (TSA), 
 enabling successful signature verification even after the certificates have expired. 
 Timestamping reduces costs by eliminating the need to periodically re-sign images due to certificate expiry, which is critical when using short-lived certificates. 
-To validate Notary Project signatures that include timestamps from a TSA, it's essential for a verifier to determine trusted entities both as the image signer and as the TSA. In Ratify, configure trust stores and trust policies in the Notation verifier to establish this trust. For more information, see the [configuration of Notation verifier](https://ratify.dev/docs/next/plugins/verifier/notation/#configuration).
+To validate Notary Project signatures that include timestamps from a TSA, it's essential for a verifier to determine trusted entities both as the image signer and as the TSA. In Ratify, trust stores and trust policies can be configured in the Notation verifier to establish this trust. For more information, see the [configuration of Notation verifier](https://ratify.dev/docs/next/plugins/verifier/notation/#configuration).
 
 ### Support of periodic retrieval of keys and certificates stored in a KMS
 
