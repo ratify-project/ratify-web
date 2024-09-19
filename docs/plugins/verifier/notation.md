@@ -23,9 +23,6 @@ spec:
       ca: # trust-store-type
         ca-certs: # name of the trustStore
           - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
-      tsa: # trust-store-type
-        tsa-certs: # name of the trustStore
-          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -36,7 +33,6 @@ spec:
             level: strict
           trustStores: # trustStore must be trust-store-type:trust-store-name specified in verificationCertStores
             - ca:ca-certs
-            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
@@ -84,9 +80,6 @@ spec:
       ca:
         ca-certs: 
           - gatekeeper-system/kmp-akv-ca
-      tsa:
-        tsa-certs: 
-          - gatekeeper-system/kmp-akv-tsa
     trustPolicyDoc:
       version: "1.0"
       trustPolicies:
@@ -97,15 +90,15 @@ spec:
             level: strict
           trustStores:
             - ca:ca-certs
-            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
 
 In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
-To use the timestamping feature, you need to configure the trust store type accordingly. In the example, `tsa:tsa-certs` is the trust store specified for timestamp verification, and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` field.
 
 ### CLI
+
+Sample Notation CLI config:
 
 ```json
 {
@@ -147,8 +140,109 @@ To use the timestamping feature, you need to configure the trust store type acco
                                 "level": "strict"
                             },
                             "trustStores": [
+                                "ca:ca-certs"
+                            ],
+                            "trustedIdentities": [
+                                "*"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
+```
+
+## Timestamping Configuration
+
+In the X.509 Public Key Infrastructure (PKI) system, digital signatures must be generated within the certificate’s validity period, as expired certificates compromise the signature’s trustworthiness. The RFC 3161 standard defines the internet X.509 PKI Time-Stamp Protocol (TSP), where a timestamp is issued by a trusted third party acting as a Time Stamping Authority (TSA). These trusted timestamps extend the trust of signatures created within certificates validity, enabling successful signature verification even after certificates have expired.
+
+### Kubernetes
+
+Sample Notation yaml spec with timestamping configuration:
+
+```yml
+apiVersion: config.ratify.deislabs.io/v1beta1
+kind: Verifier
+metadata:
+  name: verifier-notation
+spec:
+  name: notation
+  artifactTypes: application/vnd.cncf.notary.signature
+  parameters:
+    verificationCertStores:
+      ca:
+        ca-certs: 
+          - gatekeeper-system/kmp-akv-ca
+      tsa:
+        tsa-certs: 
+          - gatekeeper-system/kmp-akv-tsa
+    trustPolicyDoc:
+      version: "1.0"
+      trustPolicies:
+        - name: default
+          registryScopes:
+            - "*"
+          signatureVerification:
+            level: strict
+            verifyTimestamp: "afterCertExpiry"   # Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
+          trustStores:
+            - ca:ca-certs
+            - tsa:tsa-certs                      # To enable timestamp verification, trust store type `tsa` MUST be configured.
+          trustedIdentities:
+            - "*"
+```
+
+To use the timestamping feature, you need to configure the trust store type accordingly. In the example, `tsa:tsa-certs` is the trust store specified for timestamp verification, and the `tsa-certs` suffix corresponds to the `tsa-certs` certificate collection listed in the `verificationCertStores` field.
+
+### CLI
+
+Sample Notation CLI config with timestamping configuration:
+
+```json
+{
+    "store": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "oras",
+            }
+        ]
+    },
+    "policy": {
+        "version": "1.0.0",
+        "plugin": {
+            "name": "configPolicy",
+            "artifactVerificationPolicies": {
+                "application/spdx+json": "all"
+            }
+        }
+    },
+    "verifier": {
+        "version": "1.0.0",
+        "plugins": [
+            {
+                "name": "notation",
+                "artifactTypes": "application/spdx+json",
+                "verificationCerts": [
+                    "/usr/local/ratify-certs/notation/truststore"
+                ],
+                "trustPolicyDoc": {
+                    "version": "1.0",
+                    "trustPolicies": [
+                        {
+                            "name": "default",
+                            "registryScopes": [
+                                "*"
+                            ],
+                            "signatureVerification": {
+                                "level": "strict",
+                                "verifyTimestamp": "afterCertExpiry"   // Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
+                            },
+                            "trustStores": [
                                 "ca:ca-certs",
-                                "tsa:tsa-certs"
+                                "tsa:tsa-certs"                        // To enable timestamp verification, trust store type `tsa` MUST be configured.
                             ],
                             "trustedIdentities": [
                                 "*"
