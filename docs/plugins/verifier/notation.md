@@ -23,6 +23,9 @@ spec:
       ca: # trust-store-type
         ca-certs: # name of the trustStore
           - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
+      tsa: # trust-store-type
+        tsa-certs: # name of the trustStore
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -33,6 +36,7 @@ spec:
             level: strict
           trustStores: # trustStore must be trust-store-type:trust-store-name specified in verificationCertStores
             - ca:ca-certs
+            - tsa:tsa-certs
           trustedIdentities:
             - "*"
 ```
@@ -94,7 +98,7 @@ spec:
             - "*"
 ```
 
-In the example, the verifier's configuration references 2 `KeyManagementProvider`s, kmp-akv-ca, kmp-akv-tsa. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
+In the example, the verifier's configuration references 2 `KeyManagementProvider`s, `kmp-akv-ca`. Here, `ca:ca-certs` is one of the trust stores specifing and the `ca-certs` suffix corresponds to the `ca-certs` certificate collection listed in the `verificationCertStores` section.
 
 ### CLI
 
@@ -156,7 +160,7 @@ Sample Notation CLI config:
 
 ## Timestamping Configuration
 
-In the X.509 Public Key Infrastructure (PKI) system, digital signatures must be generated within the certificate’s validity period, as expired certificates compromise the signature’s trustworthiness. The RFC 3161 standard defines the internet X.509 PKI Time-Stamp Protocol (TSP), where a timestamp is issued by a trusted third party acting as a Time Stamping Authority (TSA). These trusted timestamps extend the trust of signatures created within certificates validity, enabling successful signature verification even after certificates have expired.
+In the X.509 Public Key Infrastructure (PKI) system, digital signatures must be generated within the certificate’s validity period, as expired certificates compromise the signature’s trustworthiness. The [RFC 3161](https://datatracker.ietf.org/doc/html/rfc3161) standard defines the internet X.509 PKI Time-Stamp Protocol (TSP), where a timestamp is issued by a trusted third party acting as a Time Stamping Authority (TSA). These trusted timestamps extend the trust of signatures created within certificates validity, enabling successful signature verification even after certificates have expired.
 
 ### Kubernetes
 
