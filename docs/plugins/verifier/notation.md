@@ -23,9 +23,9 @@ spec:
       ca: # trust-store-type
         ca-certs: # name of the trustStore
           - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore
-      tsa: # trust-store-type; optional, please remove if timestamp  verification is not required
-        tsa-certs: # name of the trustStore; optional, please remove if timestamp  verification is not required
-          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore; optional, please remove if timestamp  verification is not required
+      tsa: # trust-store-type; optional, please remove if timestamp verification is not required
+        tsa-certs: # name of the trustStore; optional, please remove if timestamp verification is not required
+          - <NAMESPACE>/<KEY MANAGEMENT PROVIDER NAME> # namespace/name of the key management provider CRD to include in this trustStore; optional, please remove if timestamp verification is not required
     trustPolicyDoc: # policy language that indicates which identities are trusted to produce artifacts
       version: "1.0"
       trustPolicies:
@@ -37,7 +37,7 @@ spec:
             verifyTimestamp: "always" # optional, this parameter is only applicable if timestamp verification has been enabled. The default value is `always`, which means timestamp will always be validated. If you want to verify timestamp only when any code signing certificate has expired, set the value to `afterCertExpiry`. 
           trustStores: # trustStore must be trust-store-type:trust-store-name specified in verificationCertStores
             - ca:ca-certs
-            - tsa:tsa-certs # optional, please remove if timestamp  verification is not required.
+            - tsa:tsa-certs # optional, please remove if timestamp verification is not required.
           trustedIdentities:
             - "*"
 ```
