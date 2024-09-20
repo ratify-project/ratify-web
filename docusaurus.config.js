@@ -71,7 +71,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/ratify-social-card.png',
       algolia: {
         apiKey: '22f800332771c65f3bd7110dc87689c3',
         contexualSearch: true,
