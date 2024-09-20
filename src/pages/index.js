@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="Description will go into a meta tag in <head />">
+      description="Verification engine for software supply chain security <head />">
       <main>
         <Header/>
         <What/>

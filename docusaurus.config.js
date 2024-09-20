@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Ratify',
-  tagline: 'Verification engine for software supply chain security',
+  title: 'A cloud-native verification engine',
+  // tagline: 'software supply chain security',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
