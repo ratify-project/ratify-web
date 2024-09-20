@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Ratify',
-  // tagline: 'Dinosaurs are cool',
+  title: 'A cloud-native verification engine',
+  // tagline: 'software supply chain security',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -18,7 +18,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Deislabs', // Usually your GitHub org/user name.
+  organizationName: 'Ratify-project', // Usually your GitHub org/user name.
   projectName: 'Ratify', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -71,7 +71,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/ratify-social-card.png',
       algolia: {
         apiKey: '22f800332771c65f3bd7110dc87689c3',
         contexualSearch: true,
