@@ -34,9 +34,10 @@ spec:
             - "*"
           signatureVerification:
             level: strict
+            verifyTimestamp: "afterCertExpiry" # optional, please remove if timestamp countersignature verification is not required. `afterCertExpiry` only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`. To enable timestamp verification, trust store type `tsa` MUST be configured.
           trustStores: # trustStore must be trust-store-type:trust-store-name specified in verificationCertStores
             - ca:ca-certs
-            - tsa:tsa-certs # optional, please remove if timestamp countersignature verification is not required
+            - tsa:tsa-certs # optional, please remove if timestamp countersignature verification is not required. To enable timestamp verification, trust store type `tsa` MUST be configured.
           trustedIdentities:
             - "*"
 ```
@@ -190,10 +191,10 @@ spec:
             - "*"
           signatureVerification:
             level: strict
-            verifyTimestamp: "afterCertExpiry"   # Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
+            verifyTimestamp: "afterCertExpiry" # Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
           trustStores:
             - ca:ca-certs
-            - tsa:tsa-certs                      # To enable timestamp verification, trust store type `tsa` MUST be configured.
+            - tsa:tsa-certs # To enable timestamp verification, trust store type `tsa` MUST be configured.
           trustedIdentities:
             - "*"
 ```
@@ -242,11 +243,11 @@ Sample Notation CLI config with timestamping configuration:
                             ],
                             "signatureVerification": {
                                 "level": "strict",
-                                "verifyTimestamp": "afterCertExpiry"   // Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
+                                "verifyTimestamp": "afterCertExpiry" // Only verify timestamp countersignatures if any code signing certificate has expired. DEFAULT: `always`
                             },
                             "trustStores": [
                                 "ca:ca-certs",
-                                "tsa:tsa-certs"                        // To enable timestamp verification, trust store type `tsa` MUST be configured.
+                                "tsa:tsa-certs" // To enable timestamp verification, trust store type `tsa` MUST be configured.
                             ],
                             "trustedIdentities": [
                                 "*"
