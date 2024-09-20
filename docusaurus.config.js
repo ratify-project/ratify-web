@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Ratify',
-  // tagline: 'Dinosaurs are cool',
+  tagline: 'Verification engine for software supply chain security',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -18,7 +18,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Deislabs', // Usually your GitHub org/user name.
+  organizationName: 'Ratify-project', // Usually your GitHub org/user name.
   projectName: 'Ratify', // Usually your repo name.
 
   onBrokenLinks: 'throw',
