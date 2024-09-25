@@ -615,17 +615,17 @@ Keys in AKV may be rotated regularly as security best practice. If the key is ro
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
+      type: azurekeyvault
     parameters:
-        vaultURI: https://$AKV_NAME.vault.azure.net/
-        keys:
+      vaultURI: https://$AKV_NAME.vault.azure.net/
+      keys:
         - name: $KEY_NAME
-            version: $KEY_VER 
-            version: $KEY_VER_NEW
-        tenantID: $TENANT_ID
-        clientID: $CLIENT_ID
+          version: $KEY_VER 
+          version: $KEY_VER_NEW
+      tenantID: $TENANT_ID
+      clientID: $CLIENT_ID
     ```
 
 1. Apply the new configuration
@@ -656,16 +656,16 @@ In some cases, you may need to disable a specific version of key. For example, t
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
+      type: azurekeyvault
     parameters:
-        vaultURI: https://$AKV_NAME.vault.azure.net/
-        keys:
+      vaultURI: https://$AKV_NAME.vault.azure.net/
+      keys:
         - name: $KEY_NAME
-            version: $KEY_VER_NEW
-        tenantID: $TENANT_ID
-        clientID: $CLIENT_ID
+          version: $KEY_VER_NEW
+      tenantID: $TENANT_ID
+      clientID: $CLIENT_ID
     ```
 
     Apply the new configuration

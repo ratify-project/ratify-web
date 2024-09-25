@@ -389,13 +389,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Store
     metadata:
-    name: store-oras
+      name: store-oras
     spec:
-    name: oras
-    parameters:
+      name: oras
+      parameters:
         authProvider:
-        name: azureWorkloadIdentity
-        clientID: $IDENTITY_CLIENT_ID
+          name: azureWorkloadIdentity
+          clientID: ${IDENTITY_CLIENT_ID}
         cosignEnabled: true
     EOF
     ```
@@ -429,13 +429,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://${AKV_NAME}.vault.azure.net/
         certificates:
-        - name: ${CERT_NAME}
+          - name: ${CERT_NAME}
             version: ${CERT_KEY_ID}
         tenantID: ${TENANT_ID}
         clientID: ${IDENTITY_CLIENT_ID}
@@ -449,13 +449,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://${AKV_NAME}.vault.azure.net/
         keys:
-        - name: ${KEY_NAME}
+          - name: ${KEY_NAME}
             version: ${KEY_VER}
         tenantID: ${TENANT_ID}
         clientID: ${IDENTITY_CLIENT_ID}
@@ -473,13 +473,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 1. Confirm the configuration is applied successful.
 
     ```shell
-    kubectl get KeyManagementProvider KeyManagementProvider-akv
+    kubectl get KeyManagementProvider keymanagementprovider-akv
     ```
 
     Make sure the `ISSUCCESS` value is true in the results of above three commands. If it is not, you need to check the detailed error logs by using `kubectl describe` commands. For example,
 
     ```shell
-    kubectl describe KeyManagementProvider KeyManagementProvider-akv
+    kubectl describe KeyManagementProvider keymanagementprovider-akv
     ```
 
 ### Configure the Notation verifier resource for verifying images signed with Notation
@@ -491,25 +491,25 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Verifier
     metadata:
-    name: verifier-notation
+      name: verifier-notation
     spec:
-    name: notation
-    artifactTypes: application/vnd.cncf.notary.signature
-    parameters:
+      name: notation
+      artifactTypes: application/vnd.cncf.notary.signature
+      parameters:
         verificationCertStores:
         certs:
-            - keymanagementprovider-akv
+          - keymanagementprovider-akv
         trustPolicyDoc:
-        version: "1.0"
-        trustPolicies:
+          version: "1.0"
+          trustPolicies:
             - name: default
-            registryScopes:
+              registryScopes:
                 - "*"
-            signatureVerification:
+              signatureVerification:
                 level: strict
-            trustStores:
+              trustStores:
                 - ca:certs
-            trustedIdentities:
+              trustedIdentities:
                 - "x509.subject: ${SUBJECT_DN}"
     EOF
     ```
@@ -541,17 +541,17 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: Verifier
     metadata:
-    name: verifier-cosign
+      name: verifier-cosign
     spec:
-    name: cosign
-    artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
-    parameters:
+      name: cosign
+      artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
+      parameters:
         trustPolicies:
-        - name: default
+          - name: default
             scopes:
-            - "*"
+              - "*"
             keys:
-            - provider: keymanagementprovider-akv
+              - provider: keymanagementprovider-akv
     EOF
     ```
 
@@ -627,13 +627,13 @@ Keys in AKV may be rotated regularly as security best practice. If the key is ro
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://$AKV_NAME.vault.azure.net/
         keys:
-        - name: $KEY_NAME
+          - name: $KEY_NAME
             version: $KEY_VER 
             version: $KEY_VER_NEW
         tenantID: $TENANT_ID
@@ -668,13 +668,13 @@ In some cases, you may need to disable a specific version of key. For example, t
     apiVersion: config.ratify.deislabs.io/v1beta1
     kind: KeyManagementProvider
     metadata:
-    name: keymanagementprovider-akv
+      name: keymanagementprovider-akv
     spec:
-    type: azurekeyvault
-    parameters:
+      type: azurekeyvault
+      parameters:
         vaultURI: https://$AKV_NAME.vault.azure.net/
         keys:
-        - name: $KEY_NAME
+          - name: $KEY_NAME
             version: $KEY_VER_NEW
         tenantID: $TENANT_ID
         clientID: $CLIENT_ID
