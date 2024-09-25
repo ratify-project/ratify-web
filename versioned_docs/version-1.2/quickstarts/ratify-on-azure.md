@@ -395,7 +395,7 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
       parameters:
         authProvider:
           name: azureWorkloadIdentity
-          clientID: $IDENTITY_CLIENT_ID
+          clientID: ${IDENTITY_CLIENT_ID}
         cosignEnabled: true
     EOF
     ```
@@ -473,13 +473,13 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
 1. Confirm the configuration is applied successful.
 
     ```shell
-    kubectl get KeyManagementProvider KeyManagementProvider-akv
+    kubectl get KeyManagementProvider keymanagementprovider-akv
     ```
 
     Make sure the `ISSUCCESS` value is true in the results of above three commands. If it is not, you need to check the detailed error logs by using `kubectl describe` commands. For example,
 
     ```shell
-    kubectl describe KeyManagementProvider KeyManagementProvider-akv
+    kubectl describe KeyManagementProvider keymanagementprovider-akv
     ```
 
 ### Configure the Notation verifier resource for verifying images signed with Notation
@@ -500,17 +500,17 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
         certs:
           - keymanagementprovider-akv
         trustPolicyDoc:
-        version: "1.0"
-        trustPolicies:
-          - name: default
-            registryScopes:
-              - "*"
-            signatureVerification:
-              level: strict
-            trustStores:
-              - ca:certs
-            trustedIdentities:
-              - "x509.subject: ${SUBJECT_DN}"
+          version: "1.0"
+          trustPolicies:
+            - name: default
+              registryScopes:
+                - "*"
+              signatureVerification:
+                level: strict
+              trustStores:
+                - ca:certs
+              trustedIdentities:
+                - "x509.subject: ${SUBJECT_DN}"
     EOF
     ```
 
@@ -547,9 +547,9 @@ Run `az aks show -g "${AKS_RG}" -n "${AKS_NAME}" --query addonProfiles.azurepoli
       artifactTypes: application/vnd.dev.cosign.artifact.sig.v1+json
       parameters:
         trustPolicies:
-        - name: default
-          scopes:
-            - "*"
+          - name: default
+            scopes:
+              - "*"
             keys:
               - provider: keymanagementprovider-akv
     EOF
@@ -633,7 +633,7 @@ Keys in AKV may be rotated regularly as security best practice. If the key is ro
       parameters:
         vaultURI: https://$AKV_NAME.vault.azure.net/
         keys:
-        - name: $KEY_NAME
+          - name: $KEY_NAME
             version: $KEY_VER 
             version: $KEY_VER_NEW
         tenantID: $TENANT_ID
@@ -674,7 +674,7 @@ In some cases, you may need to disable a specific version of key. For example, t
       parameters:
         vaultURI: https://$AKV_NAME.vault.azure.net/
         keys:
-        - name: $KEY_NAME
+          - name: $KEY_NAME
             version: $KEY_VER_NEW
         tenantID: $TENANT_ID
         clientID: $CLIENT_ID
