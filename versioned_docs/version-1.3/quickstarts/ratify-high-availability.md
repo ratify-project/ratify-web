@@ -4,7 +4,6 @@ sidebar_position: 5
 
 # Install Ratify for High Availability
 
-> [!NOTE]
 > Feature status: **Experimental**. 
 > Experimental features are intended for testing and feedback as their functionality or design may change in a future release without warning.
 
