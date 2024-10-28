@@ -9,7 +9,7 @@ export default function Header() {
                 {/* <h1>RATIFY</h1> */}
                 <h3>The project provides a <span style={{color:"#3FB1E5"}}>framework</span> to <span style={{color:"#3FB1E5"}}>integrate</span> scenarios that require <span style={{color:"#3FB1E5"}}>verification</span> of reference <span style={{color:"#3FB1E5"}}>artifacts</span> </h3>
                 <div className={styles.header_content_input}>
-                    <a class="button  button--lg" href="docs/1.0/quick-start">Get Started</a>
+                    <a class="button  button--lg" href="docs/quick-start">Get Started</a>
                 </div>
             </div>
             <div className={styles.video}>
