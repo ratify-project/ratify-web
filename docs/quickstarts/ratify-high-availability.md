@@ -6,7 +6,7 @@ sidebar_position: 5
 
 > [!NOTE]
 > Feature status: **Experimental**. 
-> Experimental features are intended for testing and feedback as their functionality or design may change in a future release without warning. 
+> Experimental features are intended for testing and feedback as their functionality or design may change in a future release without warning.
 
 The default Ratify installation relies on a single Ratify pod processing all requests. For higher performance and availability requirements, Ratify can be set to run with multiple replicas and a shared state store.
 
