@@ -4,6 +4,9 @@ sidebar_position: 5
 
 # Install Ratify for High Availability
 
+> Feature status: **Experimental**. 
+> Experimental features are intended for testing and feedback as their functionality or design may change in a future release without warning.
+
 The default Ratify installation relies on a single Ratify pod processing all requests. For higher performance and availability requirements, Ratify can be set to run with multiple replicas and a shared state store.
 
 Ratify installation/upgrade for HA scenarios can be done via a `helmfile` or manual installation steps. Both options are outlined in this document.
