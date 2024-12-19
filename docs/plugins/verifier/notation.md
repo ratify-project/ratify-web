@@ -260,3 +260,11 @@ Sample Notation CLI config with timestamping configuration:
     }
 }
 ```
+
+## Certificate Revocation Check (CRL)
+
+Ratify supports CRL based on notation-core-go v1.2.0-rc1 and notation-go v1.3.0-rc1
+
+## Intro
+Certificate validation is an essential step during signature validation. Currently Ratify supports checking for revoked certificates through OCSP supported by notation-go library. However, OCSP validation requires internet connection for each validation while CRL could be cached for better performance. As notary-project added the CRL support for notation signature validation, and Ratify utilized it.
+CRL download location (URL) can be obtained from the certificate's CRL Distribution Point (CDP) extension. If the certificate contains multiple CDP locations then each location download is attempted in sequential order, until a 200 response is received for any of the location. For each CDP location, Notary Project verification workflow will try to download the CRL. The user may be able to configure this threshold. If the CRL cannot be downloaded within the timeout threshold the revocation result will be "revocation unavailable".
