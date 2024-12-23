@@ -6,8 +6,6 @@ sidebar_position: 1
 
 Notation is a built-in verifier to Ratify. Notation currently supports X.509 based PKI and identities, and uses a trust store and trust policy to determine if a signed artifact is considered authentic.
 
-[[_TOC_]]
-
 ## Configuration
 
 ### Kubernetes
