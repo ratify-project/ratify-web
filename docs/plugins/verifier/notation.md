@@ -278,8 +278,8 @@ Starting from the root to the leaf certificate, for each certificate in the cert
 
 CRL download location (URL) can be obtained from the certificate's CRL Distribution Point (CDP) extension. If the certificate contains multiple CDP locations, each location download is attempted in sequential order until a 200 response is received for any location. For each CDP location, Notary Project verification workflow will try to download the CRL. If the CRL cannot be downloaded within the timeout threshold, the revocation result will be "revocation unavailable".
 
-### Config CRL
+### Configure CRL
 
 To enable or disable CRL cache with CLI, simply edit the `crl.cacheEnabled` in [config.json](#cli).
 
-For Kubernetes scenarios, update the `crl.cacheEnabled` in values.yaml.
+For Kubernetes scenarios, update the `crl.cacheEnabled` in `values.yaml` of Ratify Helm Chart.
