@@ -157,7 +157,9 @@ Sample Notation CLI config:
         ]
     },
     "crl": {
-      "cacheEnabled": false
+      "cache": {
+        "enabled": false
+      }
     }
 }
 ```
@@ -281,6 +283,6 @@ CRL download location (URL) can be obtained from the certificate's CRL Distribut
 ### Configure CRL
 
 Ratify added support for caching CRLs response to improve availability, latency and avoid network overhead.
-To enable or disable CRL cache with CLI, simply edit the `crl.cacheEnabled` in [config.json](#cli).
+To enable or disable CRL cache with CLI, simply edit the `crl.cache.enabled` in [config.json](#cli).
 
-For Kubernetes scenarios, update the `crl.cacheEnabled` in `values.yaml` of Ratify Helm Chart.
+For Kubernetes scenarios, update the `crl.cache.enabled` in `values.yaml` of Ratify Helm Chart.
