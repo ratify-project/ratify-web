@@ -280,6 +280,13 @@ Starting from the root to the leaf certificate, for each certificate in the cert
 
 CRL download location (URL) can be obtained from the certificate's CRL Distribution Point (CDP) extension. If the certificate contains multiple CDP locations, each location download is attempted in sequential order until a 200 response is received for any location. For each CDP location, Notary Project verification workflow will try to download the CRL. If the CRL cannot be downloaded within the timeout threshold, the revocation result will be "revocation unavailable".
 
+Trust Policy defines the following signature verification levels to provide different levels of enforcement for different scenarios. If you only need integrity and authenticity guarantees you can set `signatureVerification` to `permissive`.
+
+- `strict` : Signature verification is performed at `strict` level, which enforces all validations. If any of these validations fail, the signature verification fails. This is the recommended level in environments where a signature verification failure does not have high impact to other concerns (like application availability). It is recommended that build and development environments where images are initially created, or for high assurance at deploy time use `strict` level.
+- `permissive` : The `permissive` level enforces most validations, but will only logs failures for revocation and expiry. The `permissive` level is recommended to be used if signature verification is done at deploy time or runtime, and the user only needs integrity and authenticity guarantees.
+- `audit` : The `audit` level only enforces signature integrity if a signature is present. Failure of all other validations are only logged.
+- `skip` : The `skip` level does not perform any signature verification. This is useful when an application uses multiple artifacts, and has a mix of signed and unsigned artifacts. Note that `skip` cannot be used with a global scope (`*`).
+
 ### Configure CRL
 
 Ratify added support for caching CRLs response to improve availability, latency and avoid network overhead.
