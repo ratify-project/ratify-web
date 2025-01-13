@@ -141,6 +141,7 @@ NOTE: ORAS will attempt to use anonymous access if the authentication provider f
 1. [Kubernetes Secrets](#kubernetes-secrets)
 1. [AWS IAM Roles for Service Accounts (IRSA)](#aws-iam-roles-for-service-accounts-irsa)
 1. Azure Managed Identity
+1. [Alibaba Cloud RAM Roles for Service Accounts (RRSA)](#alibaba-cloud-ram-roles-for-service-accounts-rrsa)
 
 #### Docker Config
 
@@ -409,6 +410,12 @@ kubectl -n ratify get cm ratify-configuration -oyaml
     }
 ...
 ```
+
+#### Alibaba Cloud RAM Roles for Service Accounts (RRSA)
+
+Ratify pulls artifacts from a private AlibabaCloud Container Registry (ACR) using an ACR authorization token. This token is accessed using the federated workload identity assigned to pods via [RAM Roles for Service Accounts](https://www.alibabacloud.com/help/en/ack/serverless-kubernetes/user-guide/use-rrsa-to-authorize-pods-to-access-different-cloud-services). The AlibabaCloud RRSA Auth provider uses the [Alibaba SDK V2.0 GO SDK](https://www.alibabacloud.com/help/en/sdk/developer-reference/v2-manage-go-access-credentials#ec8021b053aqe) to retrieve basic auth credentials based on a role assigned to a Kubernetes Service Account referenced by a pod specification. For an overview on how to enable and work with RAM Roles for Service Accounts, a.k.a. RRSA,  please refer to [official document](https://www.alibabacloud.com/help/en/ack/serverless-kubernetes/user-guide/use-rrsa-to-authorize-pods-to-access-different-cloud-services#section-rmr-eeh-878).
+
+Please refer to [quick start](../../quickstarts/ratify-on-alibabacloud.md#pulling-acr-private-image-signature-manifest-with-rrsa) to configure Ratify for pulling from ACR private repository using RRSA.
 
 ## Notational Conventions
 
