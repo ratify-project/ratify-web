@@ -4,7 +4,7 @@ Refer to vulerability management and release documentation [here](https://github
 
 ## Signature Validation
 
-Ratify signs all dev images and dev helm OCI artifacts with Notary Project and Sigstore Cosign signatures. Ratify will support signing release images in the near future.
+Ratify signs all release images, dev images, and dev helm OCI artifacts with Notary Project and Sigstore Cosign signatures.
 
 ### Verifying Notary Project Signature
 
@@ -24,6 +24,9 @@ cat <<EOF > ./trustpolicy.json
         {
             "name": "ratify-images",
             "registryScopes": [
+              "ghcr.io/ratify-project/ratify",
+              "ghcr.io/ratify-project/ratify-base",
+              "ghcr.io/ratify-project/ratify-crds",
               "ghcr.io/ratify-project/ratify-dev",
               "ghcr.io/ratify-project/ratify-base-dev",
               "ghcr.io/ratify-project/ratify-crds-dev",
@@ -41,11 +44,11 @@ cat <<EOF > ./trustpolicy.json
 }
 EOF
 notation policy import ./trustpolicy.json
+notation verify ghcr.io/ratify-project/ratify:v1.4.0
 notation verify ghcr.io/ratify-project/ratify-dev:latest
-notation verify ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
 ```
 
-Sample output of `verify`:
+Sample output of `verify` for ratify dev image:
 
 ```shell
 Warning: Always verify the artifact using digest(@sha256:...) rather than a tag(:latest) because resolved digest may not point to the same signed artifact, as tags are mutable.
@@ -60,10 +63,10 @@ A keyless signature is published per image. The signature is uploaded to the Rek
 
 ```shell
 cosign verify \
-  --certificate-identity "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
+  --certificate-identity-regexp "https://github.com/ratify-project/ratify/.github/workflows/publish-package.yml@*" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-github-workflow-repository ratify-project/ratify \
-  ghcr.io/ratify-project/ratify-dev:latest
+  ghcr.io/ratify-project/ratify:v1.4.0
 ```
 
 ```shell
@@ -71,10 +74,10 @@ cosign verify \
   --certificate-identity "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-github-workflow-repository ratify-project/ratify \
-  ghcr.io/ratify-project/ratify-chart-dev/ratify:0-dev
+  ghcr.io/ratify-project/ratify-dev:latest
 ```
 
-Sample output:
+Sample output of verifcation of ratify dev image:
 
 ```shell
 Verification for ghcr.io/ratify-project/ratify-dev:latest --
