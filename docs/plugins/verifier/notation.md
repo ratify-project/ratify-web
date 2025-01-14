@@ -158,7 +158,7 @@ Sample Notation CLI config:
     },
     "crl": {
       "cache": {
-        "enabled": false
+        "enabled": true
       }
     }
 }
@@ -270,7 +270,7 @@ Sample Notation CLI config with timestamping configuration:
 
 Ratify supports validating signing identity (certificate and certificate chain) revocation status using [certificate revocation evaluation](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#certificate-revocation-evaluation) as per revocation setting in Notation trust policy. The CRL implementation uses Notation libraries and follows the [Notary Project specification](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#crls).
 
-Certificate validation is an essential step during signature validation. Currently, Ratify supports checking for revoked certificates through OCSP supported by the notation-go library. However, OCSP validation requires an internet connection for each validation, while CRL could be cached for better performance. As the notary-project added CRL support for notation signature validation, Ratify utilized it.
+Certificate validation is an essential step during signature validation. Currently, Ratify supports checking for revoked certificates through OCSP supported by the notation-go library. However, OCSP validation requires an internet connection for each validation, while CRL could be cached for better performance. As the Notary Project added CRL support for notation signature validation, Ratify utilized it.
 
 Starting from the root to the leaf certificate, for each certificate in the certificate chain, perform the following steps to check its revocation status:
 
