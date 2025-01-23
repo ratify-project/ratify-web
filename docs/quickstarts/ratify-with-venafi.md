@@ -148,13 +148,14 @@ Next we will need to deploy the trusted Root certificate used to issue the signi
 ```shell
 cat > venafi_root.yaml << EOF
 apiVersion: config.ratify.deislabs.io/v1beta1
-kind: CertificateStore
+kind: KeyManagementProvider
 metadata:
   name: ratify-notation-inline-cert
   namespace: gatekeeper-system
 spec:
-  provider: inline
+  type: inline
   parameters:
+    contentType: certificate
     value: |
       -----BEGIN CERTIFICATE-----
       ...
