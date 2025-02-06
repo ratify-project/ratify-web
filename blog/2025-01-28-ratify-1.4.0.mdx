@@ -13,7 +13,7 @@ We are thrilled to announce the release of [Ratify v1.4.0](https://github.com/ra
    
 Security in supply chain verification is critical, and this release marks an important step forward with the addition of revocation checking. Certificate revocation checking enhances security by ensuring that compromised or expired certificates are not used, thereby maintaining the integrity and trustworthiness of digital signatures. Ratify supports validating signing identity (certificate and certificate chain) revocation status. 
 
-The CRL implementation uses Notation libraries and follows the [Notary Project specification](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#crls). Since [Notation v1.3.0](https://notaryproject.dev/blog/2025/announcing-notation-v1-3/), Ratify users can now use revocation checking by default if your images are signed by Notation since [CRL files are cached by default](https://notaryproject.dev/docs/user-guides/how-to/directory-structure/#caches). It enables end-to-end revocation checking for validating image signature since reduced network traffic to the CRL server which minimizes potential server throttling and enhanced performance with lower latency. See [Certificate Revocation Check (CRL) guidance](https://ratify.dev/docs/plugins/verifier/notation#certificate-revocation-check-crl) for details.
+The CRL implementation uses Notation libraries and follows the [Notary Project specification](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#crls). Since [Notation v1.3.0](https://notaryproject.dev/blog/2025/announcing-notation-v1-3/), Ratify users can now use revocation checking by default if your images are signed by [Notation](https://notaryproject.dev/docs/user-guides/how-to/directory-structure/#caches) since CRL cache is enabled by default to enhance performance. It enables end-to-end revocation checking for validating image signature since reduced network traffic to the CRL server which minimizes potential server throttling and enhanced performance with lower latency. See [Certificate Revocation Check (CRL) guidance](https://ratify.dev/docs/plugins/verifier/notation#certificate-revocation-check-crl) for details.
 
 ### Streamlined Notary Project Trust Policy Attributes in Helm Chart
 
@@ -33,7 +33,7 @@ Ratify community continues to expand its support for cloud-native ecosystems wit
 
 Ratify official images are now signed by Notation and Cosign to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/troubleshoot/security/#signature-validation).
 
-### Enhanced diagnose experience
+### Enhanced Diagnostic Experience
 
 This release also adds `timestamp` and `traceID` in verification response to help users identity the failing request easily. The default constraint template is updated to report the `timestamp` and `traceID` when validation fails.
 
