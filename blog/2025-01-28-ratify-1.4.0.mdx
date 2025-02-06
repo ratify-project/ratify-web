@@ -1,0 +1,56 @@
+---
+slug: ratify-v1.4.0-is-available
+title: Announcing Ratify v1.4.0 - Revocation Checking with CRL Support, Enhanced Out-of-box Experience, and New Cloud Provider Support
+authors: [ratify]
+tags: [verification]
+---
+
+We are thrilled to announce the release of [Ratify v1.4.0](https://github.com/ratify-project/ratify/releases/tag/v1.4.0)! This milestone release introduces significant new features that enhance Ratify's capabilities as a trusted supply chain security tool. As always, we deeply appreciate the contributions from the community, which make these advancements possible.
+
+## New Features
+
+### Revocation Checking with Certificate Revocation List (CRL) Support
+   
+Security in supply chain verification is critical, and this release marks an important step forward with the addition of revocation checking. Certificate revocation checking enhances security by ensuring that compromised or expired certificates are not used, thereby maintaining the integrity and trustworthiness of digital signatures. Ratify supports validating signing identity (certificate and certificate chain) revocation status. 
+
+The CRL implementation uses Notation libraries and follows the [Notary Project specification](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#crls). Since [Notation v1.3.0](https://notaryproject.dev/blog/2025/announcing-notation-v1-3/), Ratify users can now use revocation checking by default if your images are signed by [Notation](https://notaryproject.dev/docs/user-guides/how-to/directory-structure/#caches) since CRL cache is enabled by default to enhance performance. It enables end-to-end revocation checking for validating image signature since reduced network traffic to the CRL server which minimizes potential server throttling and enhanced performance with lower latency. See [Certificate Revocation Check (CRL) guidance](https://ratify.dev/docs/plugins/verifier/notation#certificate-revocation-check-crl) for details.
+
+### Streamlined Notary Project Trust Policy Attributes in Helm Chart
+
+To provide an out-of-the-box experience for users, this release adds more Notary Project trust policy attributes to the `values.yaml` of the Ratify Helm Chart. This enhancement addresses three major scenarios outlined in [this issue](https://github.com/ratify-project/ratify/issues/1965), simplifying configuration and streamlining deployment processes for these common use cases:
+
+- The signed images are stored in a public registry
+- The signed images are stored in a private registry with certificates stored in AKV
+- The signed images are stored in a both public and private registry.
+
+### Alibaba Cloud RRSA Store Authentication Provider
+
+Ratify community continues to expand its support for cloud-native ecosystems with the introduction of a new authentication provider for the Alibaba Cloud RRSA Store. Users leveraging Alibaba Cloud’s RRSA can now seamlessly integrate with Ratify, enabling secure artifact signing and verification within their workflows. This feature reflects our commitment to supporting a diverse and growing range of platforms in the cloud-native landscape. As a new partner of Ratify, Alibaba Cloud also created a [guidance](https://ratify.dev/docs/quickstarts/ratify-on-alibabacloud) on how to use Ratify on Alibaba Cloud using Alibaba Cloud Container Service for Kubernetes (ACK) and Alibaba Cloud Container Registry (ACR).
+
+## Other enhancements
+
+### Image signing
+
+Ratify official images are now signed by Notation and Cosign to ensure their integrity and authenticity. This helps defend against supply chain attacks by preventing tampered or untrusted images from being deployed in production environments. For more information, see the [Signature Validation document](https://ratify.dev/docs/troubleshoot/security/#signature-validation).
+
+### Enhanced Diagnostic Experience
+
+This release also adds `timestamp` and `traceID` in verification response to help users identity the failing request easily. The default constraint template is updated to report the `timestamp` and `traceID` when validation fails.
+
+## A Heartfelt Thanks to Our Contributors
+
+Open-source projects thrive on the energy and dedication of their contributors. We are delighted to welcome five new contributors who have joined us in this release. Their efforts in refining the codebase, adding features, and addressing issues have been invaluable. To our new contributors: thank you for your hard work and passion for making Ratify better!
+
+## How to Get Started
+
+To start exploring Ratify v1.4.0:
+
+- Check out the [release notes](https://github.com/ratify-project/ratify/releases/tag/v1.4.0) for a detailed overview of changes and improvements.
+- Upgrade to the latest release by following the [installation guide](https://ratify.dev/docs/quick-start).
+- Provide feedback by opening issues or discussions on our [GitHub repository](https://github.com/ratify-project/ratify/issues).
+
+## Join the Ratify Community
+
+Ratify’s growth is driven by an engaged and collaborative community. Whether you’re a developer, security professional, or just starting with supply chain security, we welcome your input and involvement. Join the community on our GitHub Discussions, Slack channel, community meeting, or share your ideas for improving Ratify.
+
+Thank you for your continued support, and we look forward to hearing your feedback on this exciting release!
