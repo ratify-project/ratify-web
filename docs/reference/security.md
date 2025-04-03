@@ -14,9 +14,12 @@ The public certificate for verification can be found at `ratify.dev/.well-known/
 
 > The latest certificate for verification can always be found at `ratify.dev/.well-known/pki-validation/ratify-verification.crt`. Refer to [Certificate Versioning](#certificate-versioning) guidance for details on verifying older artifacts.
 
+Example: Verify Ratify release images for v1.4.0 and Ratify dev images
 ```shell
 curl -LO ratify.dev/.well-known/pki-validation/ratify-verification.crt
+curl -LO ratify.dev/.well-known/pki-validation/ratify-verification_20250328.crt
 notation cert add --type ca --store ratify-verify ./ratify-verification.crt
+notation cert add --type ca --store ratify-verify ./ratify-verification_20250328.crt
 cat <<EOF > ./trustpolicy.json
 {
     "version": "1.0",
