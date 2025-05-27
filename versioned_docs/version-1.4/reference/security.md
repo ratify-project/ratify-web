@@ -1,6 +1,6 @@
 # Security
 
-Refer to vulerability management and release documentation [here](https://github.com/ratify-project/ratify/blob/dev/SECURITY.md).
+Refer to vulerability management and release documentation [here](https://github.com/notaryproject/ratify/blob/dev/SECURITY.md).
 
 ## Signature Validation
 

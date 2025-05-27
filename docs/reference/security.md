@@ -1,6 +1,6 @@
 # Security
 
-Refer to vulerability management and release documentation [here](https://github.com/ratify-project/ratify/blob/dev/SECURITY.md).
+Refer to vulerability management and release documentation [here](https://github.com/notaryproject/ratify/blob/dev/SECURITY.md).
 
 ## Signature Validation
 
@@ -74,7 +74,7 @@ cosign verify \
 
 ```shell
 cosign verify \
-  --certificate-identity "https://github.com/ratify-project/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
+  --certificate-identity "https://github.com/notaryproject/ratify/.github/workflows/publish-dev-assets.yml@refs/heads/dev" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-github-workflow-repository ratify-project/ratify \
   ghcr.io/ratify-project/ratify-dev:latest

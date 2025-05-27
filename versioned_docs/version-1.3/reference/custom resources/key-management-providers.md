@@ -104,7 +104,7 @@ status:
 
 Samples:
 
-- [Inline KMP](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_inline.yaml)
+- [Inline KMP](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_inline.yaml)
 
 ### Azure Key Vault
 
@@ -144,8 +144,8 @@ spec:
 
 Samples:
 
-- [Azure Key Vault KMP](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv.yaml)
-- [Azure Key Vault KMP Refresh Enabled](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv_refresh_enabled.yaml)
+- [Azure Key Vault KMP](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv.yaml)
+- [Azure Key Vault KMP Refresh Enabled](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv_refresh_enabled.yaml)
 
 ## Limitation
 
@@ -161,7 +161,7 @@ Samples:
 
 - Certificate/Key MUST be in PEM format. PKCS12 format with nonexportable private keys can NOT be parsed due to limitation of Golang certificate library.
 
-- Refer to Azure Key Vault setup guide ratify-on-azure [quick start](https://github.com/ratify-project/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
+- Refer to Azure Key Vault setup guide ratify-on-azure [quick start](https://github.com/notaryproject/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
 > Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using an [inline key management provider](#inline) to reduce risk of exposing a private key.
 

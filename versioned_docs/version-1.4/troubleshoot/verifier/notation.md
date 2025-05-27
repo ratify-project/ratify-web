@@ -21,7 +21,7 @@ kubectl get namespacedverifiers.config.ratify.deislabs.io -n <namespace> -o yaml
 ```
 
 ## Verification Errors
-If an artifact verification failed for some reason, please check the logs in Ratify pod to inspect the related error logs. If you have applied the latest default [constraint templates](https://github.com/ratify-project/ratify/blob/dev/library/default/template.yaml), the error response will append trace-id to the error message. You can use this trace-id to search the logs in Ratify pod.
+If an artifact verification failed for some reason, please check the logs in Ratify pod to inspect the related error logs. If you have applied the latest default [constraint templates](https://github.com/notaryproject/ratify/blob/dev/library/default/template.yaml), the error response will append trace-id to the error message. You can use this trace-id to search the logs in Ratify pod.
 
 An example of error response that occurs when Notation verifier fails to verify an artifact is shown below.
 ```bash

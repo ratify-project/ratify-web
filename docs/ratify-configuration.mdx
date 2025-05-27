@@ -12,7 +12,7 @@ When Ratify runs in cli serve mode, configuration file can be dynamically update
 ## CRDs
 Ratify also supports configuration through K8s [CRDs](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). The configuration can be updated using natively supported `kubectl` commands.
 
-When running Ratify in a pod, the `ConfigMap` will be mounted in the pod at the default configuration file path. Ratify will initialize with specifications from the configuration file. CRDs will override store and verifier defined in the configuration file if they exist at runtime. Our team is in the process of converting configuration components into Ratify CRDs to support a more native k8s experience. Please review ratify CRDs samples [here](https://github.com/ratify-project/ratify/tree/main/config/samples).
+When running Ratify in a pod, the `ConfigMap` will be mounted in the pod at the default configuration file path. Ratify will initialize with specifications from the configuration file. CRDs will override store and verifier defined in the configuration file if they exist at runtime. Our team is in the process of converting configuration components into Ratify CRDs to support a more native k8s experience. Please review ratify CRDs samples [here](https://github.com/notaryproject/ratify/tree/main/config/samples).
 
 Currently supported components through CRDs are:
 
@@ -45,5 +45,5 @@ kubectl delete verifiers.config.ratify.deislabs.io/verifier-notary
 
 ### Limitations
 Currently Ratify only supports single namespace, Ratify cannot distinguish CRs with the same metadata name from different namespaces.
-To ensure predictable results, please install all CRs in a single namespace. This limitation is being tracked by issue [1061](https://github.com/ratify-project/ratify/issues/1061)
+To ensure predictable results, please install all CRs in a single namespace. This limitation is being tracked by issue [1061](https://github.com/notaryproject/ratify/issues/1061)
 
