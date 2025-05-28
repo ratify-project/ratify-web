@@ -31,8 +31,8 @@ Ratify can generate various errors, either from its core workflow or from extern
 | ---- | ----------- | ---------------------- |
 | PLUGIN_INIT_FAILURE | plugin init failure | The plugin fails to be initialized. Please check error details and validate the plugin config is correctly provided. |
 | PLUGIN_NOT_FOUND | plugin not found | No plugin was found. Verify the required plugin is supported by Ratify and check the plugin name is entered correctly. |
-| DOWNLOAD_PLUGIN_FAILURE | download plugin failure | Failed to download plugin. Please verify the provided plugin configuration is correct and check the error details for further investigation. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/dynamic-plugins.md for more information. |
-| CERT_INVALID | cert invalid | The certificate is invalid. Please verify the provided inline certificates or certificates fetched from key vault are in valid format. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/crds/certificate-stores.md for more information. |
+| DOWNLOAD_PLUGIN_FAILURE | download plugin failure | Failed to download plugin. Please verify the provided plugin configuration is correct and check the error details for further investigation. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/dynamic-plugins.md for more information. |
+| CERT_INVALID | cert invalid | The certificate is invalid. Please verify the provided inline certificates or certificates fetched from key vault are in valid format. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/crds/certificate-stores.md for more information. |
 | PROVIDER_NOT_FOUND | provider not found | No provider was found. Please verify that the necessary policy provider has been registered and that the provider's name has been entered correctly. |
 
 #### Verifier errors
@@ -51,13 +51,13 @@ Ratify can generate various errors, either from its core workflow or from extern
 #### Referrer Store errors
 | Code | Description  | Trouble Shooting Guide |
 | ---- | -----------  | ---------------------- |
-| LIST_REFERRERS_FAILURE | list referrers failure | Referrer store fails to list the referrers. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md#listreferrers for more details. |
-| GET_SUBJECT_DESCRIPTOR_FAILURE | get subject descriptor failure | Referrer store fails to get the subject descriptor. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md#getsubjectdescriptor for more details. |
-| GET_REFERRER_MANIFEST_FAILURE | get reference manifest failure | Referrer store fails to get the reference manifest. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md#getreferencemanifest for more details. |
+| LIST_REFERRERS_FAILURE | list referrers failure | Referrer store fails to list the referrers. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md#listreferrers for more details. |
+| GET_SUBJECT_DESCRIPTOR_FAILURE | get subject descriptor failure | Referrer store fails to get the subject descriptor. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md#getsubjectdescriptor for more details. |
+| GET_REFERRER_MANIFEST_FAILURE | get reference manifest failure | Referrer store fails to get the reference manifest. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md#getreferencemanifest for more details. |
 | GET_BLOB_CONTENT_FAILURE | get blob content failure | Referrer store fails to get the blob content. | Check the original error for more details. |
-| REFERRER_STORE_FAILURE | referrer store failure | Referrer store fails to get the blob content. Refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md#getblobcontent for more details. |
+| REFERRER_STORE_FAILURE | referrer store failure | Referrer store fails to get the blob content. Refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md#getblobcontent for more details. |
 | CREATE_REPOSITORY_FAILURE | create repository failure | Failed to create repository. Please verify the repository config is configured correctly and check error details for more information. |
 | REPOSITORY_OPERATION_FAILURE | repository operation failure | The operation to the repository failed. Please check the error details for more information. |
 | MANIFEST_INVALID | manifest invalid | The manifest is invalid. Please validate the manifest is correctly formatted. |
-| REFERRERS_NOT_FOUND | referrers not found | No referrers are found. Please verify the subject has attached expected artifacts and refer to https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md to investigate Referrer Store configuration. |
+| REFERRERS_NOT_FOUND | referrers not found | No referrers are found. Please verify the subject has attached expected artifacts and refer to https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md to investigate Referrer Store configuration. |
 

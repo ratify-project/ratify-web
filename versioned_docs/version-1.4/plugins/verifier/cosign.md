@@ -148,7 +148,7 @@ Prerequisites:
 1. Install Ratify
 
 ```bash
-helm repo add ratify https://ratify-project.github.io/ratify
+helm repo add ratify https://notaryproject.github.io/ratify
 helm install ratify ratify/ratify \
     --atomic \
     --namespace gatekeeper-system \
@@ -161,8 +161,8 @@ helm install ratify ratify/ratify \
 2. Apply Constraint and ConstraintTemplate
 
 ```bash
-kubectl apply -f https://ratify-project.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://ratify-project.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://notaryproject.github.io/ratify/library/default/template.yaml
+kubectl apply -f https://notaryproject.github.io/ratify/library/default/samples/constraint.yaml
 ```
 
 3. Apply Cosign verifier

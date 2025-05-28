@@ -4,14 +4,14 @@ This document provides a walkthrough on how to use the ratify command line to ve
 
 ## Verify notation signature with Ratify cli
 
-1. Download the latest Ratify CLI on a Linux AMD64 machine. Go to [release page](https://github.com/ratify-project/ratify/releases/) if you are on other platforms.
+1. Download the latest Ratify CLI on a Linux AMD64 machine. Go to [release page](https://github.com/notaryproject/ratify/releases/) if you are on other platforms.
 ```bash
-curl -L https://github.com/ratify-project/ratify/releases/download/v1.2.1/ratify_1.2.1_Linux_amd64.tar.gz | tar xvzC ~/bin/ ratify
+curl -L https://github.com/notaryproject/ratify/releases/download/v1.2.1/ratify_1.2.1_Linux_amd64.tar.gz | tar xvzC ~/bin/ ratify
 ```
 
 2. Download a local verification certificate for sample image
 ```bash
-curl -sSLO https://raw.githubusercontent.com/ratify-project/ratify/dev/test/testdata/notation.crt
+curl -sSLO https://raw.githubusercontent.com/notaryproject/ratify/dev/test/testdata/notation.crt
 ```
 3. Prepare configuration file
 
@@ -19,7 +19,7 @@ Store/Verifier/Policy configuration:
 - Setup oras store to define how artifacts should be fetched
 - Define rego policy to validate the result of verification report
 - Setup Notation verifier with path to the local verification cert downloaded from previous step.
-- `verificationCerts` configuration may contain both CA and TSA certification, see tracking issue [1673](https://github.com/ratify-project/ratify/issues/1673).
+- `verificationCerts` configuration may contain both CA and TSA certification, see tracking issue [1673](https://github.com/notaryproject/ratify/issues/1673).
 - Local files in the default notation ```trustStores``` path will also be added to the verification certs.
 
 ```bash
@@ -118,4 +118,4 @@ Sample verification result:
 
 ## Limitation
 
-Ratify CLI currently does not have feature parity with k8s in cluster external data provider support. There are feature [gaps](https://github.com/ratify-project/ratify/issues/1300) in areas like inline and Azure Key Vault Key Management Provider. To help us prioritize, please create [new](https://github.com/ratify-project/ratify/issues/new?assignees=&labels=enhancement%2Ctriage&projects=&template=feature-request.yaml) tracking issues or vote on [existing](https://github.com/ratify-project/ratify/issues?q=is%3Aissue+is%3Aopen+cli) issues.
+Ratify CLI currently does not have feature parity with k8s in cluster external data provider support. There are feature [gaps](https://github.com/notaryproject/ratify/issues/1300) in areas like inline and Azure Key Vault Key Management Provider. To help us prioritize, please create [new](https://github.com/notaryproject/ratify/issues/new?assignees=&labels=enhancement%2Ctriage&projects=&template=feature-request.yaml) tracking issues or vote on [existing](https://github.com/notaryproject/ratify/issues?q=is%3Aissue+is%3Aopen+cli) issues.

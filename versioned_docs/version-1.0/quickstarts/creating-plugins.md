@@ -12,7 +12,7 @@ The easiest way to get started is to use [deislabs/ratify-verifier-plugin](https
 
 ## Store
 
-There is a sample store plugin located at [plugins/referrerstore/sample/sample.go](https://github.com/ratify-project/ratify/blob/main/plugins/referrerstore/sample/sample.go)
+There is a sample store plugin located at [plugins/referrerstore/sample/sample.go](https://github.com/notaryproject/ratify/blob/main/plugins/referrerstore/sample/sample.go)
 
 To build the plugin and place it into your plugins dir:
 

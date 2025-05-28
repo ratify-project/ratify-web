@@ -104,7 +104,7 @@ status:
 
 Samples:
 
-- [Inline KMP](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_inline.yaml)
+- [Inline KMP](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_inline.yaml)
 
 ### Azure Key Vault
 
@@ -144,8 +144,8 @@ spec:
 
 Samples:
 
-- [Azure Key Vault KMP](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv.yaml)
-- [Azure Key Vault KMP Refresh Enabled](https://github.com/ratify-project/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv_refresh_enabled.yaml)
+- [Azure Key Vault KMP](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv.yaml)
+- [Azure Key Vault KMP Refresh Enabled](https://github.com/notaryproject/ratify/blob/dev/config/samples/clustered/kmp/config_v1beta1_keymanagementprovider_akv_refresh_enabled.yaml)
 
 ## Limitation
 
@@ -153,7 +153,7 @@ Samples:
 
 - Ratify supports periodic refresh and polling of certificates/keys from Azure Key Vault. The `refreshInterval` field can be set to a time duration to refresh the certificates/keys. When no version of the certificate or key is specified, the latest version will be fetched and the resource will be updated. However, if a version is specified, the resource will be locked to that version and will not be updated.
 
-- If the `refreshInterval` is set, verification may fail if the artifact being verified is signed with an older version of the certificate/key even if the older version is still valid/enabled. This is because Ratify only uses the latest stored certificate/key for verification. However, [support n-versions of certificates/keys](https://github.com/ratify-project/ratify/issues/1751) is planned in future releases.
+- If the `refreshInterval` is set, verification may fail if the artifact being verified is signed with an older version of the certificate/key even if the older version is still valid/enabled. This is because Ratify only uses the latest stored certificate/key for verification. However, [support n-versions of certificates/keys](https://github.com/notaryproject/ratify/issues/1751) is planned in future releases.
 
 - If `keys` are configured, the managed identity with `clientID` specified MUST be assigned the correct permissions to list, view, and download keys in the configured Key Vault.
 
@@ -161,7 +161,7 @@ Samples:
 
 - Certificate/Key MUST be in PEM format. PKCS12 format with nonexportable private keys can NOT be parsed due to limitation of Golang certificate library.
 
-- Refer to Azure Key Vault setup guide ratify-on-azure [quick start](https://github.com/ratify-project/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
+- Refer to Azure Key Vault setup guide ratify-on-azure [quick start](https://github.com/notaryproject/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-access-policy-for-akv).
 
 > Note: If you were unable to configure certificate policy, please consider specifying the public root certificate value inline using an [inline key management provider](#inline) to reduce risk of exposing a private key.
 

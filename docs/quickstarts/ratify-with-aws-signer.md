@@ -33,7 +33,7 @@ There are a couple tools you will need locally to complete this guide:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/): This is used to interact with the EKS cluster we will create
 - [helm](https://helm.sh/docs/intro/quickstart/): This is used to install ratify components into the EKS cluster
 - [docker](https://www.docker.com/get-started): This is used to build the container image we will deploy in this guide
-- [ratify](https://github.com/ratify-project/ratify/releases): This is used to check images from ECR locally
+- [ratify](https://github.com/notaryproject/ratify/releases): This is used to check images from ECR locally
 - [jq](https://stedolan.github.io/jq/): This is used to capture variables from json returned by commands
 - [notation](https://github.com/notaryproject/notation): This is used to sign the container image we will deploy in this guide
 - [AWS Signer notation plugin](https://docs.aws.amazon.com/signer/latest/developerguide/image-signing-prerequisites.html): this is required to use `notation` with AWS Signer resources

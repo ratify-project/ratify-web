@@ -1,7 +1,7 @@
 # Store
 
 A `Store` resource defines how to discover and retrieve reference types for a subject.
-Please review doc [here](https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md) for a full list of store capabilities.
+Please review doc [here](https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md) for a full list of store capabilities.
 
 ## Scope
 Stores can be defined as cluster-wide resources(using the kind `Store`) or namespaced resources(using the kind `NamespacedStore`).

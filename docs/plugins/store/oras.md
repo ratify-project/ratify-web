@@ -44,8 +44,8 @@ spec:
 
 | Name           | Required | Description                                                                                                                                                                                                        | Default Value               |
 | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
-| cosignEnabled  | no       | This must be `true` if cosign verifier is enabled. Read more about cosign verifier [here](https://github.com/ratify-project/ratify/blob/main/plugins/verifier/cosign/README.md).                                         | `false`                     |
-| authProvider   | no       | This is only required if pulling from a private repository. For all supported auth mode, please review [oras-auth-provider](https://github.com/ratify-project/ratify/blob/main/docs/reference/oras-auth-provider.md) doc | dockerAuth                  |
+| cosignEnabled  | no       | This must be `true` if cosign verifier is enabled. Read more about cosign verifier [here](https://github.com/notaryproject/ratify/blob/main/plugins/verifier/cosign/README.md).                                         | `false`                     |
+| authProvider   | no       | This is only required if pulling from a private repository. For all supported auth mode, please review [oras-auth-provider](https://github.com/notaryproject/ratify/blob/main/docs/reference/oras-auth-provider.md) doc | dockerAuth                  |
 | cacheEnabled   | no       | Oras cache, cache for all referrers for a subject. Note: global cache must be enabled first                                                                                                                        | `false`                     |
 | ttl            | no       | Time to live for entries in oras cache                                                                                                                                                                             | 10 seconds                  |
 | useHttp        | no       | Local testing ONLY. This needs to be set to `true` for  local insecure registries                                                                                                                                  | `false`                     |
@@ -171,14 +171,14 @@ Both the above modes uses a k8s secret of type ```dockerconfigjson``` that is de
 
 Ratify pulls artifacts from a private Azure Container Registry using Workload Federated Identity in an Azure Kubernetes Service cluster. For an overview on how workload identity operates in Azure, refer to the [documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/workload-identity-federation). You can use workload identity federation to configure an Azure AD app registration or user-assgined managed identity. 
 
-Please refer to [quick start](https://github.com/ratify-project/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-workload-identity-for-acr) to configure workload identity for ACR.
+Please refer to [quick start](https://github.com/notaryproject/ratify/blob/main/docs/quickstarts/ratify-on-azure.md#configure-workload-identity-for-acr) to configure workload identity for ACR.
 The official steps for setting up Workload Identity on AKS can be found [here](https://azure.github.io/azure-workload-identity/docs/quick-start.html).  
 
 #### Kubernetes Secrets
 
 Ratify resolves registry credentials from [Docker Config Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets) in the cluster. Ratify considers kubernetes secrets in two ways:
 
-1. The configuration can specify a list of `secrets`. Each entry REQUIRES the `secretName` field. The `namespace` field MUST also be provided if the secret does not exist in the namespace Ratify is deployed in. The Ratify helm chart contains a [ratify-manager-role-clusterrole.yaml](https://github.com/ratify-project/ratify/blob/main/charts/ratify/templates/ratify-manager-role-clusterrole.yaml) file with role assignments. If a namespace other than Ratify's namespace is provided in the secret list, the user MUST add a new role binding to the cluster role for that new namespace.
+1. The configuration can specify a list of `secrets`. Each entry REQUIRES the `secretName` field. The `namespace` field MUST also be provided if the secret does not exist in the namespace Ratify is deployed in. The Ratify helm chart contains a [ratify-manager-role-clusterrole.yaml](https://github.com/notaryproject/ratify/blob/main/charts/ratify/templates/ratify-manager-role-clusterrole.yaml) file with role assignments. If a namespace other than Ratify's namespace is provided in the secret list, the user MUST add a new role binding to the cluster role for that new namespace.
 
 1. Ratify considers the `imagePullSecrets` specified in the service account associated with Ratify. The `serviceAccountName` field specifies the service account associated with Ratify. Ratify MUST be assigned a role to read the service account and secrets in the Ratify namespace.
 
@@ -297,7 +297,7 @@ serviceAccount:
   name: ratify-admin
 ```
 
-8. Specify the _AWS ECR Basic Auth_ provider in the Ratify helm chart [values](https://github.com/ratify-project/ratify/blob/main/charts/ratify/values.yaml) file.
+8. Specify the _AWS ECR Basic Auth_ provider in the Ratify helm chart [values](https://github.com/notaryproject/ratify/blob/main/charts/ratify/values.yaml) file.
 
 ```yaml
 oras:
@@ -313,7 +313,7 @@ oras:
       region: ""
 ```
 
-9. If your AWS environment requires you to use a custom AWS endpoint resolver then you need to enable this feature in the helm chart [values](https://github.com/ratify-project/ratify/blob/main/charts/ratify/values.yaml) file.
+9. If your AWS environment requires you to use a custom AWS endpoint resolver then you need to enable this feature in the helm chart [values](https://github.com/notaryproject/ratify/blob/main/charts/ratify/values.yaml) file.
 
 ```yaml
 oras:
@@ -339,7 +339,7 @@ AWS ECR basic auth API override partition: <AWS_PARTITION>
 AWS ECR basic auth API override region: <AWS_REGION>
 ```
 
-10. [Install Ratify](https://github.com/ratify-project/ratify#quick-start)
+10. [Install Ratify](https://github.com/notaryproject/ratify#quick-start)
 
 ```shell
 helm install ratify \

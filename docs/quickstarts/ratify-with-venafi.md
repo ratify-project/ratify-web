@@ -27,7 +27,7 @@ There are a number of tools that you will need locally to complete this guide:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/): This is used to interact with the cluster
 - [helm](https://helm.sh/docs/intro/quickstart/): This is used to install ratify components into the cluster
 - [docker](https://www.docker.com/get-started): This is used to build the container image we will deploy in this guide
-- [ratify](https://github.com/ratify-project/ratify/releases): This is used to check images from ECR locally
+- [ratify](https://github.com/notaryproject/ratify/releases): This is used to check images from ECR locally
 - [jq](https://stedolan.github.io/jq/): This is used to capture variables from json returned by commands
 - [notation](https://github.com/notaryproject/notation): This is used to sign the container image we will deploy in this guide
 - [Venafi CodeSign Protect notation plugin](https://github.com/Venafi/notation-venafi-csp): this is required to use `notation` with [Venafi CodeSign Protect](https://venafi.com/codesign-protect/) signing identities

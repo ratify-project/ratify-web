@@ -2,7 +2,7 @@ Store
 ---
 
 A `Store` resource defines how to discover and retrieve reference types for a subject.
-Please review doc [here](https://github.com/ratify-project/ratify/blob/main/docs/reference/store.md) for a full list of store capabilities.
+Please review doc [here](https://github.com/notaryproject/ratify/blob/main/docs/reference/store.md) for a full list of store capabilities.
 
 ## Table of Contents
 - [Store](#store)
@@ -30,7 +30,7 @@ Namespaced stores will only apply to the namespace in which they are defined. If
 Cluster-wide stores are applied as the default global store if no namespaced store is specified in required namespace.
 
 ## Common properties
-To see more sample store configuration, click [here](https://github.com/ratify-project/ratify/tree/main/config/samples). Each resource must specify the `name` of the store.
+To see more sample store configuration, click [here](https://github.com/notaryproject/ratify/tree/main/config/samples). Each resource must specify the `name` of the store.
 
 ```yml
 apiVersion: config.ratify.deislabs.io/v1beta1
@@ -69,8 +69,8 @@ spec:
 ```
 | Name           | Required | Description                                                                                                                                                                                                              | Default Value               |
 | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
-| cosignEnabled  | no       | This must be `true` if cosign verifier is enabled. Read more about cosign verifier [here](https://github.com/ratify-project/ratify/blob/main/plugins/verifier/cosign/README.md).                                         | `false`                     |
-| authProvider   | no       | This is only required if pulling from a private repository. For all supported auth mode, please review [oras-auth-provider](https://github.com/ratify-project/ratify/blob/main/docs/reference/oras-auth-provider.md) doc | dockerConfig                  |
+| cosignEnabled  | no       | This must be `true` if cosign verifier is enabled. Read more about cosign verifier [here](https://github.com/notaryproject/ratify/blob/main/plugins/verifier/cosign/README.md).                                         | `false`                     |
+| authProvider   | no       | This is only required if pulling from a private repository. For all supported auth mode, please review [oras-auth-provider](https://github.com/notaryproject/ratify/blob/main/docs/reference/oras-auth-provider.md) doc | dockerConfig                  |
 | cacheEnabled   | no       | Oras cache, cache for all referrers for a subject. Note: global cache must be enabled first                                                                                                                              | `false`                     |
 | ttl            | no       | Time to live for entries in oras cache                                                                                                                                                                                   | 10 seconds                  |
 | useHttp        | no       | Local testing ONLY. This needs to be set to `true` for  local insecure registries                                                                                                                                        | `false`                     |

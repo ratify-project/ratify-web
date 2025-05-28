@@ -19,7 +19,7 @@ Ratify’s security guarantees rely on its performance at various cluster scales
 - **Minimal registry request throttling (429 reponse) can lead to drastic performance degradation for Ratify.** In large clusters (10k pods+) in XS ACR regions, Ratify's 429 rate spikes. This leads to back-off retries that prolong each verification operation. Longer running requests can lead to more concurrent requests being processed at once, which eventually increases pod memory usage. Throttling also increases the number of request timeouts leading to the K8s workload resource attempting to recreate the pod. This in turn generates more requests to Ratify. 
 - **Ratify's memory usage is directly correlated to the number of resources on the cluster.** Memory usage is a good indicator for Ratify deployment scale out. We may consider adding a Horizontal Pod Autoscaler (HPA) based on memory consumption.
 - **Ratify's CPU usage is fairly minimal**. Although CPU usage was not measured over the course of the test, but instead measured once after, the CPU limits seem to be well below the currently limits set. We may consider lowering the CPU request.  
-- **The performance benefit of the distributed cache for high availability usage is inconclusive.** Large cluster tests with distributed cache enabled in an XS region resulted in anomalous behavior and the logs show very slow request processing. Investigation as to why there is a bottleneck compared to when distributed cache is disabled is tracked [here](https://github.com/ratify-project/ratify/issues/1117)
+- **The performance benefit of the distributed cache for high availability usage is inconclusive.** Large cluster tests with distributed cache enabled in an XS region resulted in anomalous behavior and the logs show very slow request processing. Investigation as to why there is a bottleneck compared to when distributed cache is disabled is tracked [here](https://github.com/notaryproject/ratify/issues/1117)
 
 ## Testing Details
 
@@ -115,13 +115,13 @@ The purpose of this test is to measure the limit for a single Ratify pod to serv
 
 #### Distributed caching (Orange)
 
-The goal for this test is to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR in the largest workloads, the request processing slowed down and the cache miss rate spiked leading to request timeouts. This result is not expected and is a symptom of an underlying issue. Investigation tracked [here](https://github.com/ratify-project/ratify/issues/1117). Distributed caching is imperative for external verifiers as they run as seperate processes and thus cannot share an in memory cache. Future testing will include external verifier scenarios. 
+The goal for this test is to measure if distributed caching results in less registry throttling. From the data, we can see that at smaller scales and for larger regions, both distributed caching and single instance caching performed well. For the XS region of ACR in the largest workloads, the request processing slowed down and the cache miss rate spiked leading to request timeouts. This result is not expected and is a symptom of an underlying issue. Investigation tracked [here](https://github.com/notaryproject/ratify/issues/1117). Distributed caching is imperative for external verifiers as they run as seperate processes and thus cannot share an in memory cache. Future testing will include external verifier scenarios. 
 
 ### Caveats
 
 - The testing pipeline scrapes real time CPU/Memory metrics AFTER the workload has completed. Peak CPU/Memory usage is likely higher
 - The original testing plan included a maximum of 20k pod workloads to test. This test has been excluded from the current test due to performance bottlenecks with the ClusterLoaderV2 tool. Investigation is required.
-- As already noted above, the distributed caching at largest scale (10k pods) in the smallest region yielded anomalous results. Investigation tracked [here](https://github.com/ratify-project/ratify/issues/1117)
+- As already noted above, the distributed caching at largest scale (10k pods) in the smallest region yielded anomalous results. Investigation tracked [here](https://github.com/notaryproject/ratify/issues/1117)
 
 ## Azure Dev Ops Pipeline Implementation
 ### Prerequisites (needs to be done once per subscription)
