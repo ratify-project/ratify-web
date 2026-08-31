@@ -48,6 +48,9 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          // Keep the latest stable release (1.4) as the default docs version.
+          // 2.0.0-beta.1 is a pre-release and is available from the version dropdown.
+          lastVersion: '1.4',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
