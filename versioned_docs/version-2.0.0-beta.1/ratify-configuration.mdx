@@ -40,7 +40,7 @@ Ratify executors provide a scoped approach to artifact verification, allowing di
 The basic structure of an executor configuration using Kubernetes CRDs:
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-sample
@@ -88,7 +88,7 @@ The Notation verifier validates Notation signatures using X.509 certificates.
 Notary Project signature verification with an inline certificate.
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-sample
@@ -129,7 +129,7 @@ spec:
 
 Notary Project signature verification with an inline certificate and Azure Key Vault.
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-notation-advanced
@@ -181,7 +181,7 @@ The Cosign verifier supports keyless signature verification with scoped trust po
 #### Keyless Verification
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-cosign-keyless
@@ -225,7 +225,7 @@ Embeds certificates or keys directly in the verifier configuration.
 For certificates (used with Notation):
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-inline-cert
@@ -280,7 +280,7 @@ spec:
 Loads certificates from local filesystem paths, configured directly within the verifier.
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-filesystem-certs
@@ -319,7 +319,7 @@ Fetches certificates from Azure Key Vault with support for Azure Workload Identi
 For Notation verifier with certificates:
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-akv-certs
@@ -376,7 +376,7 @@ Stores manage artifact retrieval and caching within the Executor configuration.
 Connects to OCI-compliant registries with authentication support.
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-with-registry-store
@@ -448,7 +448,7 @@ credential:
 Reads artifacts from local filesystem in OCI layout format.
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-with-filesystem-store
@@ -476,7 +476,7 @@ Policy enforcers determine verification success criteria within the Executor con
 The Threshold Policy Enforcer is a flexible and powerful policy enforcement mechanism in Ratify that allows you to define verification requirements for container artifacts. It enables you to create complex verification policies with nested rules, threshold-based decision making, and support for multiple verifiers.
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-with-threshold-policy
@@ -522,10 +522,10 @@ policyEnforcer:
 **Nested Rules:**
 
 This configuration demonstrates a more complex policy with nested rule groups. The policy requires:
-1. The image has a SBOM artifact that can be verified by the sbom-verifier.
-2. AND the SBOM artifact must also be signed by either the notation-verifier OR the cosign-verifier.
+1. The image is signed by the notation-verifier.
+2. AND the image is additionally signed by at least one of two Cosign identities (for example, two different signing teams).
 
-This is useful when you want to ensure both signature verification (from any supported format) AND additional attestations like SBOM validation.
+This is useful when you want to combine multiple mandatory signatures with an "any-of" group.
 
 ```yaml
 policyEnforcer:
@@ -533,11 +533,12 @@ policyEnforcer:
   parameters:
     policy:
       rules:
+        - verifierName: notation-verifier
         - rules:
-            - verifierName: notation-verifier
-            - verifierName: cosign-verifier
+            - verifierName: cosign-verifier-team-a
+            - verifierName: cosign-verifier-team-b
           threshold: 1
-        - verifierName: sbom-verifier
+      # outer threshold unset => both top-level rules must pass
 ```
 
 ## Complete Configuration Examples
@@ -545,7 +546,7 @@ policyEnforcer:
 ### Development Environment
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-dev
@@ -600,7 +601,7 @@ spec:
 ### Production Environment with Azure Integration
 
 ```yaml
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-production
@@ -644,7 +645,7 @@ spec:
 
 ```yaml
 # Executor for GitHub Container Registry and Quay.io
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-github-quay
@@ -677,7 +678,7 @@ spec:
         threshold: 1
 ---
 # Executor for Azure Container Registry
-apiVersion: config.ratify.dev/v2alpha1
+apiVersion: config.ratify.sh/v2alpha1
 kind: Executor
 metadata:
   name: executor-azure-acr

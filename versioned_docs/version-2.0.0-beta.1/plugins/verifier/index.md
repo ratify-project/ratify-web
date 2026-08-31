@@ -1,19 +1,10 @@
 # Verifiers
 
-Ratify support built-in plugin verifiers and [external](https://github.com/notaryproject/ratify/tree/main/plugins/verifier) plugin verifiers. See below for supported versions.
+Ratify v2 ships with built-in verifiers, selected by `type` in the `verifiers` list of an [Executor](../../concepts/executor.md). There are no external/binary verifier plugins in v2.
 
-## Built-in Verifier Builds
+| Type | Description |
+| ---- | ----------- |
+| [`notation`](./notation.md) | Verifies [Notary Project](https://notaryproject.dev/) (X.509) signatures. |
+| [`cosign`](./cosign.md) | Verifies [Sigstore Cosign](https://github.com/sigstore/cosign) signatures (keyless or key-based). |
 
-| Verifier Name | Current Version | Supported Version |
-| ------------- | --------------- | ----------------- |
-| Notation      | 1.0.0           | {"1.0.0"}         |
-| Cosign        | 1.0.0           | {"1.0.0"}         |
-
-## External Verifier Builds
-
-| Verifier Name        | Current Version | Supported Version          |
-| -------------------- | --------------- | -------------------------- |
-| Licensechecker       | 1.0.0           | {"1.0.0"}                  |
-| SBOM                 | 2.0.0-alpha.1   | {"1.0.0", "2.0.0-alpha.1"} |
-| Schema Validation    | 1.0.0           | {"1.0.0"}                  |
-| Vulnerability Report | 1.0.0           | {"1.0.0"}                  |
+See [Configuration](../../ratify-configuration.mdx#verifier-configuration) for the full verifier schema.
