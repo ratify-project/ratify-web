@@ -15,7 +15,7 @@ Prerequisites:
 ### Step 1: Install Gatekeeper, Ratify, and Constraints
 
 ```bash
-helmfile sync -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.3' 
+helmfile sync -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.5' 
 ```
 
 > **NOTE** To use the latest development version of Ratify instead, refer to this [document](https://github.com/notaryproject/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile)
@@ -49,7 +49,7 @@ You just validated the container images in your k8s cluster!
 
 ### Step 3: Uninstall
 ```bash
-helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.3' 
+helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.5' 
 ```
 
 ### Notes

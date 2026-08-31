@@ -14,7 +14,7 @@ The public certificate for verification can be found at `ratify.dev/.well-known/
 
 > The latest certificate for verification can always be found at `ratify.dev/.well-known/pki-validation/ratify-verification.crt`. Refer to [Certificate Versioning](#certificate-versioning) guidance for details on verifying older artifacts.
 
-Example: Verify Ratify release images for v1.4.0 and Ratify dev images
+Example: Verify Ratify release images for v1.4.5 and Ratify dev images
 ```shell
 curl -LO ratify.dev/.well-known/pki-validation/ratify-verification.crt
 curl -LO ratify.dev/.well-known/pki-validation/ratify-verification_20250328.crt
@@ -47,7 +47,7 @@ cat <<EOF > ./trustpolicy.json
 }
 EOF
 notation policy import ./trustpolicy.json
-notation verify ghcr.io/ratify-project/ratify:v1.4.0
+notation verify ghcr.io/ratify-project/ratify:v1.4.5
 notation verify ghcr.io/ratify-project/ratify-dev:latest
 ```
 
@@ -69,7 +69,7 @@ cosign verify \
   --certificate-identity-regexp "https://github.com/ratify-project/ratify/.github/workflows/publish-package.yml@*" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-github-workflow-repository ratify-project/ratify \
-  ghcr.io/ratify-project/ratify:v1.4.0
+  ghcr.io/ratify-project/ratify:v1.4.5
 ```
 
 ```shell
