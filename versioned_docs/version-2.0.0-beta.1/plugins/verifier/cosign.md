@@ -11,7 +11,7 @@ In Ratify v2 the verifier is configured inline in the `verifiers` list of an [Ex
 Cosign signatures are commonly published as a specially formatted tag alongside the subject image. To let the store discover them, set `allowCosignTag: true` on the `registry-store`.
 
 :::caution
-Keyless verification in v2.0.0-beta.1 initializes a Sigstore TUF client, which needs to write to the local cache directory. The default container runs with a read-only root filesystem, so keyless verification currently fails at startup (`mkdir /home/nonroot/.sigstore: read-only file system`). Key-based verification is unaffected.
+Keyless verification is **not supported in v2.0.0-beta.1** and is planned for **v2.0.0-beta.2**. In beta.1 the Sigstore TUF client needs to write to a local cache directory, but the default container runs with a read-only root filesystem, so keyless verification fails at startup (`mkdir /home/nonroot/.sigstore: read-only file system`). Key-based verification is unaffected.
 :::
 
 ## Keyless configuration

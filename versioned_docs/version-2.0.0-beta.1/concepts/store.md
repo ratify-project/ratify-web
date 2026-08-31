@@ -10,9 +10,7 @@ In Ratify v2, stores are **built-in** and declared inline in the `stores` list o
 | ---- | ----------- |
 | `registry-store` | Connects to OCI-compliant registries using [ORAS](https://oras.land/) to discover and pull artifacts. Supports registry authentication. |
 
-:::note
-A `filesystem-oci-store` type also exists in the API, but it is not functional via the Executor CRD in v2.0.0-beta.1. Use `registry-store`.
-:::
+`registry-store` is the only supported store in v2.0.0-beta.1.
 
 ## Configuration
 

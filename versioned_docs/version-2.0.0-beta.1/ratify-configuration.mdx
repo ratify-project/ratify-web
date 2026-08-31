@@ -445,12 +445,6 @@ credential:
 ```
 `clientID` and `tenantID` are optional for Azure Workload Identity. If not specified, the executor will use the pod's managed identity.
 
-### Filesystem OCI Store
-
-:::caution
-The `filesystem-oci-store` is not functional when configured through the Executor CRD in v2.0.0-beta.1 (its parameters fail to decode). Use `registry-store` instead. This section will be restored once the issue is resolved.
-:::
-
 ## Policy Enforcer Configuration
 
 Policy enforcers determine verification success criteria within the Executor configuration. The policy enforcer is optional in the executor configuration, and if not specified, Ratify will just return the verification results without enforcing any policies.
