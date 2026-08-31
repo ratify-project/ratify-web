@@ -72,4 +72,4 @@ credential:
 
 > For local, insecure registries you can set `plainHttp: true`. It cannot be combined with `caPem`/`caBase64` (there is no TLS over plain HTTP).
 
-For the complete schema and a `filesystem-oci-store` example, see [Configuration → Store Configuration](../../ratify-configuration.mdx#store-configuration).
+For the complete registry-store schema, see [Configuration → Store Configuration](../../ratify-configuration.mdx#store-configuration).

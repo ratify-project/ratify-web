@@ -28,10 +28,11 @@ spec:
           - "*"
         certificates:
           - type: ca
-            inline: |
-              -----BEGIN CERTIFICATE-----
-              ...
-              -----END CERTIFICATE-----
+            inline:
+              certs: |
+                -----BEGIN CERTIFICATE-----
+                ...
+                -----END CERTIFICATE-----
   stores:
     - type: registry-store
       parameters:
@@ -50,6 +51,6 @@ spec:
 Each `certificates` entry has:
 
 - `type` — trust-store type: `ca`, `signingAuthority`, or `tsa` (for timestamping). See [Notation trust stores](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#version-10).
-- One key provider that supplies the certificates: `inline` (PEM string), `files` (list of paths), or `azurekeyvault`.
+- One key provider that supplies the certificates: `inline` (with a `certs` field holding the PEM string), `files` (list of paths), or `azurekeyvault`.
 
 See [Configuration → Notation Verifier](../../ratify-configuration.mdx#notation-verifier) for advanced examples, including multiple key providers and Azure Key Vault.

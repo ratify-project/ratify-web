@@ -37,10 +37,11 @@ spec:
       parameters:
         certificates:
           - type: ca
-            inline: |
-              -----BEGIN CERTIFICATE-----
-              ...
-              -----END CERTIFICATE-----
+            inline:
+              certs: |
+                -----BEGIN CERTIFICATE-----
+                ...
+                -----END CERTIFICATE-----
   stores:
     - type: registry-store
       parameters:
