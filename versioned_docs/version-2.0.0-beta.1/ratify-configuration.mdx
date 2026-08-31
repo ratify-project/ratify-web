@@ -1,0 +1,715 @@
+---
+title: Configuration 
+sidebar_position: 3
+---
+
+This document provides comprehensive guidance on configuring Ratify executors using Kubernetes Custom Resources (CRDs). It covers all executor components including verifiers with their key providers, stores for artifact retrieval, and policy enforcers for verification criteria. Key providers are configured directly within the verifier configuration rather than as separate resources.
+
+**Configuration Methods**: Ratify can be configured using either mounted `config.json` files or Kubernetes Custom Resources (CRDs). Since `config.json` configurations can be converted to CRDs and CRDs provide better Kubernetes integration, this document uses CRD examples throughout the tutorial.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Executor Configuration Structure](#executor-configuration-structure)
+- [Verifier Configuration](#verifier-configuration)
+  - [Notation Verifier](#notation-verifier)
+  - [Cosign Verifier](#cosign-verifier)
+- [Key Provider Configuration](#key-provider-configuration)
+  - [Inline Key Provider](#inline-key-provider)
+  - [Filesystem Key Provider](#filesystem-key-provider)
+  - [Azure Key Vault Provider](#azure-key-vault-provider)
+- [Store Configuration](#store-configuration)
+  - [Registry Store](#registry-store)
+  - [Filesystem OCI Store](#filesystem-oci-store)
+- [Policy Enforcer Configuration](#policy-enforcer-configuration)
+  - [Threshold Policy](#threshold-policy)
+- [Complete Configuration Examples](#complete-configuration-examples)
+- [Additional Resources](#additional-resources)
+
+## Overview
+
+Ratify executors provide a scoped approach to artifact verification, allowing different verification policies and configurations for different registries, repositories, or artifact types. Each executor contains:
+
+- **Scopes**: Define which registries/repositories this executor handles
+- **Verifiers**: Configure supply chain metadata verification (e.g., Notation, Cosign, etc.)
+- **Stores**: Define how to access artifacts in OCI registries or OCI image layout
+- **Policy Enforcer**: Define verification success criteria
+
+## Executor Configuration Structure
+
+The basic structure of an executor configuration using Kubernetes CRDs:
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-sample
+spec:
+  scopes:
+    - registry.example.com
+    - "*.internal.com"
+  verifiers:
+    # Verifier configurations
+  stores:
+    # Store configurations  
+  policyEnforcer:
+    # Policy enforcer configuration
+```
+
+### Scope Patterns
+
+Executors support three types of scope patterns with precedence order:
+
+1. **Exact repository match**: `registry.example.com/namespace/repo`
+2. **Exact registry match**: `registry.example.com`
+3. **Wildcard registry match**: `*.example.com`
+
+:::important
+- **Top-level domain wildcards (`*`) are not supported.**
+- **❌ ERROR: Overlapping scopes between different Executors will cause configuration failure.** Each scope must be uniquely assigned to only one executor. Attempting to configure multiple executors with overlapping scopes will result in an error during executor initialization.
+:::
+
+## Verifier Configuration
+
+Verifiers are responsible for validating artifact signatures and attestations. Each verifier in an executor requires the following fields:
+
+- **`name`**: A unique identifier for the verifier instance within the executor (required)
+- **`type`**: The verifier implementation type (e.g., "notation", "cosign") (required)  
+- **`parameters`**: Type-specific configuration options that vary based on the verifier type (optional)
+
+Multiple verifiers of the same type can be configured with different names and parameters to handle different verification scenarios within a single executor.
+
+### Notation Verifier
+
+The Notation verifier validates Notation signatures using X.509 certificates.
+
+#### Basic Configuration
+
+Notary Project signature verification with an inline certificate.
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-sample
+spec:
+  scopes:
+    - registry.example.com
+  verifiers:
+    - name: notation-verifier
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            inline: |
+              -----BEGIN CERTIFICATE-----
+              MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+              BQAwKTEPMA0GA1UECgwGUmF0aWZ5MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMB4X
+              DTIzMDYyOTA1MjgzMloXDTMzMDYyNjA1MjgzMlowKTEPMA0GA1UECgwGUmF0aWZ5
+              MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+              MIIBCgKCAQEAshmsL2VM9ojhgTVUUuEsZro9jfI27VKZJ4naWSHJihmOki7IoZS8
+              3/3ATpkE1lGbduJ77M9UxQbEW1PnESB0bWtMQtjIbser3mFCn15yz4nBXiTIu/K4
+              FYv6HVdc6/cds3jgfEFNw/8RVMBUGNUiSEWa1lV1zDM2v/8GekUr6SNvMyqtY8oo
+              ItwxfUvlhgMNlLgd96mVnnPVLmPkCmXFN9iBMhSce6sn6P9oDIB+pr1ZpE4F5bwa
+              gRBg2tWN3Tz9H/z2a51Xbn7hCT5OLBRlkorHJl2HKKRoXz1hBgR8xOL+zRySH9Qo
+              3yx6WvluYDNfVbCREzKJf9fFiQeVe0EJOwIDAQABo2MwYTAdBgNVHQ4EFgQUKzci
+              EKCDwPBn4I1YZ+sDdnxEir4wHwYDVR0jBBgwFoAUKzciEKCDwPBn4I1YZ+sDdnxE
+              ir4wDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAgQwDQYJKoZIhvcNAQEL
+              BQADggEBAGh6duwc1MvV+PUYvIkDfgj158KtYX+bv4PmcV/aemQUoArqM1ECYFjt
+              BlBVmTRJA0lijU5I0oZje80zW7P8M8pra0BM6x3cPnh/oZGrsuMizd4h5b5TnwuJ
+              hRvKFFUVeHn9kORbyQwRQ5SpL8cRGyYp+T6ncEmo0jdIOM5dgfdhwHgb+i3TejcF
+              90sUs65zovUjv1wa11SqOdu12cCj/MYp+H8j2lpaLL2t0cbFJlBY6DNJgxr5qync
+              cz8gbXrZmNbzC7W5QK5J7fcx6tlffOpt5cm427f9NiK2tira50HU7gC3HJkbiSTp
+              Xw10iXXMZzSbQ0/Hj2BF4B40WfAkgRg=
+              -----END CERTIFICATE-----
+  # ... rest of configuration
+```
+
+#### Advanced Configuration with Multiple Key Providers
+
+Notary Project signature verification with an inline certificate and Azure Key Vault.
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-notation-advanced
+spec:
+  scopes:
+    - registry.example.com
+    - "*.internal.com"
+  verifiers:
+    - name: notation-verifier
+      type: notation
+      parameters:
+        scopes:
+          - registry.example.com
+        trustedIdentities:
+          - "*"
+        certificates:
+          - type: ca
+            inline: |
+              -----BEGIN CERTIFICATE-----
+              MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+              ...
+              -----END CERTIFICATE-----
+          - type: signingAuthority
+            files:
+              - /path/to/cert1.pem
+              - /path/to/cert2.pem
+          - type: tsa
+            azurekeyvault:
+              vaultURL: "https://vault.vault.azure.net/"
+              certificates:
+                - name: tsa-cert
+                  version: latest
+  # ... rest of configuration
+```
+
+#### Notation Configuration Parameters
+- **`scopes`**: List of scopes this verifier applies to. Please refer to [Notation trust policy constraints](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#trust-policy-constraints) for more information.
+- **`trustedIdentities`**: List of trusted identities for this verifier. Please refer to [Notation trusted identities constraints](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#trusted-identities-constraints) for more information.
+- **`certificates`**: List of certificates used for verification
+  - **`type`**: Type of certificate (e.g., `ca`, `signingAuthority`, `tsa`). It's used to differentiate the underlying trust stores. Please refer to [Notation trust stores](https://github.com/notaryproject/specifications/blob/v1.1.0/specs/trust-store-trust-policy.md#version-10) for more information.
+  - **`inline`**: PEM-encoded certificate content (for inline key provider)
+  - **`files`**: List of file paths containing certificates (for filesystem key provider)
+  - **`azurekeyvault`**: Configuration for fetching certificates from Azure Key Vault
+
+### Cosign Verifier
+
+The Cosign verifier supports keyless signature verification with scoped trust policies.
+
+#### Keyless Verification
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-cosign-keyless
+spec:
+  scopes:
+    - ghcr.io
+    - registry.example.com
+  verifiers:
+    - name: cosign-verifier
+      type: cosign
+      parameters:
+        trustPolicies:
+          - scopes:
+              - "ghcr.io"
+              - "registry.example.com"
+            certificateIdentity: "https://github.com/user/repo/.github/workflows/build.yml@refs/heads/main"
+            certificateOIDCIssuer: "https://token.actions.githubusercontent.com"
+            ignoreTLog: false
+            ignoreCTLog: false
+  # ... rest of configuration
+```
+
+#### Cosign Configuration Parameters
+- **`trustPolicies`**: List of trust policies for keyless verification
+  - **`scopes`**: List of scopes this verifier applies to. The schema is the same as the executor scopes. This field is optional, and if not specified, the verifier will apply to all scopes in the executor.
+  - **`certificateIdentity`**: Expected certificate identity for keyless verification
+  - **`certificateIdentityRegex`**: Regex pattern for certificate identity matching
+  - **`certificateOIDCIssuer`**: OIDC issuer URL for keyless verification  
+  - **`certificateOIDCIssuerRegex`**: Regex pattern for OIDC issuer matching
+  - **`ignoreTLog`**: Skip transparency log verification
+  - **`ignoreCTLog`**: Skip certificate transparency log verification
+
+## Key Provider Configuration
+
+Key providers manage cryptographic material (certificates, keys) for verifiers and are configured directly within the verifier configuration rather than as separate resources.
+
+### Inline Key Provider
+
+Embeds certificates or keys directly in the verifier configuration.
+
+For certificates (used with Notation):
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-inline-cert
+spec:
+  scopes:
+    - "registry.example.com"
+  verifiers:
+    - name: notation-verifier
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            inline: |
+              -----BEGIN CERTIFICATE-----
+              MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+              BQAwKTEPMA0GA1UECgwGUmF0aWZ5MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMB4X
+              DTIzMDYyOTA1MjgzMloXDTMzMDYyNjA1MjgzMlowKTEPMA0GA1UECgwGUmF0aWZ5
+              MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+              MIIBCgKCAQEAshmsL2VM9ojhgTVUUuEsZro9jfI27VKZJ4naWSHJihmOki7IoZS8
+              3/3ATpkE1lGbduJ77M9UxQbEW1PnESB0bWtMQtjIbser3mFCn15yz4nBXiTIu/K4
+              FYv6HVdc6/cds3jgfEFNw/8RVMBUGNUiSEWa1lV1zDM2v/8GekUr6SNvMyqtY8oo
+              ItwxfUvlhgMNlLgd96mVnnPVLmPkCmXFN9iBMhSce6sn6P9oDIB+pr1ZpE4F5bwa
+              gRBg2tWN3Tz9H/z2a51Xbn7hCT5OLBRlkorHJl2HKKRoXz1hBgR8xOL+zRySH9Qo
+              3yx6WvluYDNfVbCREzKJf9fFiQeVe0EJOwIDAQABo2MwYTAdBgNVHQ4EFgQUKzci
+              EKCDwPBn4I1YZ+sDdnxEir4wHwYDVR0jBBgwFoAUKzciEKCDwPBn4I1YZ+sDdnxE
+              ir4wDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAgQwDQYJKoZIhvcNAQEL
+              BQADggEBAGh6duwc1MvV+PUYvIkDfgj158KtYX+bv4PmcV/aemQUoArqM1ECYFjt
+              BlBVmTRJA0lijU5I0oZje80zW7P8M8pra0BM6x3cPnh/oZGrsuMizd4h5b5TnwuJ
+              hRvKFFUVeHn9kORbyQwRQ5SpL8cRGyYp+T6ncEmo0jdIOM5dgfdhwHgb+i3TejcF
+              90sUs65zovUjv1wa11SqOdu12cCj/MYp+H8j2lpaLL2t0cbFJlBY6DNJgxr5qync
+              cz8gbXrZmNbzC7W5QK5J7fcx6tlffOpt5cm427f9NiK2tira50HU7gC3HJkbiSTp
+              Xw10iXXMZzSbQ0/Hj2BF4B40WfAkgRg=
+              -----END CERTIFICATE-----
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: static
+```
+
+**Use Cases:**
+- Development and testing
+- Simple deployments with few certificates
+- When certificates are managed externally
+
+**Security Considerations:**
+- Certificates are stored in plaintext in configuration
+- Consider using other providers for production secrets
+
+### Filesystem Key Provider
+
+Loads certificates from local filesystem paths, configured directly within the verifier.
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-filesystem-certs
+spec:
+  scopes:
+    - "registry.example.com"
+  verifiers:
+    - name: notation-verifier
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            files:
+              - /etc/ratify/certs/ca.pem
+              - /etc/ratify/certs/intermediate.pem
+              - /var/secrets/signing-cert.pem
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: static
+```
+
+**Features:**
+- Supports both files and directories
+- Automatically handles symbolic links (common in Kubernetes secret mounts)
+- Loads all valid X.509 certificates from specified paths
+
+**Configuration Considerations:**
+- Certificates are mounted during pod initialization, users cannot change them dynamically.
+
+### Azure Key Vault Provider
+
+Fetches certificates from Azure Key Vault with support for Azure Workload Identity, configured directly within the verifier.
+
+For Notation verifier with certificates:
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-akv-certs
+spec:
+  scopes:
+    - "*.azurecr.io"
+  verifiers:
+    - name: notation-verifier
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            azurekeyvault:
+              vaultURL: "https://my-vault.vault.azure.net/"
+              clientID: "12345678-1234-1234-1234-123456789abc"
+              tenantID: "87654321-4321-4321-4321-cba987654321"
+              certificates:
+                - name: root-ca
+                  version: latest
+                - name: intermediate-ca
+                  version: "abc123def456"
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: azure
+```
+
+**Configuration Parameters:**
+- **`vaultURL`**: Azure Key Vault URL (required)
+- **`clientID`**: Azure AD client ID (optional for workload identity)
+- **`tenantID`**: Azure AD tenant ID (optional for workload identity)
+- **`certificates`**: List of certificates to fetch
+    - **`name`**: Certificate name in Key Vault (required)
+    - **`version`**: Specific version (optional, defaults to latest)
+
+**Authentication Methods:**
+1. **Azure Workload Identity** (recommended): Automatically uses pod identity
+2. **Managed Identity**: Uses VM or pod managed identity
+
+**Supported Certificate Formats:**
+- **PKCS#12**: Certificates stored as .pfx files
+- **PEM**: Certificates stored as PEM-encoded text
+
+**Azure Key Vault Permissions:**
+Ensure the managed identity has assigned `get/secret` permissions for the Key Vault to fetch the certificate chain. Otherwise `get/certificate` permission only will get the leaf certificate.
+
+## Store Configuration
+
+Stores manage artifact retrieval and caching within the Executor configuration.
+
+### Registry Store
+
+Connects to OCI-compliant registries with authentication support.
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-with-registry-store
+spec:
+  scopes:
+    - registry.example.com
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: static
+          username: myuser
+          password: mypassword
+        allowCosignTag: true
+        plainHttp: false
+        userAgent: "ratify/2.0.0"
+        maxBlobBytes: 67108864
+        maxManifestBytes: 4194304
+        caPem: |
+          -----BEGIN CERTIFICATE-----
+          MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+          ...
+          -----END CERTIFICATE-----
+  # ... rest of configuration
+```
+
+#### Registry Store Configuration Parameters
+
+- **`plainHttp`**: Use HTTP instead of HTTPS (default: false)
+- **`userAgent`**: Custom User-Agent header, optional
+- **`maxBlobBytes`**: Maximum blob size in bytes, optional
+- **`maxManifestBytes`**: Maximum manifest size in bytes, optional
+- **`allowCosignTag`**: Enable Cosign tag-based signature discovery, optional
+- **`caPem`**: Custom CA certificate for TLS verification, optional. Example: 
+  ```yaml
+  caPem: |
+    -----BEGIN CERTIFICATE-----
+    MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+    ...
+    -----END CERTIFICATE-----
+  ```
+- **`caBase64`**: Base64-encoded CA certificate, optional. Example:
+  ```yaml
+  caBase64: "MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL..."
+  ```
+- **`credential`**: Credential provider configuration
+
+#### Credential Providers
+
+**Static Credentials:**
+```yaml
+credential:
+  provider: static
+  username: myuser
+  password: mytoken
+```
+
+**Azure Workload Identity:**
+```yaml
+credential:
+  provider: azure
+  clientID: "12345678-1234-1234-1234-123456789abc"
+  tenantID: "87654321-4321-4321-4321-cba987654321"
+```
+`clientID` and `tenantID` are optional for Azure Workload Identity. If not specified, the executor will use the pod's managed identity.
+
+### Filesystem OCI Store
+
+Reads artifacts from local filesystem in OCI layout format.
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-with-filesystem-store
+spec:
+  scopes:
+    - localhost:5000
+  stores:
+    - type: filesystem-oci-store
+      parameters:
+        path: /var/lib/ratify/oci-store
+  # ... rest of configuration
+```
+
+**Use Cases:**
+- Offline verification scenarios
+- Testing with local artifacts
+- Air-gapped environments
+
+## Policy Enforcer Configuration
+
+Policy enforcers determine verification success criteria within the Executor configuration. The policy enforcer is optional in the executor configuration, and if not specified, Ratify will just return the verification results without enforcing any policies.
+
+### Threshold Policy
+
+The Threshold Policy Enforcer is a flexible and powerful policy enforcement mechanism in Ratify that allows you to define verification requirements for container artifacts. It enables you to create complex verification policies with nested rules, threshold-based decision making, and support for multiple verifiers.
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-with-threshold-policy
+spec:
+  scopes:
+    - registry.example.com
+  policyEnforcer:
+    type: threshold-policy
+    parameters:
+      policy:
+        rules:
+          - verifierName: notation-verifier
+          - verifierName: cosign-verifier
+        threshold: 1
+  # ... rest of configuration
+```
+
+#### Threshold Policy Parameters
+- **`policy`**: The policy serves as the root rule for the threshold policy enforcer.
+  - **`rules`**: List of rules to evaluate
+    - **`verifierName`**: Name of the verifier to use for this rule
+    - **`rules`**: Nested rules for complex policies
+    - **`threshold`**: Minimum number of successful nested rules required for this rule to pass. When it's unset or 0, all nested rules must pass for the rule to pass.
+  - **`threshold`**: Minimum number of successful nested rules required for the policy to pass. When it's unset or 0, all nested rules must pass for the policy to pass.
+
+#### Threshold Policy Rules
+
+**Simple Threshold:**
+
+This configuration requires at least one of the specified verifiers to succeed. In this example, the image should have a signature that can be verified by either notation-verifier OR the cosign-verifier. This is useful when you have multiple signature types but only need one to be valid.
+
+```yaml
+policyEnforcer:
+  type: threshold-policy
+  parameters:
+    policy:
+      rules:
+        - verifierName: notation-verifier
+        - verifierName: cosign-verifier
+      threshold: 1
+```
+
+**Nested Rules:**
+
+This configuration demonstrates a more complex policy with nested rule groups. The policy requires:
+1. The image has a SBOM artifact that can be verified by the sbom-verifier.
+2. AND the SBOM artifact must also be signed by either the notation-verifier OR the cosign-verifier.
+
+This is useful when you want to ensure both signature verification (from any supported format) AND additional attestations like SBOM validation.
+
+```yaml
+policyEnforcer:
+  type: threshold-policy
+  parameters:
+    policy:
+      rules:
+        - rules:
+            - verifierName: notation-verifier
+            - verifierName: cosign-verifier
+          threshold: 1
+        - verifierName: sbom-verifier
+```
+
+## Complete Configuration Examples
+
+### Development Environment
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-dev
+spec:
+  scopes:
+    - localhost:5000
+    - "127.0.0.1:5000"
+  verifiers:
+    - name: notation-dev
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            inline: |
+              -----BEGIN CERTIFICATE-----
+              MIIDQzCCAiugAwIBAgIUDxHQ9JxxmnrLWTA5rAtIZCzY8mMwDQYJKoZIhvcNAQEL
+              BQAwKTEPMA0GA1UECgwGUmF0aWZ5MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMB4X
+              DTIzMDYyOTA1MjgzMloXDTMzMDYyNjA1MjgzMlowKTEPMA0GA1UECgwGUmF0aWZ5
+              MRYwFAYDVQQDDA1SYXRpZnkgU2FtcGxlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+              MIIBCgKCAQEAshmsL2VM9ojhgTVUUuEsZro9jfI27VKZJ4naWSHJihmOki7IoZS8
+              3/3ATpkE1lGbduJ77M9UxQbEW1PnESB0bWtMQtjIbser3mFCn15yz4nBXiTIu/K4
+              FYv6HVdc6/cds3jgfEFNw/8RVMBUGNUiSEWa1lV1zDM2v/8GekUr6SNvMyqtY8oo
+              ItwxfUvlhgMNlLgd96mVnnPVLmPkCmXFN9iBMhSce6sn6P9oDIB+pr1ZpE4F5bwa
+              gRBg2tWN3Tz9H/z2a51Xbn7hCT5OLBRlkorHJl2HKKRoXz1hBgR8xOL+zRySH9Qo
+              3yx6WvluYDNfVbCREzKJf9fFiQeVe0EJOwIDAQABo2MwYTAdBgNVHQ4EFgQUKzci
+              EKCDwPBn4I1YZ+sDdnxEir4wHwYDVR0jBBgwFoAUKzciEKCDwPBn4I1YZ+sDdnxE
+              ir4wDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAgQwDQYJKoZIhvcNAQEL
+              BQADggEBAGh6duwc1MvV+PUYvIkDfgj158KtYX+bv4PmcV/aemQUoArqM1ECYFjt
+              BlBVmTRJA0lijU5I0oZje80zW7P8M8pra0BM6x3cPnh/oZGrsuMizd4h5b5TnwuJ
+              hRvKFFUVeHn9kORbyQwRQ5SpL8cRGyYp+T6ncEmo0jdIOM5dgfdhwHgb+i3TejcF
+              90sUs65zovUjv1wa11SqOdu12cCj/MYp+H8j2lpaLL2t0cbFJlBY6DNJgxr5qync
+              cz8gbXrZmNbzC7W5QK5J7fcx6tlffOpt5cm427f9NiK2tira50HU7gC3HJkbiSTp
+              Xw10iXXMZzSbQ0/Hj2BF4B40WfAkgRg=
+              -----END CERTIFICATE-----
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: static
+          username: ""
+          password: ""
+        plainHttp: true
+  policyEnforcer:
+    type: threshold-policy
+    parameters:
+      policy:
+        rules:
+          - verifierName: notation-dev
+        threshold: 1
+```
+
+### Production Environment with Azure Integration
+
+```yaml
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-production
+spec:
+  scopes:
+    - mycompany.azurecr.io
+  verifiers:
+    - name: notation-prod
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            azurekeyvault:
+              vaultURL: "https://ratify-vault.vault.azure.net/"
+              certificates:
+                - name: root-ca
+                - name: intermediate-ca
+    - name: cosign-prod
+      type: cosign
+      parameters:
+        trustPolicies:
+          - certificateIdentity: "test@example.com"
+            certificateOIDCIssuer: "https://token.actions.githubusercontent.com"
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: azure
+        allowCosignTag: true
+  policyEnforcer:
+    type: threshold-policy
+    parameters:
+      policy:
+        rules:
+          - verifierName: notation-prod
+          - verifierName: cosign-prod
+        threshold: 1
+```
+
+### Multi-Registry Environment
+
+```yaml
+# Executor for GitHub Container Registry and Quay.io
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-github-quay
+spec:
+  scopes:
+    - ghcr.io
+    - quay.io
+  verifiers:
+    - name: cosign-github
+      type: cosign
+      parameters:
+        trustPolicies:
+          - scopes:
+              - "ghcr.io/*"
+            certificateIdentity: "https://github.com/.+/.github/workflows/.+@refs/heads/main"
+            certificateIdentityRegex: true
+            certificateOIDCIssuer: "https://token.actions.githubusercontent.com"
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: static
+          password: "ghp_token_here"
+  policyEnforcer:
+    type: threshold-policy
+    parameters:
+      policy:
+        rules:
+          - verifierName: cosign-github
+        threshold: 1
+---
+# Executor for Azure Container Registry
+apiVersion: config.ratify.dev/v2alpha1
+kind: Executor
+metadata:
+  name: executor-azure-acr
+spec:
+  scopes:
+    - mycompany.azurecr.io
+  verifiers:
+    - name: notation-azure
+      type: notation
+      parameters:
+        certificates:
+          - type: ca
+            files:
+              - /etc/ratify/certs/ca.pem
+  stores:
+    - type: registry-store
+      parameters:
+        credential:
+          provider: azure
+  policyEnforcer:
+    type: threshold-policy
+    parameters:
+      policy:
+        rules:
+          - verifierName: notation-azure
+        threshold: 1
+```
+
+## Additional Resources
+
+- [Notation Verifier Specification](https://github.com/notaryproject/notation)
+- [Cosign Documentation](https://github.com/sigstore/cosign)
+- [Azure Key Vault Documentation](https://docs.microsoft.com/en-us/azure/key-vault/)
+- [OCI Registry Specification](https://github.com/opencontainers/distribution-spec)
+- [Kubernetes Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
